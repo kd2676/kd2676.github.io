@@ -13,7 +13,13 @@ type KingdomSnapshot = { kingdom: string; opened: string; king: string; kingAlli
 type Status = { lastAttempt?: string; lastSuccess?: string; error?: string | null; running?: boolean };
 type Tab = 'overview' | 'alliances' | 'governors' | 'data';
 const fmt = new Intl.NumberFormat('vi-VN');
-const compact = new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 2 });
+const decimal = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 });
+const compact = { format(value: number) {
+  if (Math.abs(value) >= 1e9) return `${decimal.format(value / 1e9)}B`;
+  if (Math.abs(value) >= 1e6) return `${decimal.format(value / 1e6)}M`;
+  if (Math.abs(value) >= 1e3) return `${decimal.format(value / 1e3)}K`;
+  return fmt.format(value);
+} };
 const formatDate = (value?: string) => value ? new Date(value).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) : 'Chưa có';
 const sum = (rows: Governor[], field: keyof Governor) => rows.reduce((total, row) => total + (Number(row[field]) || 0), 0);
 

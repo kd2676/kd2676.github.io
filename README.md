@@ -8,7 +8,6 @@ Use PowerShell in this folder:
 
 ```powershell
 npm install
-npx playwright install chromium
 Copy-Item .env.example .env
 npm run login
 npm run build
@@ -17,9 +16,11 @@ npm start
 
 During `npm run login`, sign in to ROKStats via Discord in the browser window and select kingdom 2676. After the heading **All Governors - KD #2676** appears, return to PowerShell and press Enter. The login profile remains under `.private/rokstats-profile` and is excluded from Git.
 
-On this Windows setup, `LOGIN_BROWSER_CHANNEL=msedge` uses Edge for the visible login, while the scheduled updater uses Playwright Chromium in headless mode. `.env` is local and ignored by Git. The `PLAYWRIGHT_BROWSERS_PATH` setting is only needed if the browser installer and app run with different Windows profiles or environments.
+On this Windows setup, both the visible login and scheduled updater use Edge. `.env` is local and ignored by Git. If Edge cannot run headless on another computer, set `BROWSER_CHANNEL=` and install Playwright Chromium with `npx playwright install chromium`; `LOGIN_BROWSER_CHANNEL` can remain `msedge`. `PLAYWRIGHT_BROWSERS_PATH` is only needed if the browser installer and app run with different Windows profiles or environments.
 
 Open **http://127.0.0.1:2676** while `npm start` is running. The server syncs immediately, then repeats at `SYNC_INTERVAL_MINUTES`. The page checks for new data every five minutes. `npm run sync` triggers one manual export. If the session expires, repeat `npm run login` and restart the server. Close the server before launching `npm run login`, because both use the same browser profile.
+
+To start the server automatically when you log in to Windows, run `powershell -File scripts/install-autostart.ps1` once. To remove that startup task, run `powershell -File scripts/uninstall-autostart.ps1`. The PC must be on and logged in for the task to run.
 
 `npm run dev` starts the Vite development UI; run `npm start` separately for its live API. `npm run build` prepares the production UI. The local server serves it and keeps its data current while the PC and server are running.
 
