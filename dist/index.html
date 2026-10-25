@@ -39,15 +39,15 @@
     <main>
       <section class="notice" id="data-notice">
         <div class="notice-symbol">◎</div>
-        <div><strong>Bản chụp từ ROKSTATS</strong><p>Số liệu tổng quan, liên minh và KvK được ghi lại ngày 25/10/2026. Danh sách thống đốc cần file xuất CSV/JSON để bổ sung.</p></div>
-        <button class="text-action" type="button" data-open-data>Thêm thống đốc <span aria-hidden="true">→</span></button>
+        <div><strong>Bản chụp từ ROKSTATS</strong><p>Trang có 564 thống đốc từ bản quét 25/10/2026 lúc 18:00. Số liệu không đồng bộ realtime; hãy nhập bản xuất mới ở mục Dữ liệu để cập nhật danh sách.</p></div>
+        <button class="text-action" type="button" data-open-data>Cập nhật dữ liệu <span aria-hidden="true">→</span></button>
       </section>
 
       <section class="view active" id="view-overview" aria-label="Tổng quan">
         <div class="section-heading"><div><p class="section-kicker">01 / OVERVIEW</p><h2>Toàn cảnh vương quốc</h2></div><span class="section-meta" id="scan-label">Chưa có bản quét</span></div>
         <div class="stats-grid" id="stats-grid"></div>
         <div class="two-col">
-          <article class="panel"><div class="panel-heading"><div><p class="section-kicker">PHÂN BỔ</p><h3>Nhóm người chơi</h3></div><span id="category-count" class="panel-note">0 nhóm</span></div><div id="category-list" class="category-list"></div></article>
+          <article class="panel"><div class="panel-heading"><div><p class="section-kicker">PHÂN BỔ</p><h3>Thống đốc theo liên minh</h3></div><span id="category-count" class="panel-note">0 liên minh</span></div><div id="category-list" class="category-list"></div></article>
           <article class="panel"><div class="panel-heading"><div><p class="section-kicker">TOP 5</p><h3>Sức mạnh nổi bật</h3></div></div><div id="top-list" class="top-list"></div></article>
         </div>
         <article class="panel kvk-panel"><div class="panel-heading"><div><p class="section-kicker">KVK HISTORY</p><h3>Hiệu suất KvK</h3></div><span class="panel-note">8 mùa gần đây</span></div><div id="kvk-list" class="kvk-list"></div></article>
@@ -67,7 +67,7 @@
       <section class="view" id="view-data" aria-label="Dữ liệu">
         <div class="section-heading"><div><p class="section-kicker">04 / DATA SOURCE</p><h2>Quản lý dữ liệu</h2></div></div>
         <div class="data-layout">
-          <article class="panel upload-panel"><div class="upload-icon">↑</div><h3>Nhập danh sách thống đốc</h3><p>Chọn file CSV hoặc JSON của Kingdom 2676. Dữ liệu được xử lý và lưu trong trình duyệt này.</p><label class="upload-button">Chọn file CSV / JSON<input id="file-input" type="file" accept=".csv,.json,text/csv,application/json"></label><p class="upload-result" id="upload-result" role="status"></p></article>
+          <article class="panel upload-panel"><div class="upload-icon">↑</div><h3>Cập nhật danh sách thống đốc</h3><p>Xuất CSV mới từ trang All Governors của ROKSTATS rồi chọn file ở đây. Dữ liệu mới được xử lý và lưu trong trình duyệt này.</p><label class="upload-button">Chọn file CSV / JSON<input id="file-input" type="file" accept=".csv,.json,text/csv,application/json"></label><p class="upload-result" id="upload-result" role="status"></p></article>
           <article class="panel guide-panel"><p class="section-kicker">ĐỊNH DẠNG</p><h3>Cột dữ liệu cần có</h3><p>Tối thiểu: <code>name</code>, <code>id</code>, <code>alliance</code>, <code>power</code>. Có thể thêm <code>kill_points</code>, <code>t4_kills</code>, <code>t5_kills</code>, <code>dead</code>, <code>troop_power</code>, <code>category</code>. Tên cột tiếng Việt và một số tên cột ROKSTATS thông dụng cũng được nhận dạng.</p><button id="download-template" class="secondary-button" type="button">Tải mẫu CSV <span aria-hidden="true">↓</span></button><div class="divider"></div><p class="small">Trang nguồn: <a href="https://app.rokstats.online/kingdom/2676" target="_blank" rel="noopener noreferrer">app.rokstats.online/kingdom/2676 ↗</a></p></article>
         </div>
         <article class="panel history-panel"><div class="panel-heading"><div><p class="section-kicker">LỊCH SỬ</p><h3>Các lần nhập dữ liệu</h3></div><button id="clear-data" class="quiet-button" type="button">Xóa dữ liệu trên trình duyệt</button></div><div id="history-list" class="history-list"></div></article>

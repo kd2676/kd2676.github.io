@@ -20,7 +20,7 @@ const aliases = {
   alliance: ['alliance', 'alliancetag', 'tag', 'lienminh'],
   power: ['power', 'totalpower', 'sucmanh'],
   troopPower: ['trooppower', 'troops', 'lucluongquan'],
-  killPoints: ['killpoints', 'killpoint', 'kp', 'diemtieudiet'],
+  killPoints: ['killpoints', 'killpoint', 'totalkp', 'kp', 'diemtieudiet'],
   t4Kills: ['t4kills', 't4kill', 't4', 'tier4kills'],
   t5Kills: ['t5kills', 't5kill', 't5', 'tier5kills'],
   dead: ['dead', 'deaths', 'deadtroops', 'death', 'linhhy sinh', 'linhhy sinh'.replace(/ /g, '')],
@@ -116,6 +116,7 @@ function loadSnapshots() {
 }
 
 let snapshots = loadSnapshots();
+let sourceRows = [];
 let rows = snapshots.at(-1)?.rows || [];
 
 function escapeHtml(value) {
@@ -129,10 +130,10 @@ function setEmpty(element, message) { element.innerHTML = `<div class="empty">${
 function renderOverview() {
   $('#stats-grid').innerHTML = sourceSnapshot.metrics.map(([label, value, foot]) => `<article class="stat"><div class="stat-label">${escapeHtml(label)}</div><div class="stat-value">${escapeHtml(value)}</div><div class="stat-foot">${escapeHtml(foot)}</div></article>`).join('');
   const groups = new Map();
-  rows.forEach(row => groups.set(row.category || 'Chưa phân loại', (groups.get(row.category || 'Chưa phân loại') || 0) + 1));
-  $('#category-count').textContent = `${groups.size} nhóm`;
-  if (groups.size) $('#category-list').innerHTML = [...groups].sort((a,b) => b[1] - a[1]).map(([name,count]) => `<div class="category-row"><span>${escapeHtml(name)}</span><span class="bar"><i style="width:${count / rows.length * 100}%"></i></span><b>${fmt.format(count)}</b></div>`).join('');
-  else setEmpty($('#category-list'), 'Nhập dữ liệu để xem phân bổ nhóm.');
+  rows.forEach(row => { const name = row.alliance || 'Chưa có liên minh'; groups.set(name, (groups.get(name) || 0) + 1); });
+  $('#category-count').textContent = `${groups.size} liên minh`;
+  if (groups.size) $('#category-list').innerHTML = [...groups].sort((a,b) => b[1] - a[1]).slice(0,8).map(([name,count]) => `<div class="category-row"><span title="${escapeHtml(name)}">${escapeHtml(name)}</span><span class="bar"><i style="width:${count / rows.length * 100}%"></i></span><b>${fmt.format(count)}</b></div>`).join('');
+  else setEmpty($('#category-list'), 'Chưa có dữ liệu thống đốc.');
   if (rows.length) $('#top-list').innerHTML = [...rows].sort((a,b) => b.power - a.power).slice(0,5).map((row,i) => `<div class="top-row"><span class="rank">${String(i+1).padStart(2,'0')}</span><span><b>${escapeHtml(row.name || `ID ${row.id}`)}</b><small>${escapeHtml(row.alliance || 'Chưa có liên minh')} · ${escapeHtml(row.id)}</small></span><span class="value">${display(row.power)}</span></div>`).join('');
   else setEmpty($('#top-list'), 'Chưa có danh sách thống đốc.');
   $('#scan-label').textContent = 'ROKSTATS · 25/10/2026';
@@ -153,12 +154,11 @@ function renderGovernors() {
 }
 
 function renderHistory() {
-  if (!snapshots.length) setEmpty($('#history-list'), 'Chưa có lần nhập dữ liệu nào.');
-  else $('#history-list').innerHTML = [...snapshots].reverse().map(item => `<div class="history-item"><span>${new Date(item.at).toLocaleString('vi-VN')} · ${escapeHtml(item.file)}</span><span>${fmt.format(item.rows.length)} ID</span></div>`).join('');
+  const sourceHistory = sourceRows.length ? '<div class="history-item"><span>25/10/2026 18:00 · ROKSTATS All Governors</span><span>564 ID</span></div>' : '';
+  $('#history-list').innerHTML = [...snapshots].reverse().map(item => `<div class="history-item"><span>${new Date(item.at).toLocaleString('vi-VN')} · ${escapeHtml(item.file)}</span><span>${fmt.format(item.rows.length)} ID</span></div>`).join('') + sourceHistory || '<div class="empty">Chưa có dữ liệu.</div>';
   const hasData = rows.length > 0;
-  $('#data-status').innerHTML = '<i class="status-dot ready"></i> Có bản chụp ROKSTATS';
-  $('#updated-at').textContent = 'Ghi nhận 25/10/2026';
-  $('#data-notice').classList.toggle('hidden', hasData);
+  $('#data-status').innerHTML = `<i class="status-dot ready"></i> ${hasData ? `${fmt.format(rows.length)} thống đốc` : 'Có bản chụp ROKSTATS'}`;
+  $('#updated-at').textContent = snapshots.length ? `Dữ liệu riêng: ${new Date(snapshots.at(-1).at).toLocaleString('vi-VN')}` : 'Bản quét 25/10/2026 18:00';
 }
 
 function render() { renderOverview(); renderAlliances(); renderGovernors(); renderHistory(); }
@@ -204,7 +204,18 @@ $('#clear-data').addEventListener('click', () => {
   if (!snapshots.length || !confirm('Xóa mọi bản dữ liệu Kingdom 2676 đã lưu trong trình duyệt này?')) return;
   localStorage.removeItem(STORE_KEY);
   snapshots = [];
-  rows = [];
+  rows = sourceRows;
   render();
 });
 render();
+fetch('/governors.json').then(response => {
+  if (!response.ok) throw new Error('Không tải được bản dữ liệu thống đốc.');
+  return response.json();
+}).then(data => {
+  sourceRows = Array.isArray(data.rows) ? data.rows : [];
+  if (!snapshots.length) rows = sourceRows;
+  render();
+}).catch(error => {
+  $('#upload-result').classList.add('error');
+  $('#upload-result').textContent = error.message;
+});
