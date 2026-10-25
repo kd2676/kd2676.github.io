@@ -1,0 +1,57 @@
+// Bản chụp các số liệu hiển thị trên https://app.rokstats.online/kingdom/2676
+// ngày 25/10/2026. Trang này không dùng phiên đăng nhập của người xem.
+const sourceSnapshot = {
+  capturedAt: '2026-10-25',
+  kingdom: 'Zipporania',
+  globalRank: 1881,
+  opened: '10/02/2022',
+  king: '乡 Elite 乡',
+  kingAlliance: '[ROFF] Rise of FinalFantasy',
+  metrics: [
+    ['Total Power', '7,63B', 'Hạng toàn cầu #1881'],
+    ['Kill Points', '177,16B', 'Theo ROKSTATS'],
+    ['Kingdom Deaths', '1,44B', 'Theo ROKSTATS'],
+    ['Top 300 Power', '5,31B', '117 × CH25'],
+    ['Top 300 Acclaim', '298,19M', '300 người chơi'],
+    ['Power Grade', 'D', '17,5%'],
+    ['Tech Grade', 'C', '24,6%'],
+    ['Activity Grade', 'D', '13,3%']
+  ],
+  alliances: [
+    ['ROFF', 'Rise of FinalFantasy', '2,87B'],
+    ['RODW', 'Realm of Divine War', '857,29M'],
+    ['76BF', 'Bold Farmers', '819,59M'],
+    ['76T!', 'TＩTＡNＳ', '543,79M'],
+    ['76F!', 'Farm76 fam', '477,53M'],
+    ['76Sh', 'Soaring Heavens', '374,62M'],
+    ['Be1!', 'Be one', '277,86M'],
+    ['76Fr', 'Farm 76fam', '258,69M'],
+    ['76TS', 'A Thousand Suns', '252,15M'],
+    ['UZZK', 'New Teutonic Order', '149,03M'],
+    ['GdRK', '-MAHARLIKA-', '140,17M'],
+    ['ZT76', 'Zodiac Team', '114,42M'],
+    ['F3M2', 'Homem Formiga', '90,19M'],
+    ['aqbb', 'go_top_1', '73,31M'],
+    ['HFSA', 'Haha ha', '58,61M'],
+    ['GDGR', 'Hammer of domination', '52,69M'],
+    ['R-WF', 'Royal Wolfs', '34,01M'],
+    ['76P!', '76 Pride', '26,4M'],
+    ['TM59', 'TRĂNG MÁU', '20,08M'],
+    ['P-ME', 'SUN ADVENTURE I', '18,67M'],
+    ['76DW', 'Disaster Warriors', '16,22M'],
+    ['VNvp', 'VN88/TVT', '16,08M'],
+    ['UnKs', 'S1VNno1', '15,26M'],
+    ['54DT', 'Erima', '14,08M'],
+    ['ttit', 'anime TOP', '12,9M']
+  ],
+  kvks: [
+    { code: 'C13315', name: 'Mighty Assembly', dates: '25/09 – 16/11/2026', status: 'Đang diễn ra' },
+    { code: 'C13196', name: 'King of All Britain', dates: '05/06 – 27/07/2026', kp: '15,54B', deaths: '66,15M' },
+    { code: 'C13085', name: 'Heroic Anthem', dates: '13/03 – 04/05/2026', kp: '23,6B', deaths: '106,32M' },
+    { code: 'C12989', name: 'Song of Troy', dates: '05/12/2025 – 26/01/2026', kp: '23,61B', deaths: '108,64M' },
+    { code: 'C12851', name: 'Tides of War', dates: '14/08 – 11/10/2025', kp: '20,79B', deaths: '109,16M' },
+    { code: 'C12743', name: 'Storm of Stratagems', dates: '05/06 – 02/08/2025', kp: '9,29B', deaths: '96,87M' },
+    { code: 'C12625', name: 'Keener Blades', dates: '27/02 – 26/04/2025', kp: '17,93B', deaths: '161,71M' },
+    { code: 'C12487', name: 'Heroic Anthem', dates: '21/11/2024 – 19/01/2025', kp: '14,6B', deaths: '116,65M' }
+  ]
+};
