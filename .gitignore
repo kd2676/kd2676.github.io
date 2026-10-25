@@ -7,3 +7,7 @@ dist/
 data/
 *.log
 *.tsbuildinfo
+releases/
+check_rokstats.mjs
+image.png
+scripts/test-icons.ts

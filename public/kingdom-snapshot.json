@@ -47,6 +47,26 @@
       "13,3%"
     ]
   ],
+  "radarGrades": [
+    { "key": "power", "label": "Power", "grade": "D", "percentile": 17.5 },
+    { "key": "tech", "label": "Tech", "grade": "C", "percentile": 24.6 },
+    { "key": "activity", "label": "Activity", "grade": "D", "percentile": 13.3 },
+    { "key": "development", "label": "Development", "grade": "C", "percentile": 28.7 },
+    { "key": "field", "label": "Field", "grade": "D", "percentile": 19.1 },
+    { "key": "garrison", "label": "Garrison", "grade": "C", "percentile": 22.0 }
+  ],
+  "currentKvk": {
+    "name": "Mighty Assembly",
+    "code": "C13315",
+    "startDate": "2026-09-25",
+    "endDate": "2026-11-16",
+    "status": "Lost Kingdom",
+    "phases": [
+      { "name": "Off-season", "dates": "29/09 – 11/10", "completed": true },
+      { "name": "Đăng ký / Tiền KvK", "dates": "12/10 – 22/10", "completed": true },
+      { "name": "Lost Kingdom", "dates": "23/10 – 16/11", "active": true }
+    ]
+  },
   "alliances": [
     [
       "ROFF",

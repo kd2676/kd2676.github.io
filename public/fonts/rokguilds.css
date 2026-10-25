@@ -1,0 +1,228 @@
+@font-face {
+  font-family: 'rokguilds';
+  src: url('/fonts/rokguilds.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^='rok-guild-'],
+[class*=' rok-guild-'] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'rokguilds' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.rok-guild-9:before {
+  content: "\e943";
+}
+.rok-guild-10:before {
+  content: "\e942";
+}
+.rok-guild-21:before {
+  content: "\e912";
+}
+.rok-guild-1:before {
+  content: "\e900";
+}
+.rok-guild-2:before {
+  content: "\e901";
+}
+.rok-guild-3:before {
+  content: "\e902";
+}
+.rok-guild-4:before {
+  content: "\e903";
+}
+.rok-guild-5:before {
+  content: "\e904";
+}
+.rok-guild-6:before {
+  content: "\e905";
+}
+.rok-guild-7:before {
+  content: "\e906";
+}
+.rok-guild-8:before {
+  content: "\e907";
+}
+.rok-guild-11:before {
+  content: "\e908";
+}
+.rok-guild-12:before {
+  content: "\e909";
+}
+.rok-guild-13:before {
+  content: "\e90a";
+}
+.rok-guild-14:before {
+  content: "\e90b";
+}
+.rok-guild-15:before {
+  content: "\e90c";
+}
+.rok-guild-16:before {
+  content: "\e90d";
+}
+.rok-guild-17:before {
+  content: "\e90e";
+}
+.rok-guild-18:before {
+  content: "\e90f";
+}
+.rok-guild-19:before {
+  content: "\e910";
+}
+.rok-guild-20:before {
+  content: "\e911";
+}
+.rok-guild-22:before {
+  content: "\e913";
+}
+.rok-guild-23:before {
+  content: "\e914";
+}
+.rok-guild-24:before {
+  content: "\e915";
+}
+.rok-guild-25:before {
+  content: "\e916";
+}
+.rok-guild-26:before {
+  content: "\e917";
+}
+.rok-guild-27:before {
+  content: "\e918";
+}
+.rok-guild-28:before {
+  content: "\e919";
+}
+.rok-guild-29:before {
+  content: "\e91a";
+}
+.rok-guild-30:before {
+  content: "\e91b";
+}
+.rok-guild-31:before {
+  content: "\e91c";
+}
+.rok-guild-32:before {
+  content: "\e91d";
+}
+.rok-guild-33:before {
+  content: "\e91e";
+}
+.rok-guild-34:before {
+  content: "\e91f";
+}
+.rok-guild-35:before {
+  content: "\e920";
+}
+.rok-guild-36:before {
+  content: "\e921";
+}
+.rok-guild-37:before {
+  content: "\e922";
+}
+.rok-guild-38:before {
+  content: "\e923";
+}
+.rok-guild-39:before {
+  content: "\e924";
+}
+.rok-guild-40:before {
+  content: "\e925";
+}
+.rok-guild-49:before {
+  content: "\e926";
+}
+.rok-guild-50:before {
+  content: "\e927";
+}
+.rok-guild-51:before {
+  content: "\e928";
+}
+.rok-guild-52:before {
+  content: "\e929";
+}
+.rok-guild-53:before {
+  content: "\e92a";
+}
+.rok-guild-54:before {
+  content: "\e92b";
+}
+.rok-guild-55:before {
+  content: "\e92c";
+}
+.rok-guild-56:before {
+  content: "\e92d";
+}
+.rok-guild-57:before {
+  content: "\e92e";
+}
+.rok-guild-58:before {
+  content: "\e92f";
+}
+.rok-guild-59:before {
+  content: "\e930";
+}
+.rok-guild-60:before {
+  content: "\e931";
+}
+.rok-guild-61:before {
+  content: "\e932";
+}
+.rok-guild-62:before {
+  content: "\e933";
+}
+.rok-guild-63:before {
+  content: "\e934";
+}
+.rok-guild-64:before {
+  content: "\e935";
+}
+.rok-guild-67:before {
+  content: "\e936";
+}
+.rok-guild-68:before {
+  content: "\e937";
+}
+.rok-guild-70:before {
+  content: "\e938";
+}
+.rok-guild-71:before {
+  content: "\e939";
+}
+.rok-guild-72:before {
+  content: "\e93a";
+}
+.rok-guild-73:before {
+  content: "\e93b";
+}
+.rok-guild-74:before {
+  content: "\e93c";
+}
+.rok-guild-75:before {
+  content: "\e93d";
+}
+.rok-guild-76:before {
+  content: "\e93e";
+}
+.rok-guild-77:before {
+  content: "\e93f";
+}
+.rok-guild-78:before {
+  content: "\e940";
+}
+.rok-guild-79:before {
+  content: "\e941";
+}

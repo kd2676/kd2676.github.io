@@ -4,6 +4,11 @@ export type Governor = {
   id: string; name: string; alliance: string; power: number; troopPower: number;
   killPoints: number; t4Kills: number; t5Kills: number; dead: number;
   ch?: number; snapshotTime?: string;
+  avatar?: string;
+  avatarFrame?: string;
+  guildTag?: string;
+  guildName?: string;
+  guildKingdom?: number;
 };
 export type Dataset = { source: string; exportedAt: string; rows: Governor[] };
 type CsvRow = Record<string, string>;

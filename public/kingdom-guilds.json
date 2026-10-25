@@ -1,0 +1,1487 @@
+[
+  {
+    "guildId": 4409628,
+    "rank": 1,
+    "score": 2632281348,
+    "guildInfo": {
+      "guildName": "Rise of FinalFantasy",
+      "guildAbbr": "ROFF",
+      "guildLogo": "14_16_14_4_0_3",
+      "leaderId": 139794266,
+      "leaderName": "IStarlightI",
+      "serverId": 1676,
+      "territory": 596
+    },
+    "previousRank": 1
+  },
+  {
+    "guildId": 4409450,
+    "rank": 2,
+    "score": 861873096,
+    "guildInfo": {
+      "guildName": "Realm of Divine War",
+      "guildAbbr": "RODW",
+      "guildLogo": "10_3_15_5_0_1",
+      "leaderId": 148954714,
+      "leaderName": "hoggy",
+      "serverId": 1676,
+      "territory": 501
+    },
+    "previousRank": 2
+  },
+  {
+    "guildId": 4410481,
+    "rank": 3,
+    "score": 819585424,
+    "guildInfo": {
+      "guildName": "Bold Farmers",
+      "guildAbbr": "76BF",
+      "guildLogo": "13_5_32_4_0_0",
+      "leaderId": 196906735,
+      "leaderName": "crackson",
+      "serverId": 1676,
+      "territory": 371
+    },
+    "previousRank": 3
+  },
+  {
+    "guildId": 4409569,
+    "rank": 4,
+    "score": 549972650,
+    "guildInfo": {
+      "guildName": "Farm76 fam",
+      "guildAbbr": "76F!",
+      "guildLogo": "16_15_4_6_0_0",
+      "leaderId": 169726840,
+      "leaderName": "Slow 6uild",
+      "serverId": 1676,
+      "territory": 500
+    },
+    "previousRank": 4
+  },
+  {
+    "guildId": 4412523,
+    "rank": 5,
+    "score": 536247112,
+    "guildInfo": {
+      "guildName": "TＩTＡNＳ",
+      "guildAbbr": "76T!",
+      "guildLogo": "7_4_52_5_0_0",
+      "leaderId": 179465155,
+      "leaderName": "Minihog",
+      "serverId": 1676,
+      "territory": 380
+    },
+    "previousRank": 5
+  },
+  {
+    "guildId": 4410136,
+    "rank": 6,
+    "score": 370550692,
+    "guildInfo": {
+      "guildName": "Soaring Heavens",
+      "guildAbbr": "76Sh",
+      "guildLogo": "10_7_12_6_0_0",
+      "leaderId": 179463611,
+      "leaderName": "Hogggg",
+      "serverId": 1676,
+      "territory": 406
+    },
+    "previousRank": 6
+  },
+  {
+    "guildId": 6441077,
+    "rank": 7,
+    "score": 277863773,
+    "guildInfo": {
+      "guildName": "Be one",
+      "guildAbbr": "Be1!",
+      "guildLogo": "8_4_39_4_0_0",
+      "leaderId": 120293652,
+      "leaderName": "OOXX owo",
+      "serverId": 1676,
+      "territory": 1
+    },
+    "previousRank": 7
+  },
+  {
+    "guildId": 4414279,
+    "rank": 8,
+    "score": 258745471,
+    "guildInfo": {
+      "guildName": "Farm 76fam",
+      "guildAbbr": "76Fr",
+      "guildLogo": "10_5_56_5_0_0",
+      "leaderId": 155193684,
+      "leaderName": "Minni wood",
+      "serverId": 1676,
+      "territory": 195
+    },
+    "previousRank": 8
+  },
+  {
+    "guildId": 4409769,
+    "rank": 9,
+    "score": 252153538,
+    "guildInfo": {
+      "guildName": "A Thousand Suns",
+      "guildAbbr": "76TS",
+      "guildLogo": "4_7_57_1_0_0",
+      "leaderId": 94248730,
+      "leaderName": "Governor94248730",
+      "serverId": 1676,
+      "territory": 44
+    },
+    "previousRank": 9
+  },
+  {
+    "guildId": 4418153,
+    "rank": 10,
+    "score": 149031698,
+    "guildInfo": {
+      "guildName": "New Teutonic Order",
+      "guildAbbr": "UZZK",
+      "guildLogo": "4_16_51_1_0_0",
+      "leaderId": 120312043,
+      "leaderName": "Правитель120312043",
+      "serverId": 1676,
+      "territory": 11
+    },
+    "previousRank": 11
+  },
+  {
+    "guildId": 4411467,
+    "rank": 11,
+    "score": 140168936,
+    "guildInfo": {
+      "guildName": "-MAHARLIKA-",
+      "guildAbbr": "GdRK",
+      "guildLogo": "4_9_54_1_0_0",
+      "leaderId": 120190432,
+      "leaderName": "Issei Miyagi",
+      "serverId": 1676,
+      "territory": 19
+    },
+    "previousRank": 14
+  },
+  {
+    "guildId": 4416494,
+    "rank": 12,
+    "score": 114415052,
+    "guildInfo": {
+      "guildName": "Zodiac Team",
+      "guildAbbr": "ZT76",
+      "guildLogo": "16_1_31_1_0_0",
+      "leaderId": 211718150,
+      "leaderName": "Stone F18",
+      "serverId": 1676,
+      "territory": 94
+    },
+    "previousRank": 12
+  },
+  {
+    "guildId": 4413872,
+    "rank": 13,
+    "score": 90194029,
+    "guildInfo": {
+      "guildName": "Homem Formiga",
+      "guildAbbr": "F3M2",
+      "guildLogo": "7_3_52_4_0_0",
+      "leaderId": 120176218,
+      "leaderName": "Правитель120176218",
+      "serverId": 1676,
+      "territory": 29
+    },
+    "previousRank": 15
+  },
+  {
+    "guildId": 4413853,
+    "rank": 14,
+    "score": 73307928,
+    "guildInfo": {
+      "guildName": "go_top_1",
+      "guildAbbr": "aqbb",
+      "guildLogo": "5_1_61_3_0_0",
+      "leaderId": 120194375,
+      "leaderName": "Thống đốc120194375",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 14
+  },
+  {
+    "guildId": 4410953,
+    "rank": 15,
+    "score": 58613949,
+    "guildInfo": {
+      "guildName": "Haha ha",
+      "guildAbbr": "HFSA",
+      "guildLogo": "13_14_16_4_0_0",
+      "leaderId": 215326009,
+      "leaderName": "JangKUk",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 18
+  },
+  {
+    "guildId": 4472212,
+    "rank": 16,
+    "score": 52692568,
+    "guildInfo": {
+      "guildName": "Hammer of domination",
+      "guildAbbr": "GDGR",
+      "guildLogo": "4_16_61_6_0_0",
+      "leaderId": 121817425,
+      "leaderName": "SugarTori",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 26
+  },
+  {
+    "guildId": 4416811,
+    "rank": 17,
+    "score": 34009159,
+    "guildInfo": {
+      "guildName": "Royal Wolfs",
+      "guildAbbr": "R-WF",
+      "guildLogo": "16_5_24_5_0_0",
+      "leaderId": 124819416,
+      "leaderName": "Zarządca124819416",
+      "serverId": 1676,
+      "territory": 38
+    },
+    "previousRank": 18
+  },
+  {
+    "guildId": 4410927,
+    "rank": 18,
+    "score": 26400371,
+    "guildInfo": {
+      "guildName": "76 Pride",
+      "guildAbbr": "76P!",
+      "guildLogo": "15_10_56_5_0_0",
+      "leaderId": 17338996,
+      "leaderName": "Stop zeroing us",
+      "serverId": 1676,
+      "territory": 104
+    },
+    "previousRank": 22
+  },
+  {
+    "guildId": 4409954,
+    "rank": 19,
+    "score": 20078718,
+    "guildInfo": {
+      "guildName": "TRĂNG MÁU",
+      "guildAbbr": "TM59",
+      "guildLogo": "8_15_8_4_0_0",
+      "leaderId": 120170932,
+      "leaderName": "Thống đốc120170932",
+      "serverId": 1676,
+      "territory": 3
+    },
+    "previousRank": 47
+  },
+  {
+    "guildId": 4417673,
+    "rank": 20,
+    "score": 18668640,
+    "guildInfo": {
+      "guildName": "SUN ADVENTURE I",
+      "guildAbbr": "P-ME",
+      "guildLogo": "14_14_31_6_0_0",
+      "leaderId": 120932680,
+      "leaderName": "Governador120932680",
+      "serverId": 1676,
+      "territory": 6
+    },
+    "previousRank": 20
+  },
+  {
+    "guildId": 4411863,
+    "rank": 21,
+    "score": 16220240,
+    "guildInfo": {
+      "guildName": "Disaster Warriors",
+      "guildAbbr": "76DW",
+      "guildLogo": "3_9_9_3_0_0",
+      "leaderId": 120352444,
+      "leaderName": "Governor120352444",
+      "serverId": 1676,
+      "territory": 3
+    },
+    "previousRank": 29
+  },
+  {
+    "guildId": 4413097,
+    "rank": 22,
+    "score": 16081972,
+    "guildInfo": {
+      "guildName": "VN88/TVT",
+      "guildAbbr": "VNvp",
+      "guildLogo": "4_2_25_2_0_0",
+      "leaderId": 120204985,
+      "leaderName": "Thống đốc120204985",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 26
+  },
+  {
+    "guildId": 4416998,
+    "rank": 23,
+    "score": 15261714,
+    "guildInfo": {
+      "guildName": "S1VNno1",
+      "guildAbbr": "UnKs",
+      "guildLogo": "4_16_49_6_0_0",
+      "leaderId": 125893452,
+      "leaderName": "Thống đốc125893452",
+      "serverId": 1676,
+      "territory": 1
+    },
+    "previousRank": 28
+  },
+  {
+    "guildId": 4422396,
+    "rank": 24,
+    "score": 14079770,
+    "guildInfo": {
+      "guildName": "Erima",
+      "guildAbbr": "54DT",
+      "guildLogo": "16_16_1_5_0_0",
+      "leaderId": 120241314,
+      "leaderName": "Thống đốc120241314",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 49
+  },
+  {
+    "guildId": 4413814,
+    "rank": 25,
+    "score": 12897046,
+    "guildInfo": {
+      "guildName": "anime TOP",
+      "guildAbbr": "ttit",
+      "guildLogo": "16_14_34_4_0_0",
+      "leaderId": 120299964,
+      "leaderName": "Правитель120299964",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 31
+  },
+  {
+    "guildId": 4409447,
+    "rank": 26,
+    "score": 12626777,
+    "guildInfo": {
+      "guildName": "Major 5 peace",
+      "guildAbbr": "bi76",
+      "guildLogo": "11_9_63_7_0_0",
+      "leaderId": 120118946,
+      "leaderName": "Правитель120118946",
+      "serverId": 1676,
+      "territory": 9
+    },
+    "previousRank": 40
+  },
+  {
+    "guildId": 4412014,
+    "rank": 27,
+    "score": 10796432,
+    "guildInfo": {
+      "guildName": "POWER OF CONQUEST",
+      "guildAbbr": "#POC",
+      "guildLogo": "15_5_3_4_0_0",
+      "leaderId": 119333314,
+      "leaderName": "Governador119333314",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 37
+  },
+  {
+    "guildId": 4414371,
+    "rank": 28,
+    "score": 9882093,
+    "guildInfo": {
+      "guildName": "AKATSUKI3",
+      "guildAbbr": "HMH3",
+      "guildLogo": "2_8_55_6_0_0",
+      "leaderId": 120221022,
+      "leaderName": "Dragon18nd",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 54
+  },
+  {
+    "guildId": 4410170,
+    "rank": 29,
+    "score": 9721856,
+    "guildInfo": {
+      "guildName": "The empire of Islam",
+      "guildAbbr": "IDFV",
+      "guildLogo": "11_16_61_5_0_0",
+      "leaderId": 120297952,
+      "leaderName": "Gubernur120297952",
+      "serverId": 1676,
+      "territory": 21
+    },
+    "previousRank": 35
+  },
+  {
+    "guildId": 4411389,
+    "rank": 30,
+    "score": 9175505,
+    "guildInfo": {
+      "guildName": "LLS8 Suites",
+      "guildAbbr": "LLS8",
+      "guildLogo": "13_2_54_6_0_0",
+      "leaderId": 120238397,
+      "leaderName": "Thống đốc120238397",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 39
+  },
+  {
+    "guildId": 4409741,
+    "rank": 31,
+    "score": 8743667,
+    "guildInfo": {
+      "guildName": "Team Việt Nam S",
+      "guildAbbr": "51AE",
+      "guildLogo": "2_2_49_6_0_0",
+      "leaderId": 120270666,
+      "leaderName": "Thống đốc120270666",
+      "serverId": 1676,
+      "territory": 1
+    },
+    "previousRank": 44
+  },
+  {
+    "guildId": 8914654,
+    "rank": 32,
+    "score": 8658695,
+    "guildInfo": {
+      "guildName": "Luminarc",
+      "guildAbbr": "LUMN",
+      "guildLogo": "3_12_70_6_0_0",
+      "leaderId": 120375265,
+      "leaderName": "Governor120375265",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 32
+  },
+  {
+    "guildId": 4410067,
+    "rank": 33,
+    "score": 8030678,
+    "guildInfo": {
+      "guildName": "VN Sam lì",
+      "guildAbbr": "FJ76",
+      "guildLogo": "8_10_8_1_0_0",
+      "leaderId": 120115710,
+      "leaderName": "Thống đốc120115710",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 45
+  },
+  {
+    "guildId": 4410017,
+    "rank": 34,
+    "score": 7372750,
+    "guildInfo": {
+      "guildName": "Türk Ulusu_",
+      "guildAbbr": "YBS-",
+      "guildLogo": "5_9_3_3_0_0",
+      "leaderId": 78488251,
+      "leaderName": "Governor78488251",
+      "serverId": 1676,
+      "territory": 1
+    },
+    "previousRank": 78
+  },
+  {
+    "guildId": 4410020,
+    "rank": 35,
+    "score": 7040532,
+    "guildInfo": {
+      "guildName": "jonp900",
+      "guildAbbr": "UnRA",
+      "guildLogo": "4_16_38_5_0_0",
+      "leaderId": 131210933,
+      "leaderName": "Gubernur131210933",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 44
+  },
+  {
+    "guildId": 4422497,
+    "rank": 36,
+    "score": 6907954,
+    "guildInfo": {
+      "guildName": "DARKFROST76",
+      "guildAbbr": "KLSB",
+      "guildLogo": "9_12_38_6_0_0",
+      "leaderId": 120360470,
+      "leaderName": "Thống đốc120360470",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 41
+  },
+  {
+    "guildId": 4410419,
+    "rank": 37,
+    "score": 6528498,
+    "guildInfo": {
+      "guildName": "Brave_Warrior",
+      "guildAbbr": "UNbw",
+      "guildLogo": "15_14_55_5_0_0",
+      "leaderId": 120243723,
+      "leaderName": "Thống đốc120243723",
+      "serverId": 1676,
+      "territory": 14
+    },
+    "previousRank": 42
+  },
+  {
+    "guildId": 4416495,
+    "rank": 38,
+    "score": 6081046,
+    "guildInfo": {
+      "guildName": "Lunar Eclipse_",
+      "guildAbbr": "LU_",
+      "guildLogo": "7_7_52_4_0_0",
+      "leaderId": 120266646,
+      "leaderName": "Governatore120266646",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 51
+  },
+  {
+    "guildId": 4409704,
+    "rank": 39,
+    "score": 5294069,
+    "guildInfo": {
+      "guildName": "The Last SPartans",
+      "guildAbbr": "RDUU",
+      "guildLogo": "15_16_18_1_0_0",
+      "leaderId": 120247415,
+      "leaderName": "الحاكم120247415",
+      "serverId": 1676,
+      "territory": 2
+    },
+    "previousRank": 99
+  },
+  {
+    "guildId": 4409876,
+    "rank": 40,
+    "score": 4901592,
+    "guildInfo": {
+      "guildName": "Família BR/SP",
+      "guildAbbr": "W-vk",
+      "guildLogo": "16_16_58_6_0_0",
+      "leaderId": 124732269,
+      "leaderName": "Governador124732269",
+      "serverId": 1676,
+      "territory": 32
+    },
+    "previousRank": 103
+  },
+  {
+    "guildId": 4409867,
+    "rank": 41,
+    "score": 4879127,
+    "guildInfo": {
+      "guildName": "Todos UnidosS",
+      "guildAbbr": "76JR",
+      "guildLogo": "4_12_33_6_0_0",
+      "leaderId": 120455871,
+      "leaderName": "Gobernador120455871",
+      "serverId": 1676,
+      "territory": 41
+    },
+    "previousRank": 116
+  },
+  {
+    "guildId": 4416427,
+    "rank": 42,
+    "score": 4524312,
+    "guildInfo": {
+      "guildName": "rảnh chơi",
+      "guildAbbr": "TCVD",
+      "guildLogo": "15_12_22_4_0_0",
+      "leaderId": 120277591,
+      "leaderName": "Thống đốc120277591",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 41
+  },
+  {
+    "guildId": 4411128,
+    "rank": 43,
+    "score": 3652555,
+    "guildInfo": {
+      "guildName": "Vallhalans",
+      "guildAbbr": "Vhls",
+      "guildLogo": "4_16_50_4_0_0",
+      "leaderId": 120161187,
+      "leaderName": "Governatore120161187",
+      "serverId": 1676,
+      "territory": 2
+    },
+    "previousRank": 55
+  },
+  {
+    "guildId": 4413929,
+    "rank": 44,
+    "score": 3626113,
+    "guildInfo": {
+      "guildName": "GOLDENWIZE SQUAD",
+      "guildAbbr": "gldq",
+      "guildLogo": "9_12_12_5_0_0",
+      "leaderId": 120276633,
+      "leaderName": "Governatore120276633",
+      "serverId": 1676,
+      "territory": 1
+    },
+    "previousRank": 44
+  },
+  {
+    "guildId": 4418294,
+    "rank": 45,
+    "score": 3458703,
+    "guildInfo": {
+      "guildName": "Akatsuki_FR",
+      "guildAbbr": "AKFr",
+      "guildLogo": "4_16_61_3_0_0",
+      "leaderId": 120229330,
+      "leaderName": "Gouverneur120229330",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 99
+  },
+  {
+    "guildId": 4409832,
+    "rank": 46,
+    "score": 3269662,
+    "guildInfo": {
+      "guildName": "Kings of Avalon",
+      "guildAbbr": "LKoa",
+      "guildLogo": "13_1_38_4_0_0",
+      "leaderId": 120390546,
+      "leaderName": "Governor120390546",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 58
+  },
+  {
+    "guildId": 4414607,
+    "rank": 47,
+    "score": 3236392,
+    "guildInfo": {
+      "guildName": "INFINITE CROSS",
+      "guildAbbr": "12NN",
+      "guildLogo": "9_5_14_5_0_0",
+      "leaderId": 120269969,
+      "leaderName": "Governor120269969",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 60
+  },
+  {
+    "guildId": 4410518,
+    "rank": 48,
+    "score": 3185320,
+    "guildInfo": {
+      "guildName": "GOD 0F WAR",
+      "guildAbbr": "G0W:",
+      "guildLogo": "16_5_54_6_0_0",
+      "leaderId": 120130263,
+      "leaderName": "ผู้ว่าการ120130263",
+      "serverId": 1676,
+      "territory": 3
+    },
+    "previousRank": 125
+  },
+  {
+    "guildId": 4409951,
+    "rank": 49,
+    "score": 2985942,
+    "guildInfo": {
+      "guildName": "BlazeLand",
+      "guildAbbr": "blln",
+      "guildLogo": "4_16_1_5_0_0",
+      "leaderId": 120332404,
+      "leaderName": "Governor120332404",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 53
+  },
+  {
+    "guildId": 4412316,
+    "rank": 50,
+    "score": 2910180,
+    "guildInfo": {
+      "guildName": "Royal Warrior",
+      "guildAbbr": "76RW",
+      "guildLogo": "4_3_61_5_0_0",
+      "leaderId": 120346281,
+      "leaderName": "Gubernur120346281",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 50
+  },
+  {
+    "guildId": 4418309,
+    "rank": 51,
+    "score": 2810871,
+    "guildInfo": {
+      "guildName": "DRAKARIS",
+      "guildAbbr": "WXXX",
+      "guildLogo": "14_15_14_6_0_0",
+      "leaderId": 124116614,
+      "leaderName": "Governor124116614",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 56
+  },
+  {
+    "guildId": 4409819,
+    "rank": 52,
+    "score": 2765211,
+    "guildInfo": {
+      "guildName": "tyabee",
+      "guildAbbr": "o5RK",
+      "guildLogo": "16_4_14_5_0_0",
+      "leaderId": 120307806,
+      "leaderName": "Gubernur120307806",
+      "serverId": 1676,
+      "territory": 7
+    },
+    "previousRank": 55
+  },
+  {
+    "guildId": 4410200,
+    "rank": 53,
+    "score": 2613537,
+    "guildInfo": {
+      "guildName": "INASUMA",
+      "guildAbbr": "JPri",
+      "guildLogo": "3_4_38_5_0_0",
+      "leaderId": 120267400,
+      "leaderName": "Правитель120267400",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 150
+  },
+  {
+    "guildId": 4412304,
+    "rank": 54,
+    "score": 2578385,
+    "guildInfo": {
+      "guildName": "001 Freedom",
+      "guildAbbr": "001F",
+      "guildLogo": "13_15_12_3_0_0",
+      "leaderId": 120305277,
+      "leaderName": "Governor120305277",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 171
+  },
+  {
+    "guildId": 4412751,
+    "rank": 55,
+    "score": 2533354,
+    "guildInfo": {
+      "guildName": "YAKUZA BRASIL",
+      "guildAbbr": "@YKZ",
+      "guildLogo": "4_5_13_5_0_0",
+      "leaderId": 120301298,
+      "leaderName": "Governador120301298",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 73
+  },
+  {
+    "guildId": 4410513,
+    "rank": 56,
+    "score": 2437381,
+    "guildInfo": {
+      "guildName": "Rahil G",
+      "guildAbbr": "oRGO",
+      "guildLogo": "4_16_36_6_0_0",
+      "leaderId": 120312361,
+      "leaderName": "Governor120312361",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 76
+  },
+  {
+    "guildId": 4410201,
+    "rank": 57,
+    "score": 2395622,
+    "guildInfo": {
+      "guildName": "Brazilians Hackers",
+      "guildAbbr": "BHAK",
+      "guildLogo": "11_10_33_6_0_0",
+      "leaderId": 120134707,
+      "leaderName": "Statthalter120134707",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 72
+  },
+  {
+    "guildId": 4410303,
+    "rank": 58,
+    "score": 2297224,
+    "guildInfo": {
+      "guildName": "LIVE ZERO LOVE",
+      "guildAbbr": "LZ-L",
+      "guildLogo": "15_16_36_2_0_0",
+      "leaderId": 120362380,
+      "leaderName": "Governor120362380",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 60
+  },
+  {
+    "guildId": 4418992,
+    "rank": 59,
+    "score": 2234927,
+    "guildInfo": {
+      "guildName": "Gg123654",
+      "guildAbbr": "Sa28",
+      "guildLogo": "11_13_16_2_0_0",
+      "leaderId": 120357187,
+      "leaderName": "Thống đốc120357187",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 65
+  },
+  {
+    "guildId": 4419694,
+    "rank": 60,
+    "score": 2220117,
+    "guildInfo": {
+      "guildName": "ZoneRed",
+      "guildAbbr": "ocee",
+      "guildLogo": "2_5_51_5_0_0",
+      "leaderId": 120384845,
+      "leaderName": "الحاكم120384845",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 45
+  },
+  {
+    "guildId": 4410399,
+    "rank": 61,
+    "score": 2206472,
+    "guildInfo": {
+      "guildName": "KINGS and QUEENS",
+      "guildAbbr": "K95Q",
+      "guildLogo": "10_3_22_3_0_0",
+      "leaderId": 120156111,
+      "leaderName": "Правитель120156111",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 75
+  },
+  {
+    "guildId": 4410906,
+    "rank": 62,
+    "score": 2201858,
+    "guildInfo": {
+      "guildName": "dark death396",
+      "guildAbbr": "18dd",
+      "guildLogo": "7_16_37_5_0_0",
+      "leaderId": 120198009,
+      "leaderName": "Gobernador120198009",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 76
+  },
+  {
+    "guildId": 4409773,
+    "rank": 63,
+    "score": 2167317,
+    "guildInfo": {
+      "guildName": "Turtlix",
+      "guildAbbr": "SOiS",
+      "guildLogo": "13_12_39_4_0_0",
+      "leaderId": 120151889,
+      "leaderName": "Правитель120151889",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 69
+  },
+  {
+    "guildId": 4411737,
+    "rank": 64,
+    "score": 2051455,
+    "guildInfo": {
+      "guildName": "Cobra-kai",
+      "guildAbbr": "Gmz",
+      "guildLogo": "4_16_51_5_0_0",
+      "leaderId": 120240958,
+      "leaderName": "Gobernador120240958",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 79
+  },
+  {
+    "guildId": 4417551,
+    "rank": 65,
+    "score": 2006130,
+    "guildInfo": {
+      "guildName": "MarconDrac",
+      "guildAbbr": "GZUS",
+      "guildLogo": "5_16_11_2_0_0",
+      "leaderId": 169202705,
+      "leaderName": "Governor169202705",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 152
+  },
+  {
+    "guildId": 4416555,
+    "rank": 66,
+    "score": 1998987,
+    "guildInfo": {
+      "guildName": "OngTrum509",
+      "guildAbbr": "qqhh",
+      "guildLogo": "4_11_29_3_0_0",
+      "leaderId": 120245780,
+      "leaderName": "Thống đốc120245780",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 80
+  },
+  {
+    "guildId": 4411885,
+    "rank": 67,
+    "score": 1989114,
+    "guildInfo": {
+      "guildName": "Puro Humo",
+      "guildAbbr": "PuUm",
+      "guildLogo": "4_10_39_2_0_0",
+      "leaderId": 120321813,
+      "leaderName": "Gobernador120321813",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 83
+  },
+  {
+    "guildId": 4411653,
+    "rank": 68,
+    "score": 1917555,
+    "guildInfo": {
+      "guildName": "CNFU1",
+      "guildAbbr": "OkTv",
+      "guildLogo": "4_10_27_1_0_0",
+      "leaderId": 120137013,
+      "leaderName": "Thống đốc120137013",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 97
+  },
+  {
+    "guildId": 4412882,
+    "rank": 69,
+    "score": 1905290,
+    "guildInfo": {
+      "guildName": "sotemhumildes",
+      "guildAbbr": "brer",
+      "guildLogo": "12_4_36_4_0_0",
+      "leaderId": 120354330,
+      "leaderName": "Governador120354330",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 87
+  },
+  {
+    "guildId": 4410189,
+    "rank": 70,
+    "score": 1685423,
+    "guildInfo": {
+      "guildName": "IOPs76",
+      "guildAbbr": "IOPs",
+      "guildLogo": "4_16_24_2_0_0",
+      "leaderId": 120140290,
+      "leaderName": "Governor120140290",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 57
+  },
+  {
+    "guildId": 4410577,
+    "rank": 71,
+    "score": 1674545,
+    "guildInfo": {
+      "guildName": "Afterglow",
+      "guildAbbr": "AFGW",
+      "guildLogo": "4_14_53_6_0_0",
+      "leaderId": 120309223,
+      "leaderName": "Governor120309223",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 72
+  },
+  {
+    "guildId": 4416896,
+    "rank": 72,
+    "score": 1621133,
+    "guildInfo": {
+      "guildName": "богатыри9062",
+      "guildAbbr": "f1t1",
+      "guildLogo": "11_16_18_6_0_0",
+      "leaderId": 120290621,
+      "leaderName": "Правитель120290621",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 87
+  },
+  {
+    "guildId": 4414376,
+    "rank": 73,
+    "score": 1486289,
+    "guildInfo": {
+      "guildName": "fust push",
+      "guildAbbr": "65PB",
+      "guildLogo": "4_1_33_2_0_0",
+      "leaderId": 120233909,
+      "leaderName": "Правитель120233909",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 59
+  },
+  {
+    "guildId": 4416483,
+    "rank": 74,
+    "score": 1433018,
+    "guildInfo": {
+      "guildName": "Casa BELMONT",
+      "guildAbbr": "cBLO",
+      "guildLogo": "14_7_40_2_0_0",
+      "leaderId": 120292279,
+      "leaderName": "Zarządca120292279",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 94
+  },
+  {
+    "guildId": 4409641,
+    "rank": 75,
+    "score": 1352267,
+    "guildInfo": {
+      "guildName": "FC Wolf_Fr",
+      "guildAbbr": "Fn-g",
+      "guildLogo": "11_16_24_5_0_0",
+      "leaderId": 120172011,
+      "leaderName": "Gouverneur120172011",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 72
+  },
+  {
+    "guildId": 4414977,
+    "rank": 76,
+    "score": 1201636,
+    "guildInfo": {
+      "guildName": "ПрыгунЫ",
+      "guildAbbr": "ReK!",
+      "guildLogo": "2_5_18_1_0_0",
+      "leaderId": 120165953,
+      "leaderName": "Правитель120165953",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 172
+  },
+  {
+    "guildId": 4419483,
+    "rank": 77,
+    "score": 1066513,
+    "guildInfo": {
+      "guildName": "76 M0B",
+      "guildAbbr": "76MB",
+      "guildLogo": "3_13_29_4_0_0",
+      "leaderId": 143130792,
+      "leaderName": "Governor143130792",
+      "serverId": 1676,
+      "territory": 109
+    },
+    "previousRank": 25
+  },
+  {
+    "guildId": 4411525,
+    "rank": 78,
+    "score": 1059830,
+    "guildInfo": {
+      "guildName": "AUSDAUER",
+      "guildAbbr": "MUT~",
+      "guildLogo": "7_10_13_7_0_0",
+      "leaderId": 123173633,
+      "leaderName": "Gobernador123173633",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 61
+  },
+  {
+    "guildId": 4409689,
+    "rank": 79,
+    "score": 1037164,
+    "guildInfo": {
+      "guildName": "abdo1",
+      "guildAbbr": "abd0",
+      "guildLogo": "7_16_5_3_0_0",
+      "leaderId": 120328080,
+      "leaderName": "Governor120328080",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 37
+  },
+  {
+    "guildId": 4416397,
+    "rank": 80,
+    "score": 771372,
+    "guildInfo": {
+      "guildName": "Zakon Wolności",
+      "guildAbbr": "UN4C",
+      "guildLogo": "14_7_15_5_0_0",
+      "leaderId": 120166884,
+      "leaderName": "Zarządca120166884",
+      "serverId": 1676,
+      "territory": 2
+    },
+    "previousRank": 338
+  },
+  {
+    "guildId": 4409656,
+    "rank": 81,
+    "score": 611325,
+    "guildInfo": {
+      "guildName": "-Night Raven-",
+      "guildAbbr": "76NR",
+      "guildLogo": "11_9_2_5_0_0",
+      "leaderId": 119397696,
+      "leaderName": "Governor119397696",
+      "serverId": 1676,
+      "territory": 4
+    },
+    "previousRank": 326
+  },
+  {
+    "guildId": 4411321,
+    "rank": 82,
+    "score": 584988,
+    "guildInfo": {
+      "guildName": "Soup ark",
+      "guildAbbr": "So2A",
+      "guildLogo": "16_16_1_7_0_0",
+      "leaderId": 120147232,
+      "leaderName": "الحاكم120147232",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 34
+  },
+  {
+    "guildId": 4412393,
+    "rank": 83,
+    "score": 577028,
+    "guildInfo": {
+      "guildName": "Farm ville Alliance",
+      "guildAbbr": "FvA",
+      "guildLogo": "9_5_58_6_0_0",
+      "leaderId": 191158615,
+      "leaderName": "Aii x5",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 15
+  },
+  {
+    "guildId": 4413296,
+    "rank": 84,
+    "score": 544914,
+    "guildInfo": {
+      "guildName": "Farm 76",
+      "guildAbbr": "76Fy",
+      "guildLogo": "7_3_50_7_0_0",
+      "leaderId": 206089166,
+      "leaderName": "Aii x6",
+      "serverId": 1676,
+      "territory": 37
+    },
+    "previousRank": 15
+  },
+  {
+    "guildId": 4431557,
+    "rank": 85,
+    "score": 422328,
+    "guildInfo": {
+      "guildName": "Kingnaroc",
+      "guildAbbr": "RoC:",
+      "guildLogo": "9_8_18_5_0_0",
+      "leaderId": 120217254,
+      "leaderName": "Правитель120217254",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 316
+  },
+  {
+    "guildId": 4409844,
+    "rank": 86,
+    "score": 388795,
+    "guildInfo": {
+      "guildName": "INDOKABI",
+      "guildAbbr": "K4B1",
+      "guildLogo": "4_16_57_4_0_0",
+      "leaderId": 120369741,
+      "leaderName": "Gobernador120369741",
+      "serverId": 1676,
+      "territory": 50
+    },
+    "previousRank": 71
+  },
+  {
+    "guildId": 4412076,
+    "rank": 87,
+    "score": 387986,
+    "guildInfo": {
+      "guildName": "Старички",
+      "guildAbbr": "Bit:",
+      "guildLogo": "4_6_34_2_0_0",
+      "leaderId": 134889594,
+      "leaderName": "Правитель134889594",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 105
+  },
+  {
+    "guildId": 4413976,
+    "rank": 88,
+    "score": 122648,
+    "guildInfo": {
+      "guildName": "Passport_Bank",
+      "guildAbbr": "P_P1",
+      "guildLogo": "15_16_63_4_0_0",
+      "leaderId": 179675777,
+      "leaderName": "Governor179675777",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 21
+  },
+  {
+    "guildId": 4414793,
+    "rank": 89,
+    "score": 110658,
+    "guildInfo": {
+      "guildName": "As_1671100094_1",
+      "guildAbbr": "_76S",
+      "guildLogo": "14_1_31_6_0_0",
+      "leaderId": 144692045,
+      "leaderName": "Gubernur144692045",
+      "serverId": 1676,
+      "territory": 27
+    },
+    "previousRank": 113
+  },
+  {
+    "guildId": 4430679,
+    "rank": 90,
+    "score": 102905,
+    "guildInfo": {
+      "guildName": "RenacidosS",
+      "guildAbbr": "RR-M",
+      "guildLogo": "10_10_51_6_0_0",
+      "leaderId": 130475643,
+      "leaderName": "Gobernador130475643",
+      "serverId": 1676,
+      "territory": 5
+    },
+    "previousRank": 694
+  },
+  {
+    "guildId": 4409768,
+    "rank": 91,
+    "score": 72141,
+    "guildInfo": {
+      "guildName": "西游",
+      "guildAbbr": "ZHXY",
+      "guildLogo": "4_7_61_6_0_0",
+      "leaderId": 122980700,
+      "leaderName": "Gubernur122980700",
+      "serverId": 1676,
+      "territory": 6
+    },
+    "previousRank": 78
+  },
+  {
+    "guildId": 4417465,
+    "rank": 92,
+    "score": 64922,
+    "guildInfo": {
+      "guildName": "Farm 76Fam",
+      "guildAbbr": "76Fx",
+      "guildLogo": "16_5_4_1_0_0",
+      "leaderId": 193213426,
+      "leaderName": "Governor193213426",
+      "serverId": 1676,
+      "territory": 22
+    },
+    "previousRank": 99
+  },
+  {
+    "guildId": 4415199,
+    "rank": 93,
+    "score": 28853,
+    "guildInfo": {
+      "guildName": "Be One",
+      "guildAbbr": "bOne",
+      "guildLogo": "2_6_39_3_0_0",
+      "leaderId": 120282849,
+      "leaderName": "Governatore120282849",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 50
+  },
+  {
+    "guildId": 4411004,
+    "rank": 94,
+    "score": 26516,
+    "guildInfo": {
+      "guildName": "Godsonn",
+      "guildAbbr": "GdSn",
+      "guildLogo": "2_7_12_5_0_0",
+      "leaderId": 194492807,
+      "leaderName": "Governor194492807",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 114
+  },
+  {
+    "guildId": 4411489,
+    "rank": 95,
+    "score": 19866,
+    "guildInfo": {
+      "guildName": "Farmer Shop",
+      "guildAbbr": "LE67",
+      "guildLogo": "6_16_18_1_0_0",
+      "leaderId": 144152132,
+      "leaderName": "Gubernur144152132",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 1161
+  },
+  {
+    "guildId": 4410346,
+    "rank": 96,
+    "score": 13368,
+    "guildInfo": {
+      "guildName": "WOLF-ARMY",
+      "guildAbbr": "B-dk",
+      "guildLogo": "6_16_18_2_0_0",
+      "leaderId": 131427203,
+      "leaderName": "Governor131427203",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 1301
+  },
+  {
+    "guildId": 4410197,
+    "rank": 97,
+    "score": 4957,
+    "guildInfo": {
+      "guildName": "FEARLESS PEOPLE",
+      "guildAbbr": "76DP",
+      "guildLogo": "4_16_9_4_0_0",
+      "leaderId": 209662047,
+      "leaderName": "Thống đốc209662047",
+      "serverId": 1676,
+      "territory": 30
+    },
+    "previousRank": 107
+  },
+  {
+    "guildId": 4414701,
+    "rank": 98,
+    "score": 4947,
+    "guildInfo": {
+      "guildName": "Passport_Bank02",
+      "guildAbbr": "P_P2",
+      "guildLogo": "1_5_18_6_0_0",
+      "leaderId": 206008699,
+      "leaderName": "Gobernador206008699",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 95
+  },
+  {
+    "guildId": 4412350,
+    "rank": 99,
+    "score": 4840,
+    "guildInfo": {
+      "guildName": "Iberic0s",
+      "guildAbbr": "IB3E",
+      "guildLogo": "7_16_38_4_0_0",
+      "leaderId": 132160222,
+      "leaderName": "Vali132160222",
+      "serverId": 1676,
+      "territory": 0
+    },
+    "previousRank": 46
+  }
+]

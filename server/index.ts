@@ -26,6 +26,24 @@ createServer(async (request, response) => {
     response.writeHead(200, { 'content-type': types['.json'], 'cache-control': 'no-store' });
     response.end(JSON.stringify(status)); return;
   }
+  if (pathname === '/api/sync' && request.method === 'POST') {
+    if (status.running) {
+      response.writeHead(409, { 'content-type': types['.json'] });
+      response.end(JSON.stringify({ error: 'Đang đồng bộ, vui lòng đợi.' })); return;
+    }
+    try {
+      status.running = true; status.lastAttempt = new Date().toISOString(); status.error = null;
+      const result = await syncOnce();
+      status.lastSuccess = result.exportedAt; status.running = false;
+      response.writeHead(200, { 'content-type': types['.json'], 'cache-control': 'no-store' });
+      response.end(JSON.stringify({ ok: true, rows: result.rows, exportedAt: result.exportedAt }));
+    } catch (err) {
+      status.error = (err as Error).message; status.running = false;
+      response.writeHead(500, { 'content-type': types['.json'] });
+      response.end(JSON.stringify({ error: status.error }));
+    }
+    return;
+  }
   if (pathname === '/api/governors') {
     try {
       const body = await readFile(dataFile);

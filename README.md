@@ -29,3 +29,9 @@ The previously published `chatgpt.site` address is a separate static deployment.
 ## Data coverage
 
 Governor list, alliance totals, Power, KP, T4/T5, and deaths are calculated from the CSV. Historical KvK entries remain the snapshot captured on 25/10/2026. The page shows the export time, not an assertion of real-time game data. ROKStats controls when it scans and updates its own records.
+
+## Updating and publishing
+
+- Local dashboard: after changing the React UI, run `npm run build` in `D:\kingdom-2676`. The running local server serves the new `dist` files. After changing `server/` code, restart the `Kingdom2676Dashboard` Windows task.
+- Data: while Windows is logged in, the server exports ROKStats every `SYNC_INTERVAL_MINUTES` (currently 60). The page checks its local API every five minutes. The Windows task starts at logon and retries every five minutes if it has stopped.
+- Hosted dashboard: `npm run build` does not publish to `chatgpt.site`. Ask Codex to deploy the current `D:\kingdom-2676` source to the existing Kingdom 2676 Site. Deployment needs a fresh Sites repository credential and a new saved version. The hosted site remains online when this PC is off, but its data remains the last published snapshot.
