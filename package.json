@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/generate-routes.js",
     "preview": "vite preview --host 127.0.0.1",
     "sync": "tsx scripts/sync.ts",
     "get-cookie": "tsx scripts/get-cookie.ts"
