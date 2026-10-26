@@ -1,7 +1,7 @@
 {
-  "capturedAt": "2026-10-24",
+  "capturedAt": "2026-10-25",
   "kingdom": "Zipporania",
-  "globalRank": 1881,
+  "globalRank": 1883,
   "opened": "10/02/2022",
   "king": "Spicy Salsa",
   "kingAlliance": "[ROFF] Rise of FinalFantasy",
@@ -11,8 +11,8 @@
     "allianceTag": "ROFF",
     "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-06-17/067E6C0EC9CADA52480295114135F8E1_250x250.jpg",
     "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png",
-    "since": "Since 2 hours ago",
-    "sinceVi": "Từ 2 giờ trước"
+    "since": "Since 4 hours ago",
+    "sinceVi": "Từ 4 giờ trước"
   },
   "recentKings": [
     {
@@ -108,7 +108,7 @@
       "key": "power",
       "label": "Power",
       "grade": "D",
-      "percentile": 17.49
+      "percentile": 17.44
     },
     {
       "key": "tech",
