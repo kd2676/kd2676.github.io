@@ -87,6 +87,7 @@ async function applyOverviewData(overviewApiData: any) {
       allianceTag: ck.guildAbbr || 'ROFF',
       avatar: ck.avatar?.url || existingSnapshot.currentKing?.avatar,
       avatarFrame: ck.avatar?.frame || existingSnapshot.currentKing?.avatarFrame,
+      sinceDate: ck.since,
       since: sinceObj.en,
       sinceVi: sinceObj.vi
     };

@@ -29,6 +29,7 @@ type CurrentKingInfo = {
   allianceTag?: string;
   avatar: string;
   avatarFrame: string;
+  sinceDate?: string;
   since: string;
   sinceVi: string;
 };
@@ -151,6 +152,22 @@ function App() {
     if (isNaN(d.getTime())) return `${value} UTC`;
     const pad = (n: number) => String(n).padStart(2, '0');
     return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} ${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}/${d.getUTCFullYear()} UTC`;
+  };
+
+  const formatKingSince = (sinceDate?: string, fallbackSince?: string, fallbackSinceVi?: string) => {
+    if (sinceDate) {
+      const diffMs = Date.now() - new Date(sinceDate).getTime();
+      if (!isNaN(diffMs) && diffMs >= 0) {
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffDays = Math.floor(diffHours / 24);
+        if (diffHours < 1) return lang === 'vi' ? 'Vừa xong' : 'Just now';
+        if (diffHours === 1) return lang === 'vi' ? 'Từ 1 giờ trước' : 'Since an hour ago';
+        if (diffHours < 24) return lang === 'vi' ? `Từ ${diffHours} giờ trước` : `Since ${diffHours} hours ago`;
+        if (diffDays === 1) return lang === 'vi' ? 'Từ 1 ngày trước' : 'Since 1 day ago';
+        return lang === 'vi' ? `Từ ${diffDays} ngày trước` : `Since ${diffDays} days ago`;
+      }
+    }
+    return lang === 'vi' ? (fallbackSinceVi || 'Từ 1 giờ trước') : (fallbackSince || 'Since an hour ago');
   };
 
   const [tab, setTabState] = useState<Tab>(() => {
@@ -493,9 +510,11 @@ function App() {
                     {snapshot?.currentKing?.alliance || snapshot?.kingAlliance || '[ROFF] Rise of FinalFantasy'}
                   </div>
                   <div className="current-king-gov-since">
-                    {lang === 'vi'
-                      ? (snapshot?.currentKing?.sinceVi || 'Từ 1 giờ trước')
-                      : (snapshot?.currentKing?.since || 'Since an hour ago')}
+                    {formatKingSince(
+                      snapshot?.currentKing?.sinceDate,
+                      snapshot?.currentKing?.since,
+                      snapshot?.currentKing?.sinceVi
+                    )}
                   </div>
                 </div>
               </div>
