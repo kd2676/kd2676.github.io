@@ -80,6 +80,7 @@ export const translations = {
       sort: {
         power: 'Power cao nhất',
         killPoints: 'Kill Points cao nhất',
+        acclaim: 'Acclaim cao nhất',
         dead: 'Dead cao nhất',
         name: 'Tên A–Z',
       },
@@ -88,9 +89,11 @@ export const translations = {
         alliance: 'Liên minh',
         power: 'Power',
         killPoints: 'Kill Points',
+        acclaim: 'Acclaim',
         t4t5: 'T4 / T5',
         dead: 'Dead',
       },
+      maxAcclaim: 'tối đa',
     },
     data: {
       kicker: '04 / DATA SOURCE',
@@ -197,6 +200,7 @@ export const translations = {
       sort: {
         power: 'Highest Power',
         killPoints: 'Highest Kill Points',
+        acclaim: 'Highest Acclaim',
         dead: 'Highest Dead',
         name: 'Name A–Z',
       },
@@ -205,9 +209,11 @@ export const translations = {
         alliance: 'Alliance',
         power: 'Power',
         killPoints: 'Kill Points',
+        acclaim: 'Acclaim',
         t4t5: 'T4 / T5',
         dead: 'Dead',
       },
+      maxAcclaim: 'max',
     },
     data: {
       kicker: '04 / DATA SOURCE',

@@ -129,6 +129,8 @@ function buildDatasetFromApi(govApiData: any[]): any {
       power: Number(g.power) || 0,
       troopPower: Number(g.troopPower) || 0,
       killPoints: Number(g.killPoints) || 0,
+      acclaim: Number(g.acclaim) || 0,
+      maxAcclaim: Number(g.maxAcclaim) || 0,
       t4Kills: Number(g.t4) || 0,
       t5Kills: Number(g.t5) || 0,
       dead: Number(g.dead) || 0,

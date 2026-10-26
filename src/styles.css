@@ -1025,6 +1025,18 @@ td.num {
   font-weight: 800 !important;
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
 }
+.num-acclaim {
+  color: #f43f5e !important;
+  font-weight: 800 !important;
+  text-shadow: 0 0 10px rgba(244, 63, 94, 0.2);
+}
+.acclaim-sub {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 2px;
+}
 .num-dead {
   color: #fb7185 !important;
   font-weight: 700 !important;

@@ -18,6 +18,8 @@ type Governor = {
   guildTag?: string;
   guildName?: string;
   guildKingdom?: number;
+  acclaim?: number;
+  maxAcclaim?: number;
 };
 type Dataset = { source: string; exportedAt: string; rows: Governor[] };
 type KvK = { code: string; name: string; dates: string; status?: string; kp?: string; deaths?: string };
@@ -792,6 +794,7 @@ function App() {
               >
                 <option value="power">{i18n.governors.sort.power}</option>
                 <option value="killPoints">{i18n.governors.sort.killPoints}</option>
+                <option value="acclaim">{i18n.governors.sort.acclaim}</option>
                 <option value="dead">{i18n.governors.sort.dead}</option>
                 <option value="name">{i18n.governors.sort.name}</option>
               </select>
@@ -805,6 +808,7 @@ function App() {
                       <th>{i18n.governors.headers.alliance}</th>
                       <th className="num">{i18n.governors.headers.power}</th>
                       <th className="num">{i18n.governors.headers.killPoints}</th>
+                      <th className="num">{i18n.governors.headers.acclaim}</th>
                       <th className="num">{i18n.governors.headers.t4t5}</th>
                       <th className="num">{i18n.governors.headers.dead}</th>
                     </tr>
@@ -829,6 +833,14 @@ function App() {
                         </td>
                         <td className="num num-power">{fmt.format(row.power)}</td>
                         <td className="num num-kp">{fmt.format(row.killPoints)}</td>
+                        <td className="num num-acclaim">
+                          <b>{fmt.format(row.acclaim || 0)}</b>
+                          {row.maxAcclaim ? (
+                            <small className="acclaim-sub">
+                              {i18n.governors.maxAcclaim} {fmt.format(row.maxAcclaim)}
+                            </small>
+                          ) : null}
+                        </td>
                         <td className="num num-t4t5">{compact.format(row.t4Kills)} / {compact.format(row.t5Kills)}</td>
                         <td className="num num-dead">{fmt.format(row.dead)}</td>
                       </tr>
