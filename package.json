@@ -8,6 +8,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "login": "tsx server/login.ts",
     "sync": "tsx server/sync.ts",
+    "get-cookie": "tsx scripts/get-cookie.ts",
     "start": "tsx server/index.ts"
   },
   "dependencies": {

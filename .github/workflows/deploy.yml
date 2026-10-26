@@ -1,0 +1,60 @@
+name: Auto Sync & Deploy Web
+
+on:
+  schedule:
+    # Tự động đồng bộ mỗi 2 tiếng một lần (giờ UTC)
+    - cron: '0 */2 * * *'
+  workflow_dispatch: # Cho phép bấm nút "Run workflow" thủ công bất cứ lúc nào trên GitHub
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài đặt Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Cài đặt thư viện
+        run: npm ci
+
+      - name: Đồng bộ dữ liệu mới nhất từ ROKStats
+        env:
+          ROKSTATS_SESSION: ${{ secrets.ROKSTATS_SESSION }}
+          ROKSTATS_KINGDOM: '2676'
+        run: npm run sync
+
+      - name: Build web tĩnh
+        run: npm run build
+
+      - name: Tải artifact trang web
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Xuất bản lên GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

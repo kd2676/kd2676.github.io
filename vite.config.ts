@@ -6,7 +6,6 @@ export default defineConfig({
   server: {
     watch: {
       ignored: ['**/.private/**', '**/data/**']
-    },
-    proxy: { '/api': 'http://127.0.0.1:2676' }
+    }
   }
 });

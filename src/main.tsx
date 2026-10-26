@@ -99,17 +99,20 @@ const sum = (rows: Governor[], field: keyof Governor) => rows.reduce((total, row
 async function loadDataset(lang: Lang): Promise<{ data: Dataset; live: boolean }> {
   const ts = Date.now();
   try {
-    const response = await fetch(`/api/governors?t=${ts}`, { cache: 'no-store' });
-    if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) throw new Error('API unavailable');
-    const data = await response.json() as Dataset;
-    if (!Array.isArray(data.rows)) throw new Error('Invalid data');
-    return { data, live: true };
-  } catch {
     const response = await fetch(`/governors.json?t=${ts}`, { cache: 'no-store' });
-    if (!response.ok) throw new Error(lang === 'vi' ? 'Không đọc được dữ liệu thống đốc.' : 'Failed to read governors data.');
+    if (!response.ok) throw new Error('Static file not ready');
     const data = await response.json() as Dataset;
-    if (!Array.isArray(data.rows)) throw new Error(lang === 'vi' ? 'Dữ liệu thống đốc không hợp lệ.' : 'Invalid governors dataset.');
+    if (!Array.isArray(data.rows)) throw new Error('Invalid governors dataset');
     return { data, live: false };
+  } catch {
+    try {
+      const response = await fetch(`/api/governors?t=${ts}`, { cache: 'no-store' });
+      if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+        const data = await response.json() as Dataset;
+        if (Array.isArray(data.rows)) return { data, live: true };
+      }
+    } catch {}
+    throw new Error(lang === 'vi' ? 'Không đọc được dữ liệu thống đốc.' : 'Failed to read governors data.');
   }
 }
 
@@ -234,16 +237,31 @@ function App() {
     setSyncing(true);
     setToast({ type: 'info', message: i18n.toast.syncing });
     try {
-      const res = await fetch('/api/sync', { method: 'POST' });
-      const json = await res.json() as { ok?: boolean; error?: string; rows?: number; exportedAt?: string };
-      if (!res.ok || json.error) throw new Error(json.error || i18n.toast.syncFail);
-      await refreshData();
-      setToast({ type: 'ok', message: i18n.toast.syncSuccess(json.rows || 0, formatDate(json.exportedAt)) });
+      let triggeredBackend = false;
+      try {
+        const res = await fetch('/api/sync', { method: 'POST', signal: AbortSignal.timeout(2000) });
+        if (res.ok) {
+          const json = await res.json() as { ok?: boolean; error?: string; rows?: number; exportedAt?: string };
+          if (json.ok) {
+            triggeredBackend = true;
+            await refreshData();
+            setToast({ type: 'ok', message: i18n.toast.syncSuccess(json.rows || 0, formatDate(json.exportedAt)) });
+          }
+        }
+      } catch {}
+
+      if (!triggeredBackend) {
+        await refreshData();
+        setToast({
+          type: 'ok',
+          message: lang === 'vi' ? 'Đã làm mới dữ liệu mới nhất!' : 'Data refreshed successfully!'
+        });
+      }
     } catch (err) {
       setToast({ type: 'error', message: (err as Error).message });
     } finally {
       setSyncing(false);
-      setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 8000);
+      setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 6000);
     }
   };
 
