@@ -4,8 +4,8 @@ export const translations = {
   vi: {
     brandSubtitle: 'ROK / INTELLIGENCE',
     sourceLink: 'Nguồn ROKSTATS ↗',
-    syncBtn: 'Làm mới',
-    syncing: 'Đang làm mới...',
+    syncBtn: 'Đồng bộ ROKStats',
+    syncing: 'Đang đồng bộ...',
     syncNow: 'Đồng bộ ngay',
     syncingRok: 'Đang đồng bộ ROKStats...',
     syncedLocal: 'Đã đồng bộ trực tuyến',
@@ -124,8 +124,8 @@ export const translations = {
   en: {
     brandSubtitle: 'ROK / INTELLIGENCE',
     sourceLink: 'ROKStats Source ↗',
-    syncBtn: 'Refresh Data',
-    syncing: 'Refreshing...',
+    syncBtn: 'Sync ROKStats',
+    syncing: 'Syncing...',
     syncNow: 'Sync Now',
     syncingRok: 'Syncing from ROKStats...',
     syncedLocal: 'Online Synced',

@@ -41,6 +41,8 @@ jobs:
         run: npm run sync
 
       - name: Build web tĩnh
+        env:
+          VITE_GH_TOKEN: ${{ secrets.VITE_GH_TOKEN }}
         run: |
           npm run build
           cp dist/index.html dist/404.html

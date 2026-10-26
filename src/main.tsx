@@ -261,24 +261,117 @@ function App() {
     }
   };
 
+  const GH_SYNC_TOKEN = (import.meta.env.VITE_GH_TOKEN as string | undefined)?.trim();
+
   const triggerSync = async () => {
     if (syncing) return;
     setSyncing(true);
+
+    if (!GH_SYNC_TOKEN) {
+      setToast({
+        type: 'info',
+        message: lang === 'vi' ? 'Đang làm mới dữ liệu...' : 'Refreshing latest data...'
+      });
+      try {
+        await refreshData();
+        setToast({
+          type: 'ok',
+          message: lang === 'vi' ? 'Đã làm mới dữ liệu thành công!' : 'Data refreshed successfully!'
+        });
+      } catch (err) {
+        setToast({ type: 'error', message: (err as Error).message });
+      } finally {
+        setSyncing(false);
+        setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 4000);
+      }
+      return;
+    }
+
     setToast({
       type: 'info',
-      message: lang === 'vi' ? 'Đang làm mới dữ liệu...' : 'Refreshing latest data...'
+      message: lang === 'vi'
+        ? 'Đang gửi lệnh kích hoạt đồng bộ lên GitHub Actions...'
+        : 'Dispatching sync workflow to GitHub Actions...'
     });
+
     try {
-      await refreshData();
-      setToast({
-        type: 'ok',
-        message: lang === 'vi' ? 'Đã làm mới dữ liệu thành công!' : 'Data refreshed successfully!'
+      const dispatchRes = await fetch('https://api.github.com/repos/kd2676/kd2676.github.io/actions/workflows/deploy.yml/dispatches', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${GH_SYNC_TOKEN}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Kingdom-2676-App'
+        },
+        body: JSON.stringify({ ref: 'main' })
       });
+
+      if (!dispatchRes.ok) {
+        throw new Error(lang === 'vi' ? `Lỗi GitHub API: ${dispatchRes.status}` : `GitHub API Error: ${dispatchRes.status}`);
+      }
+
+      setToast({
+        type: 'info',
+        message: lang === 'vi'
+          ? 'GitHub Action đang chạy! Đang đồng bộ số liệu mới nhất từ ROKStats... (ước tính 30s)'
+          : 'GitHub Action running! Syncing fresh data from ROKStats... (~30s)'
+      });
+
+      const startTime = Date.now();
+      let completed = false;
+      let runSuccess = false;
+
+      while (Date.now() - startTime < 90_000) {
+        await new Promise(r => setTimeout(r, 3500));
+        try {
+          const runsRes = await fetch('https://api.github.com/repos/kd2676/kd2676.github.io/actions/runs?per_page=1', {
+            headers: {
+              'Authorization': `Bearer ${GH_SYNC_TOKEN}`,
+              'Accept': 'application/vnd.github.v3+json',
+              'User-Agent': 'Kingdom-2676-App'
+            }
+          });
+          if (runsRes.ok) {
+            const runsData = await runsRes.json() as { workflow_runs?: Array<{ id: number; status: string; conclusion: string | null; created_at: string }> };
+            const latestRun = runsData.workflow_runs?.[0];
+            if (latestRun) {
+              const runCreatedAt = new Date(latestRun.created_at).getTime();
+              if (runCreatedAt >= startTime - 15000) {
+                if (latestRun.status === 'completed') {
+                  completed = true;
+                  runSuccess = latestRun.conclusion === 'success';
+                  break;
+                }
+              }
+            }
+          }
+        } catch {}
+      }
+
+      if (completed && runSuccess) {
+        await new Promise(r => setTimeout(r, 2500));
+        await refreshData();
+        setToast({
+          type: 'ok',
+          message: lang === 'vi'
+            ? 'Đồng bộ ROKStats thành công! Dữ liệu đã được cập nhật trực tiếp.'
+            : 'ROKStats sync completed successfully! Live data refreshed.'
+        });
+      } else if (completed && !runSuccess) {
+        throw new Error(lang === 'vi' ? 'GitHub Action gặp lỗi khi đồng bộ.' : 'GitHub Action failed during sync.');
+      } else {
+        await refreshData();
+        setToast({
+          type: 'ok',
+          message: lang === 'vi'
+            ? 'Đã gửi lệnh đồng bộ. Hệ thống đang hoàn tất quá trình xuất bản...'
+            : 'Sync dispatched. GitHub is completing the publication...'
+        });
+      }
     } catch (err) {
       setToast({ type: 'error', message: (err as Error).message });
     } finally {
       setSyncing(false);
-      setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 4000);
+      setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 8000);
     }
   };
 
