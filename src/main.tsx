@@ -228,10 +228,6 @@ function App() {
   const [syncing, setSyncing] = useState(false);
   const [toast, setToast] = useState<{ type: 'info' | 'ok' | 'error'; message: string } | null>(null);
   const [overviewDynastyTab, setOverviewDynastyTab] = useState<'recentKings' | 'topPower'>('recentKings');
-  const [showTokenModal, setShowTokenModal] = useState(false);
-  const [tokenInput, setTokenInput] = useState(() => {
-    try { return localStorage.getItem('kd_gh_token') || ''; } catch { return ''; }
-  });
 
   const PAGE_SIZE = 20;
   const [alliancePage, setAlliancePage] = useState(1);
@@ -265,108 +261,25 @@ function App() {
     }
   };
 
-  const runLiveSync = async (token: string) => {
+  const triggerSync = async () => {
     if (syncing) return;
     setSyncing(true);
     setToast({
       type: 'info',
-      message: lang === 'vi'
-        ? 'Đang gửi lệnh đồng bộ lên GitHub Actions...'
-        : 'Dispatching sync workflow to GitHub Actions...'
+      message: lang === 'vi' ? 'Đang làm mới dữ liệu...' : 'Refreshing latest data...'
     });
-
     try {
-      const dispatchRes = await fetch('https://api.github.com/repos/kd2676/kd2676.github.io/actions/workflows/deploy.yml/dispatches', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'User-Agent': 'Kingdom-2676-App'
-        },
-        body: JSON.stringify({ ref: 'main' })
-      });
-
-      if (!dispatchRes.ok) {
-        if (dispatchRes.status === 401 || dispatchRes.status === 403) {
-          throw new Error(lang === 'vi' ? 'GitHub Token không đúng hoặc không có quyền (HTTP 401/403).' : 'Invalid GitHub Token or insufficient permissions.');
-        }
-        throw new Error(`GitHub API Error: ${dispatchRes.status}`);
-      }
-
+      await refreshData();
       setToast({
-        type: 'info',
-        message: lang === 'vi'
-          ? 'GitHub Action đang chạy! Đang đồng bộ số liệu mới nhất từ ROKStats... (ước tính 30s)'
-          : 'GitHub Action running! Syncing fresh data from ROKStats... (~30s)'
+        type: 'ok',
+        message: lang === 'vi' ? 'Đã làm mới dữ liệu thành công!' : 'Data refreshed successfully!'
       });
-
-      const startTime = Date.now();
-      let completed = false;
-      let runSuccess = false;
-
-      while (Date.now() - startTime < 90_000) {
-        await new Promise(r => setTimeout(r, 3500));
-        try {
-          const runsRes = await fetch('https://api.github.com/repos/kd2676/kd2676.github.io/actions/runs?per_page=1', {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Accept': 'application/vnd.github.v3+json',
-              'User-Agent': 'Kingdom-2676-App'
-            }
-          });
-          if (runsRes.ok) {
-            const runsData = await runsRes.json() as { workflow_runs?: Array<{ id: number; status: string; conclusion: string | null; created_at: string }> };
-            const latestRun = runsData.workflow_runs?.[0];
-            if (latestRun) {
-              const runCreatedAt = new Date(latestRun.created_at).getTime();
-              if (runCreatedAt >= startTime - 15000) {
-                if (latestRun.status === 'completed') {
-                  completed = true;
-                  runSuccess = latestRun.conclusion === 'success';
-                  break;
-                }
-              }
-            }
-          }
-        } catch {}
-      }
-
-      if (completed && runSuccess) {
-        await new Promise(r => setTimeout(r, 2500));
-        await refreshData();
-        setToast({
-          type: 'ok',
-          message: lang === 'vi'
-            ? 'Đồng bộ ROKStats thành công! Dữ liệu đã được cập nhật trực tiếp.'
-            : 'ROKStats sync completed successfully! Live data refreshed.'
-        });
-      } else if (completed && !runSuccess) {
-        throw new Error(lang === 'vi' ? 'GitHub Action gặp lỗi khi đồng bộ.' : 'GitHub Action failed during sync.');
-      } else {
-        await refreshData();
-        setToast({
-          type: 'ok',
-          message: lang === 'vi'
-            ? 'Đã gửi lệnh đồng bộ. Hệ thống đang hoàn tất quá trình xuất bản...'
-            : 'Sync dispatched. GitHub is completing the publication...'
-        });
-      }
     } catch (err) {
       setToast({ type: 'error', message: (err as Error).message });
     } finally {
       setSyncing(false);
-      setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 8000);
+      setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 4000);
     }
-  };
-
-  const triggerSync = async () => {
-    if (syncing) return;
-    const token = (tokenInput || localStorage.getItem('kd_gh_token') || '').trim();
-    if (!token) {
-      setShowTokenModal(true);
-      return;
-    }
-    await runLiveSync(token);
   };
 
   useEffect(() => {
@@ -502,89 +415,6 @@ function App() {
         </div>
       )}
 
-      {showTokenModal && (
-        <div className="modal-overlay" onClick={() => setShowTokenModal(false)}>
-          <div className="modal-card" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3 className="modal-title">
-                <span>🔑</span>
-                <span>{lang === 'vi' ? 'Cấu hình đồng bộ trực tuyến' : 'Configure Live Sync'}</span>
-              </h3>
-              <button
-                className="modal-close-btn"
-                onClick={() => setShowTokenModal(false)}
-                type="button"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="modal-body">
-              <p>
-                {lang === 'vi'
-                  ? 'Để nút "Sync Data" thực sự kích hoạt đồng bộ từ ROKStats lên trang web, bạn chỉ cần nhập GitHub Token 1 lần (được lưu an toàn trong trình duyệt của bạn).'
-                  : 'To enable the "Sync Data" button to trigger real live sync from ROKStats to GitHub Pages, enter your GitHub Token once (stored securely in your browser).'}
-              </p>
-              <label className="modal-input-label" htmlFor="gh-token-input">
-                {lang === 'vi' ? 'GitHub Token:' : 'GitHub Personal Access Token:'}
-              </label>
-              <input
-                id="gh-token-input"
-                className="modal-input"
-                type="password"
-                value={tokenInput}
-                onChange={e => setTokenInput(e.target.value)}
-                placeholder="ghp_... hoặc gho_..."
-                autoFocus
-              />
-              <p className="modal-hint">
-                {lang === 'vi'
-                  ? '💡 Mẹo: Dùng token GitHub của tài khoản có quyền truy cập repo kd2676.github.io. Token chỉ lưu trong trình duyệt của bạn.'
-                  : '💡 Tip: Use a GitHub token with access to kd2676.github.io repo. Token is stored only in your local browser.'}
-              </p>
-            </div>
-            <div className="modal-actions">
-              {tokenInput && (
-                <button
-                  type="button"
-                  className="modal-btn-danger"
-                  onClick={() => {
-                    setTokenInput('');
-                    try { localStorage.removeItem('kd_gh_token'); } catch {}
-                    setToast({
-                      type: 'ok',
-                      message: lang === 'vi' ? 'Đã xóa token.' : 'Token removed.'
-                    });
-                    setShowTokenModal(false);
-                  }}
-                >
-                  {lang === 'vi' ? 'Xóa Token' : 'Clear Token'}
-                </button>
-              )}
-              <button
-                type="button"
-                className="modal-btn-cancel"
-                onClick={() => setShowTokenModal(false)}
-              >
-                {lang === 'vi' ? 'Hủy' : 'Cancel'}
-              </button>
-              <button
-                type="button"
-                className="modal-btn-primary"
-                onClick={async () => {
-                  const cleaned = tokenInput.trim();
-                  if (!cleaned) return;
-                  try { localStorage.setItem('kd_gh_token', cleaned); } catch {}
-                  setShowTokenModal(false);
-                  await runLiveSync(cleaned);
-                }}
-              >
-                {lang === 'vi' ? 'Lưu & Bắt đầu đồng bộ' : 'Save & Start Sync'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <header className="hero">
         <div className="hero-top">
           <div className="brand">
@@ -616,19 +446,11 @@ function App() {
               className={`header-sync-btn ${syncing ? 'syncing' : ''}`}
               onClick={triggerSync}
               disabled={syncing}
-              title={lang === 'vi' ? 'Đồng bộ trực tiếp từ ROKStats' : 'Live Sync from ROKStats'}
+              title={i18n.syncBtn}
               type="button"
             >
               <span className={`sync-icon ${syncing ? 'spinning' : ''}`}>↻</span>
               <span>{syncing ? i18n.syncing : i18n.syncBtn}</span>
-            </button>
-            <button
-              className="token-settings-btn"
-              onClick={() => setShowTokenModal(true)}
-              title={lang === 'vi' ? 'Cấu hình Token đồng bộ' : 'Configure Sync Token'}
-              type="button"
-            >
-              🔑
             </button>
             <a className="source-link" href="https://app.rokstats.online/kingdom/2676" target="_blank" rel="noreferrer">
               {i18n.sourceLink}
