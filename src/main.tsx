@@ -6,6 +6,7 @@ import { GovernorAvatar } from './components/GovernorAvatar';
 import { KingdomGradeRadar, type RadarMetric } from './components/KingdomGradeRadar';
 import { CurrentKvkCard, type CurrentKvkInfo } from './components/CurrentKvkCard';
 import { Pagination } from './components/Pagination';
+import { FlagVN, FlagGB } from './components/FlagIcons';
 import './styles.css';
 
 type Governor = {
@@ -20,12 +21,32 @@ type Governor = {
 };
 type Dataset = { source: string; exportedAt: string; rows: Governor[] };
 type KvK = { code: string; name: string; dates: string; status?: string; kp?: string; deaths?: string };
+type CurrentKingInfo = {
+  name: string;
+  alliance: string;
+  allianceTag?: string;
+  avatar: string;
+  avatarFrame: string;
+  since: string;
+  sinceVi: string;
+};
+type RecentKing = {
+  name: string;
+  alliance: string;
+  allianceTag?: string;
+  dates: string;
+  datesVi?: string;
+  avatar: string;
+  avatarFrame: string;
+};
 type KingdomSnapshot = {
   kingdom: string; opened: string; king: string; kingAlliance: string; globalRank: number; capturedAt: string;
   alliances?: [string, string, string][];
   kvks: KvK[];
   radarGrades?: RadarMetric[];
   currentKvk?: CurrentKvkInfo;
+  currentKing?: CurrentKingInfo;
+  recentKings?: RecentKing[];
 };
 type KingdomGuild = {
   guildId: number;
@@ -45,17 +66,46 @@ type KingdomGuild = {
 type Status = { lastAttempt?: string; lastSuccess?: string; error?: string | null; running?: boolean };
 type Tab = 'overview' | 'alliances' | 'governors' | 'data';
 
+const TAB_PATHS: Record<Tab, string> = {
+  overview: '/overview',
+  alliances: '/alliances',
+  governors: '/Governors',
+  data: '/Data Source',
+};
+
+function getTabFromPath(pathname: string): Tab {
+  try {
+    const raw = decodeURIComponent(pathname).trim().replace(/^\/+|\/+$/g, '').toLowerCase();
+    if (raw === 'alliances' || raw === 'alliance') return 'alliances';
+    if (raw === 'governors' || raw === 'governor') return 'governors';
+    if (
+      raw === 'data source' ||
+      raw === 'data%20source' ||
+      raw === 'data-source' ||
+      raw === 'datasource' ||
+      raw === 'data'
+    ) {
+      return 'data';
+    }
+    if (raw === 'overview') return 'overview';
+  } catch {
+    // fallback
+  }
+  return 'overview';
+}
+
 const sum = (rows: Governor[], field: keyof Governor) => rows.reduce((total, row) => total + (Number(row[field]) || 0), 0);
 
 async function loadDataset(lang: Lang): Promise<{ data: Dataset; live: boolean }> {
+  const ts = Date.now();
   try {
-    const response = await fetch('/api/governors', { cache: 'no-store' });
+    const response = await fetch(`/api/governors?t=${ts}`, { cache: 'no-store' });
     if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) throw new Error('API unavailable');
     const data = await response.json() as Dataset;
     if (!Array.isArray(data.rows)) throw new Error('Invalid data');
     return { data, live: true };
   } catch {
-    const response = await fetch('/governors.json', { cache: 'no-store' });
+    const response = await fetch(`/governors.json?t=${ts}`, { cache: 'no-store' });
     if (!response.ok) throw new Error(lang === 'vi' ? 'Không đọc được dữ liệu thống đốc.' : 'Failed to read governors data.');
     const data = await response.json() as Dataset;
     if (!Array.isArray(data.rows)) throw new Error(lang === 'vi' ? 'Dữ liệu thống đốc không hợp lệ.' : 'Invalid governors dataset.');
@@ -69,7 +119,7 @@ function App() {
       const saved = localStorage.getItem('kd_lang') as Lang;
       if (saved === 'vi' || saved === 'en') return saved;
     } catch {}
-    return 'vi';
+    return 'en';
   });
 
   const changeLang = (newLang: Lang) => {
@@ -98,7 +148,42 @@ function App() {
     return `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} ${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}/${d.getUTCFullYear()} UTC`;
   };
 
-  const [tab, setTab] = useState<Tab>('overview');
+  const [tab, setTabState] = useState<Tab>(() => {
+    if (typeof window !== 'undefined') {
+      return getTabFromPath(window.location.pathname);
+    }
+    return 'overview';
+  });
+
+  const setTab = (newTab: Tab, replace = false) => {
+    setTabState(newTab);
+    if (typeof window !== 'undefined') {
+      const targetPath = TAB_PATHS[newTab];
+      const currentPath = decodeURIComponent(window.location.pathname);
+      if (currentPath !== targetPath) {
+        if (replace) {
+          window.history.replaceState({ tab: newTab }, '', targetPath);
+        } else {
+          window.history.pushState({ tab: newTab }, '', targetPath);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const onPopState = () => {
+      const matched = getTabFromPath(window.location.pathname);
+      setTabState(matched);
+    };
+    window.addEventListener('popstate', onPopState);
+
+    const current = window.location.pathname;
+    if (current === '' || current === '/') {
+      window.history.replaceState({ tab: 'overview' }, '', '/overview');
+    }
+
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [snapshot, setSnapshot] = useState<KingdomSnapshot | null>(null);
   const [kingdomGuilds, setKingdomGuilds] = useState<KingdomGuild[]>([]);
@@ -110,6 +195,7 @@ function App() {
   const [sort, setSort] = useState<keyof Governor>('power');
   const [syncing, setSyncing] = useState(false);
   const [toast, setToast] = useState<{ type: 'info' | 'ok' | 'error'; message: string } | null>(null);
+  const [overviewDynastyTab, setOverviewDynastyTab] = useState<'recentKings' | 'topPower'>('recentKings');
 
   const PAGE_SIZE = 20;
   const [alliancePage, setAlliancePage] = useState(1);
@@ -117,12 +203,25 @@ function App() {
 
   const refreshData = async () => {
     try {
-      const result = await loadDataset(lang);
-      setDataset(result.data);
-      setLive(result.live);
+      const ts = Date.now();
+      const [govResult, snapshotData, guildsData] = await Promise.all([
+        loadDataset(lang),
+        fetch(`/kingdom-snapshot.json?t=${ts}`, { cache: 'no-store' })
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null),
+        fetch(`/kingdom-guilds.json?t=${ts}`, { cache: 'no-store' })
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null),
+      ]);
+
+      setDataset(govResult.data);
+      setLive(govResult.live);
+      if (snapshotData) setSnapshot(snapshotData as KingdomSnapshot);
+      if (Array.isArray(guildsData)) setKingdomGuilds(guildsData as KingdomGuild[]);
       setError('');
-      if (result.live) {
-        const response = await fetch('/api/status', { cache: 'no-store' });
+
+      if (govResult.live) {
+        const response = await fetch(`/api/status?t=${ts}`, { cache: 'no-store' });
         if (response.ok) setStatus(await response.json() as Status);
       }
     } catch (caught) {
@@ -149,18 +248,9 @@ function App() {
   };
 
   useEffect(() => {
-    let mounted = true;
     void refreshData();
-    fetch('/kingdom-snapshot.json')
-      .then(response => response.json())
-      .then(data => { if (mounted) setSnapshot(data as KingdomSnapshot); })
-      .catch(() => {});
-    fetch('/kingdom-guilds.json')
-      .then(response => response.json())
-      .then(data => { if (mounted && Array.isArray(data)) setKingdomGuilds(data as KingdomGuild[]); })
-      .catch(() => {});
     const timer = window.setInterval(refreshData, 5 * 60_000);
-    return () => { mounted = false; window.clearInterval(timer); };
+    return () => { window.clearInterval(timer); };
   }, [lang]);
 
   const rows = dataset?.rows ?? [];
@@ -304,7 +394,8 @@ function App() {
                 onClick={() => changeLang('vi')}
                 title="Tiếng Việt"
               >
-                VI
+                <FlagVN width={16} height={11} />
+                <span>VI</span>
               </button>
               <button
                 type="button"
@@ -312,7 +403,8 @@ function App() {
                 onClick={() => changeLang('en')}
                 title="English"
               >
-                EN
+                <FlagGB width={16} height={11} />
+                <span>EN</span>
               </button>
             </div>
             <button
@@ -332,12 +424,53 @@ function App() {
         </div>
 
         <div className="hero-content">
-          <img src="/logo.png" alt="KD 2676" className="kd-logo" />
-          <div>
-            <p className="eyebrow">{i18n.reportSubtitle}</p>
-            <h1>Kingdom <em>2676</em></h1>
-            <p className="hero-sub">{snapshot?.kingdom || 'Zipporania'} · Continent of Egria · Chatsworth</p>
+          <div className="hero-main-info">
+            <img src="/logo.png" alt="KD 2676" className="kd-logo" />
+            <div>
+              <p className="eyebrow">{i18n.reportSubtitle}</p>
+              <h1>Kingdom <em>2676</em></h1>
+              <p className="hero-sub">{snapshot?.kingdom || 'Zipporania'} · Continent of Egria · Chatsworth</p>
+            </div>
           </div>
+
+          {(snapshot?.currentKing || snapshot?.king) && (
+            <aside className="current-king-hero-card" aria-label={i18n.overview.currentKingTitle}>
+              <div className="current-king-card-top">
+                <span className="current-king-kicker-tag">
+                  <svg className="crown-svg" viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                    <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
+                  </svg>
+                  {i18n.overview.currentKingKicker}
+                </span>
+                <span className="current-king-live-pill">
+                  <span className="live-pulse-dot" />
+                  {i18n.overview.liveBadge}
+                </span>
+              </div>
+              <div className="current-king-card-main">
+                <GovernorAvatar
+                  src={snapshot?.currentKing?.avatar || 'https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-06-17/067E6C0EC9CADA52480295114135F8E1_250x250.jpg'}
+                  frame={snapshot?.currentKing?.avatarFrame || 'https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png'}
+                  name={snapshot?.currentKing?.name || snapshot?.king || 'Spicy Salsa'}
+                  size={56}
+                  className="current-king-avatar"
+                />
+                <div className="current-king-text-block">
+                  <div className="current-king-gov-name" title={snapshot?.currentKing?.name || snapshot?.king}>
+                    {snapshot?.currentKing?.name || snapshot?.king || 'Spicy Salsa'}
+                  </div>
+                  <div className="current-king-gov-alliance">
+                    {snapshot?.currentKing?.alliance || snapshot?.kingAlliance || '[ROFF] Rise of FinalFantasy'}
+                  </div>
+                  <div className="current-king-gov-since">
+                    {lang === 'vi'
+                      ? (snapshot?.currentKing?.sinceVi || 'Từ 1 giờ trước')
+                      : (snapshot?.currentKing?.since || 'Since an hour ago')}
+                  </div>
+                </div>
+              </div>
+            </aside>
+          )}
         </div>
 
         <div className="hero-foot">
@@ -354,16 +487,24 @@ function App() {
           ['alliances', i18n.tabs.alliances],
           ['governors', i18n.tabs.governors],
           ['data', i18n.tabs.data]
-        ] as const).map(([key, label]) => (
-          <button
-            key={key}
-            className={`tab ${tab === key ? 'active' : ''}`}
-            onClick={() => setTab(key)}
-            type="button"
-          >
-            {label}
-          </button>
-        ))}
+        ] as const).map(([key, label]) => {
+          const path = TAB_PATHS[key];
+          return (
+            <a
+              key={key}
+              href={path}
+              className={`tab ${tab === key ? 'active' : ''}`}
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && e.button === 0) {
+                  e.preventDefault();
+                  setTab(key);
+                }
+              }}
+            >
+              {label}
+            </a>
+          );
+        })}
       </nav>
 
       <main>
@@ -405,26 +546,72 @@ function App() {
                 lang={lang}
               />
 
-              <article className="panel">
+              <article className="panel dynasty-panel">
                 <div className="panel-heading">
                   <div>
-                    <p className="section-kicker">{i18n.overview.topKicker}</p>
-                    <h3>{i18n.overview.topTitle}</h3>
+                    <p className="section-kicker">
+                      {overviewDynastyTab === 'recentKings' ? i18n.overview.recentKingsKicker : i18n.overview.topKicker}
+                    </p>
+                    <h3 className="panel-title-with-crown">
+                      {overviewDynastyTab === 'recentKings' && (
+                        <svg className="crown-svg-gold" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
+                        </svg>
+                      )}
+                      <span>
+                        {overviewDynastyTab === 'recentKings' ? i18n.overview.recentKingsTitle : i18n.overview.topTitle}
+                      </span>
+                    </h3>
+                  </div>
+                  <div className="panel-subtabs">
+                    <button
+                      type="button"
+                      className={`panel-subtab ${overviewDynastyTab === 'recentKings' ? 'active' : ''}`}
+                      onClick={() => setOverviewDynastyTab('recentKings')}
+                    >
+                      👑 {i18n.overview.viewRecentKings}
+                    </button>
+                    <button
+                      type="button"
+                      className={`panel-subtab ${overviewDynastyTab === 'topPower' ? 'active' : ''}`}
+                      onClick={() => setOverviewDynastyTab('topPower')}
+                    >
+                      🏆 {i18n.overview.viewTopPower}
+                    </button>
                   </div>
                 </div>
-                <div className="top-list">
-                  {[...rows].sort((a, b) => b.power - a.power).slice(0, 5).map((row, index) => (
-                    <div className="top-row" key={row.id}>
-                      <span className="rank">#{index + 1}</span>
-                      <GovernorAvatar src={row.avatar} frame={row.avatarFrame} name={row.name} size={40} />
-                      <div>
-                        <b>{row.name}</b>
-                        <small>{row.guildTag ? `[${row.guildTag}] ` : ''}{row.alliance || i18n.overview.noAlliance} · ID {row.id}</small>
+
+                {overviewDynastyTab === 'recentKings' ? (
+                  <div className="recent-kings-list">
+                    {(snapshot?.recentKings || []).map((k, index) => (
+                      <div className="recent-king-row" key={`${k.name}-${index}`}>
+                        <GovernorAvatar src={k.avatar} frame={k.avatarFrame} name={k.name} size={42} />
+                        <div className="recent-king-meta">
+                          <div className="recent-king-title-row">
+                            <b className="recent-king-name">{k.name}</b>
+                            {index === 0 && <span className="king-latest-pill">{i18n.overview.latestBadge}</span>}
+                          </div>
+                          <div className="recent-king-alliance">{k.alliance}</div>
+                          <div className="recent-king-dates">{lang === 'vi' ? (k.datesVi || k.dates) : k.dates}</div>
+                        </div>
                       </div>
-                      <span className="value">{compact.format(row.power)}</span>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="top-list">
+                    {[...rows].sort((a, b) => b.power - a.power).slice(0, 5).map((row, index) => (
+                      <div className="top-row" key={row.id}>
+                        <span className="rank">#{index + 1}</span>
+                        <GovernorAvatar src={row.avatar} frame={row.avatarFrame} name={row.name} size={40} />
+                        <div>
+                          <b>{row.name}</b>
+                          <small>{row.guildTag ? `[${row.guildTag}] ` : ''}{row.alliance || i18n.overview.noAlliance} · ID {row.id}</small>
+                        </div>
+                        <span className="value">{compact.format(row.power)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </article>
             </div>
 
@@ -540,10 +727,10 @@ function App() {
                         <td>
                           <span className="leader-crown">👑 {item.leader}</span>
                         </td>
-                        <td className="num">{fmt.format(item.count)}</td>
-                        <td className="num">{item.territory ? fmt.format(item.territory) : '—'}</td>
-                        <td className="num"><b>{compact.format(item.power)}</b></td>
-                        <td className="num">{item.kp ? compact.format(item.kp) : '—'}</td>
+                        <td className="num num-members">{fmt.format(item.count)}</td>
+                        <td className="num num-territory">{item.territory ? fmt.format(item.territory) : '—'}</td>
+                        <td className="num num-power"><b>{compact.format(item.power)}</b></td>
+                        <td className="num num-kp">{item.kp ? compact.format(item.kp) : '—'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -622,10 +809,10 @@ function App() {
                           ) : null}
                           <span>{row.alliance || '—'}</span>
                         </td>
-                        <td className="num">{fmt.format(row.power)}</td>
-                        <td className="num">{fmt.format(row.killPoints)}</td>
-                        <td className="num">{compact.format(row.t4Kills)} / {compact.format(row.t5Kills)}</td>
-                        <td className="num">{fmt.format(row.dead)}</td>
+                        <td className="num num-power">{fmt.format(row.power)}</td>
+                        <td className="num num-kp">{fmt.format(row.killPoints)}</td>
+                        <td className="num num-t4t5">{compact.format(row.t4Kills)} / {compact.format(row.t5Kills)}</td>
+                        <td className="num num-dead">{fmt.format(row.dead)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -663,6 +850,14 @@ function App() {
                     : i18n.data.staticNote}
                 </p>
                 {status?.error && <p className="upload-result error">{status.error}</p>}
+                <div className="sync-scope-box">
+                  <div className="sync-scope-title">{i18n.data.scopeTitle}</div>
+                  <ul className="sync-scope-list">
+                    <li><i>✓</i> <span>{i18n.data.scopeOverview}</span></li>
+                    <li><i>✓</i> <span>{i18n.data.scopeAlliances}</span></li>
+                    <li><i>✓</i> <span>{i18n.data.scopeGovernors}</span></li>
+                  </ul>
+                </div>
                 <div className="sync-wrap">
                   <button
                     className={`sync-btn ${syncing ? 'loading' : ''}`}

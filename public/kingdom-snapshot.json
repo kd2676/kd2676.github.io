@@ -1,10 +1,66 @@
 {
-  "capturedAt": "2026-10-25",
+  "capturedAt": "2026-10-24",
   "kingdom": "Zipporania",
   "globalRank": 1881,
   "opened": "10/02/2022",
-  "king": "乡 Elite 乡",
+  "king": "Spicy Salsa",
   "kingAlliance": "[ROFF] Rise of FinalFantasy",
+  "currentKing": {
+    "name": "Spicy Salsa",
+    "alliance": "[ROFF] Rise of FinalFantasy",
+    "allianceTag": "ROFF",
+    "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-06-17/067E6C0EC9CADA52480295114135F8E1_250x250.jpg",
+    "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png",
+    "since": "Since 2 hours ago",
+    "sinceVi": "Từ 2 giờ trước"
+  },
+  "recentKings": [
+    {
+      "name": "IStarlightI",
+      "alliance": "[ROFF] Rise of FinalFantasy",
+      "allianceTag": "ROFF",
+      "dates": "Oct 25, 2026 — Oct 26, 2026",
+      "datesVi": "25/10/2026 — 26/10/2026",
+      "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/201692076/2026-07-09/C3F214BED8617DB90183C9DFE6CC2414_250x250.jpg",
+      "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_185.png"
+    },
+    {
+      "name": "乡 Elite 乡",
+      "alliance": "[ROFF] Rise of FinalFantasy",
+      "allianceTag": "ROFF",
+      "dates": "Oct 25, 2026 — Oct 25, 2026",
+      "datesVi": "25/10/2026 — 25/10/2026",
+      "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/215314235/2026-10-17/A36060A21B50368FAEB0C0A6E369E801_250x250.jpg",
+      "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_7.png"
+    },
+    {
+      "name": "Spicy Salsa",
+      "alliance": "[ROFF] Rise of FinalFantasy",
+      "allianceTag": "ROFF",
+      "dates": "Oct 7, 2026 — Oct 25, 2026",
+      "datesVi": "07/10/2026 — 25/10/2026",
+      "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-06-17/067E6C0EC9CADA52480295114135F8E1_250x250.jpg",
+      "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png"
+    },
+    {
+      "name": "乡EliteF4乡",
+      "alliance": "[ROFF] Rise of FinalFantasy",
+      "allianceTag": "ROFF",
+      "dates": "Oct 6, 2026 — Oct 7, 2026",
+      "datesVi": "06/10/2026 — 07/10/2026",
+      "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/205177895/2025-02-21/E3A29D4ADF467418C20EC88E5B78B86F_250x250.jpg",
+      "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_4.png"
+    },
+    {
+      "name": "Itsinthebone",
+      "alliance": "[ROFF] Rise of FinalFantasy",
+      "allianceTag": "ROFF",
+      "dates": "Sep 30, 2026 — Oct 6, 2026",
+      "datesVi": "30/09/2026 — 06/10/2026",
+      "avatar": "https://imv2-gl.lilithgame.com/p/10043/0/139188243/220924/71073FB90C9B5A9FBC887A33D35D3C40_250x250.jpg",
+      "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+    }
+  ],
   "metrics": [
     [
       "Total Power",
@@ -48,12 +104,42 @@
     ]
   ],
   "radarGrades": [
-    { "key": "power", "label": "Power", "grade": "D", "percentile": 17.5 },
-    { "key": "tech", "label": "Tech", "grade": "C", "percentile": 24.6 },
-    { "key": "activity", "label": "Activity", "grade": "D", "percentile": 13.3 },
-    { "key": "development", "label": "Development", "grade": "C", "percentile": 28.7 },
-    { "key": "field", "label": "Field", "grade": "D", "percentile": 19.1 },
-    { "key": "garrison", "label": "Garrison", "grade": "C", "percentile": 22.0 }
+    {
+      "key": "power",
+      "label": "Power",
+      "grade": "D",
+      "percentile": 17.49
+    },
+    {
+      "key": "tech",
+      "label": "Tech",
+      "grade": "C",
+      "percentile": 24.6
+    },
+    {
+      "key": "activity",
+      "label": "Activity",
+      "grade": "D",
+      "percentile": 13.32
+    },
+    {
+      "key": "development",
+      "label": "Development",
+      "grade": "C",
+      "percentile": 28.66
+    },
+    {
+      "key": "field",
+      "label": "Field",
+      "grade": "D",
+      "percentile": 19.13
+    },
+    {
+      "key": "garrison",
+      "label": "Garrison",
+      "grade": "C",
+      "percentile": 22
+    }
   ],
   "currentKvk": {
     "name": "Mighty Assembly",
@@ -62,9 +148,21 @@
     "endDate": "2026-11-16",
     "status": "Lost Kingdom",
     "phases": [
-      { "name": "Off-season", "dates": "29/09 – 11/10", "completed": true },
-      { "name": "Đăng ký / Tiền KvK", "dates": "12/10 – 22/10", "completed": true },
-      { "name": "Lost Kingdom", "dates": "23/10 – 16/11", "active": true }
+      {
+        "name": "Off-season",
+        "dates": "29/09 – 11/10",
+        "completed": true
+      },
+      {
+        "name": "Đăng ký / Tiền KvK",
+        "dates": "12/10 – 22/10",
+        "completed": true
+      },
+      {
+        "name": "Lost Kingdom",
+        "dates": "23/10 – 16/11",
+        "active": true
+      }
     ]
   },
   "alliances": [
