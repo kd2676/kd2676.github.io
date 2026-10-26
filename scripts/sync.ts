@@ -20,10 +20,14 @@ function formatReignDates(startDate?: string, endDate?: string) {
 function formatSince(sinceIso?: string) {
   if (!sinceIso) return { en: 'Recently', vi: 'Gần đây' };
   const diffMs = Date.now() - new Date(sinceIso).getTime();
-  const diffHours = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60)));
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffHours < 1) return { en: 'Just now', vi: 'Vừa xong' };
-  if (diffHours === 1) return { en: 'Since an hour ago', vi: 'Từ 1 giờ trước' };
+  const diffMinutes = Math.round(diffMs / (1000 * 60));
+  const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+  if (diffMinutes < 45) {
+    if (diffMinutes <= 1) return { en: 'Just now', vi: 'Vừa xong' };
+    return { en: `Since ${diffMinutes} minutes ago`, vi: `Từ ${diffMinutes} phút trước` };
+  }
+  if (diffHours <= 1) return { en: 'Since an hour ago', vi: 'Từ 1 giờ trước' };
   if (diffHours < 24) return { en: `Since ${diffHours} hours ago`, vi: `Từ ${diffHours} giờ trước` };
   if (diffDays === 1) return { en: 'Since 1 day ago', vi: 'Từ 1 ngày trước' };
   return { en: `Since ${diffDays} days ago`, vi: `Từ ${diffDays} ngày trước` };

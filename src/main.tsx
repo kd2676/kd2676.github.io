@@ -158,12 +158,16 @@ function App() {
     if (sinceDate) {
       const diffMs = Date.now() - new Date(sinceDate).getTime();
       if (!isNaN(diffMs) && diffMs >= 0) {
-        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-        const diffDays = Math.floor(diffHours / 24);
-        if (diffHours < 1) return lang === 'vi' ? 'Vừa xong' : 'Just now';
-        if (diffHours === 1) return lang === 'vi' ? 'Từ 1 giờ trước' : 'Since an hour ago';
+        const diffMinutes = Math.round(diffMs / (1000 * 60));
+        const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+        const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+        if (diffMinutes < 45) {
+          if (diffMinutes <= 1) return lang === 'vi' ? 'Vừa xong' : 'Just now';
+          return lang === 'vi' ? `Từ ${diffMinutes} phút trước` : `Since ${diffMinutes} minutes ago`;
+        }
+        if (diffHours <= 1) return lang === 'vi' ? 'Từ 1 giờ trước' : 'Since an hour ago';
         if (diffHours < 24) return lang === 'vi' ? `Từ ${diffHours} giờ trước` : `Since ${diffHours} hours ago`;
-        if (diffDays === 1) return lang === 'vi' ? 'Từ 1 ngày trước' : 'Since 1 day ago';
+        if (diffDays <= 1) return lang === 'vi' ? 'Từ 1 ngày trước' : 'Since 1 day ago';
         return lang === 'vi' ? `Từ ${diffDays} ngày trước` : `Since ${diffDays} days ago`;
       }
     }
