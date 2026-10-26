@@ -189,6 +189,16 @@ function App() {
 
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
+
+  useEffect(() => {
+    const titles: Record<Tab, string> = {
+      overview: 'Kingdom 2676 · Kingdom Statistics',
+      alliances: 'Kingdom 2676 · Alliances',
+      governors: 'Kingdom 2676 · Governors',
+      data: 'Kingdom 2676 · Data Source',
+    };
+    document.title = titles[tab] || 'Kingdom 2676 · Kingdom Statistics';
+  }, [tab]);
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [snapshot, setSnapshot] = useState<KingdomSnapshot | null>(null);
   const [kingdomGuilds, setKingdomGuilds] = useState<KingdomGuild[]>([]);
