@@ -17195,7 +17195,7 @@
       "codePrefix": "C",
       "formattedCode": "#C12851",
       "season": 122,
-      "tier": 0,
+      "tier": 1,
       "storyId": 14,
       "storyName": "Tides of War",
       "coverUrl": "/covers/s14tides_of_war_cover.png",
@@ -21796,14 +21796,15 @@
           "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/102520241/2025-02-27/4B1326414BF870FFC2377417D0B07631_250x250.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_179.png"
         }
-      ]
+      ],
+      "tierBadge": "S"
     },
     {
       "code": 12743,
       "codePrefix": "C",
       "formattedCode": "#C12743",
       "season": 117,
-      "tier": 0,
+      "tier": 1,
       "storyId": 12,
       "storyName": "Storm of Stratagems",
       "coverUrl": "/covers/s12storm_of_stratagems_cover.png",
@@ -27004,14 +27005,15 @@
           "avatar": "https://imimg.lilithcdn.com/llc_avatar/121959670/23/05/13/fa144e34668eda5f_800x800.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_199.png"
         }
-      ]
+      ],
+      "tierBadge": "S"
     },
     {
       "code": 12625,
       "codePrefix": "C",
       "formattedCode": "#C12625",
       "season": 110,
-      "tier": 0,
+      "tier": 1,
       "storyId": 16,
       "storyName": "Keener Blades",
       "coverUrl": "/covers/s16keener_blades_cover.png",
@@ -32762,13 +32764,14 @@
           "avatar": "https://imimg.lilithcdn.com/roc/llc_avatar/135987503/23/05/13/1760713e79fcd1c1_720x720.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_76.png"
         }
-      ]
+      ],
+      "tierBadge": "S"
     },
     {
       "code": 12487,
       "codePrefix": "C",
       "formattedCode": "#C12487",
-      "tier": 0,
+      "tier": 1,
       "storyId": 4,
       "storyName": "Heroic Anthem",
       "coverUrl": "/covers/s4heroic_anthem_cover.png",
@@ -38544,7 +38547,9 @@
           "avatar": "https://imv2-gl.lilithgame.com/p/roc/avatar/153081822/23/12/06/b167046586005fb7_491x491.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
         }
-      ]
+      ],
+      "tierBadge": "S",
+      "season": 102
     }
   ]
 }

@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import type { KvKItem } from './KvkPerformanceGrid';
 
 interface KvkDashboardModalProps {
@@ -89,6 +90,29 @@ export function KvkDashboardModal({
   const [page, setPage] = useState(1);
   const pageSize = 50;
 
+  // Lock body and html scroll while modal is active
+  useEffect(() => {
+    const origBody = document.body.style.overflow;
+    const origHtml = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = origBody;
+      document.documentElement.style.overflow = origHtml;
+    };
+  }, []);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const handleSort = (field: SortField) => {
     if (sortBy === field) {
       setSortOrder(prev => (prev === 'desc' ? 'asc' : 'desc'));
@@ -162,9 +186,12 @@ export function KvkDashboardModal({
 
   if (!currentKvk) return null;
 
-  return (
-    <div className="kvk-dash-overlay" role="dialog" aria-modal="true">
-      <div className="kvk-dash-container">
+  const isTier2 = currentKvk.tier === 2 || currentKvk.tierBadge === 'S+';
+  const tierBadge = currentKvk.tierBadge || (isTier2 ? 'S+' : 'S');
+
+  return createPortal(
+    <div className="kvk-dash-overlay" role="dialog" aria-modal="true" onClick={onClose}>
+      <div className="kvk-dash-container" onClick={e => e.stopPropagation()}>
         {/* Top Navbar */}
         <div className="kvk-dash-topbar">
           <button type="button" className="kvk-dash-back-btn" onClick={onClose}>
@@ -204,24 +231,22 @@ export function KvkDashboardModal({
           </button>
         </div>
 
-        {/* Hero Banner with vivid KvK cover artwork */}
+        {/* Hero Banner with vivid KvK cover artwork and smooth bottom fade */}
         <div
           className="kvk-dash-hero"
           style={{
             backgroundImage: currentKvk.coverUrl
-              ? `linear-gradient(90deg, rgba(13, 17, 25, 0.94) 0%, rgba(13, 17, 25, 0.72) 48%, rgba(13, 17, 25, 0.25) 100%), url(${currentKvk.coverUrl})`
+              ? `linear-gradient(180deg, rgba(11, 15, 25, 0) 30%, rgba(11, 15, 25, 0.72) 75%, rgba(11, 15, 25, 0.98) 98%, #0b0f19 100%), linear-gradient(90deg, rgba(11, 15, 25, 0.96) 0%, rgba(11, 15, 25, 0.72) 48%, rgba(11, 15, 25, 0.20) 100%), url(${currentKvk.coverUrl})`
               : undefined
           }}
         >
           <div className="kvk-dash-hero-content">
             <div className="kvk-hero-badge-row">
-              {currentKvk.tierBadge && (
-                <span className={`kvk-grade-badge ${currentKvk.tierBadge === 'S+' ? 'grade-s-plus' : 'grade-s'}`}>
-                  {currentKvk.tierBadge}
-                </span>
-              )}
+              <span className={`kvk-grade-badge ${tierBadge === 'S+' ? 'grade-s-plus' : 'grade-s'}`} title={`Tier ${tierBadge}`}>
+                {tierBadge}
+              </span>
               <span className="kvk-hero-code">{currentKvk.formattedCode}</span>
-              {currentKvk.season && <span className="kvk-season-pill">S{currentKvk.season}</span>}
+              {currentKvk.season ? <span className="kvk-season-pill">S{currentKvk.season}</span> : null}
               {currentKvk.perf?.campNum && (
                 <span className="kvk-camp-pill">
                   {lang === 'vi' ? `Trại ${currentKvk.perf.campNum}` : `Camp ${currentKvk.perf.campNum}`}
@@ -640,6 +665,7 @@ export function KvkDashboardModal({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -107,8 +107,8 @@ async function main() {
     
     const storyId = Number(perfMatch?.storyId || lkMatch?.storyId || 4);
     const story = STORY_MAP[storyId] || { codePrefix: 'C', name: 'Lost Kingdom', cover: '' };
-    const tier = lkMatch?.tier !== undefined && lkMatch?.tier !== null ? Number(lkMatch.tier) : 0;
-    const tierBadge = tier === 1 ? 'S' : tier === 2 ? 'S+' : undefined;
+    const tier = (lkMatch?.tier !== undefined && lkMatch?.tier !== null && Number(lkMatch.tier) > 0) ? Number(lkMatch.tier) : 1;
+    const tierBadge = tier === 2 ? 'S+' : 'S';
     const isActive = code === activeLk?.code || lkMatch?.isActive === true;
     const openTime = perfMatch?.openTime || lkMatch?.openTime || '';
     const closeTime = perfMatch?.closeTime || lkMatch?.closeTime || '';

@@ -1732,28 +1732,30 @@ main {
 .kvk-dash-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
-  background: rgba(4, 7, 14, 0.92);
-  backdrop-filter: blur(14px);
+  z-index: 999999;
+  background: rgba(4, 7, 14, 0.96);
+  backdrop-filter: blur(16px);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   justify-content: center;
-  padding: 16px;
+  align-items: flex-start;
+  padding: 24px 16px 60px;
   animation: fadeIn 0.25s ease-out;
 }
 
 .kvk-dash-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1320px;
   background: #0b0f19;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95);
   display: flex;
   flex-direction: column;
-  margin: auto;
-  min-height: min(90vh, 850px);
+  margin: 0 auto;
+  min-height: auto;
 }
 
 .kvk-dash-topbar {
@@ -1880,11 +1882,11 @@ main {
 }
 
 .kvk-dash-hero {
-  padding: 32px 30px;
+  padding: 38px 30px 44px;
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none;
 }
 
 .kvk-dash-hero-content {
@@ -1946,7 +1948,7 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 14px;
   padding: 24px 30px;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(11, 15, 25, 0.6);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 

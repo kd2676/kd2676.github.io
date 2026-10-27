@@ -104,9 +104,9 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
       {/* Cards Grid (matching Image 1 & 2) */}
       <div className="kvk-perf-grid">
         {kvks.map(kvk => {
-          const isTier1 = kvk.tier === 1;
-          const isTier2 = kvk.tier === 2;
-          const tierBorderClass = isTier1 ? 'tier-border-purple' : isTier2 ? 'tier-border-gold' : 'tier-border-default';
+          const isTier2 = kvk.tier === 2 || kvk.tierBadge === 'S+';
+          const tierBorderClass = isTier2 ? 'tier-border-gold' : 'tier-border-purple';
+          const tierBadge = kvk.tierBadge || (isTier2 ? 'S+' : 'S');
 
           return (
             <article
@@ -121,16 +121,14 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
               {/* Card Top: Grade Badge, Code, Season, Active, Story Name, Dates & Dashboard button */}
               <div className="kvk-card-top">
                 <div className="kvk-card-identity">
-                  {kvk.tierBadge && (
-                    <div className={`kvk-grade-badge ${kvk.tierBadge === 'S+' ? 'grade-s-plus' : 'grade-s'}`} title={`Tier ${kvk.tier}`}>
-                      <span className="kvk-grade-letter">{kvk.tierBadge}</span>
-                    </div>
-                  )}
+                  <div className={`kvk-grade-badge ${tierBadge === 'S+' ? 'grade-s-plus' : 'grade-s'}`} title={`Tier ${tierBadge}`}>
+                    <span className="kvk-grade-letter">{tierBadge}</span>
+                  </div>
 
                   <div className="kvk-card-meta">
                     <div className="kvk-code-line">
                       <span className="kvk-code-text">{kvk.formattedCode}</span>
-                      {kvk.season && <span className="kvk-season-pill">S{kvk.season}</span>}
+                      {kvk.season ? <span className="kvk-season-pill">S{kvk.season}</span> : null}
                       {kvk.isActive && (
                         <span className="kvk-live-badge">
                           <span className="kvk-live-dot" />
