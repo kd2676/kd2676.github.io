@@ -1622,13 +1622,28 @@ main {
   backdrop-filter: blur(6px);
 }
 
-.kvk-progress-spinner {
-  width: 12px;
-  height: 12px;
-  border: 2px solid #10b981;
-  border-top-color: transparent;
+.kvk-progress-pulse-dot {
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  display: inline-block;
+  flex-shrink: 0;
+  animation: pulse-dot-slow 2.4s infinite ease-in-out;
+}
+
+@keyframes pulse-dot-slow {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.55;
+    box-shadow: 0 0 4px #10b981;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+    box-shadow: 0 0 14px #10b981, 0 0 22px rgba(16, 185, 129, 0.45);
+  }
 }
 
 .kvk-progress-text {
@@ -2306,6 +2321,107 @@ main {
 
 .td-heal span {
   color: #34d399;
+}
+
+/* ─── KvK Detailed Table (ROKStats match) ────────── */
+.kvk-detailed-table {
+  min-width: 1080px;
+}
+
+.kvk-rank-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.pointer {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.pointer:hover {
+  color: #38bdf8;
+}
+
+.td-kd {
+  min-width: 80px;
+}
+
+.kvk-kd-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.kvk-kd-badge {
+  display: inline-block;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  font: 700 11px 'JetBrains Mono', monospace;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.kvk-camp-name {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.kvk-dual-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  line-height: 1.25;
+}
+
+.kvk-cell-diff {
+  font: 700 12.5px 'JetBrains Mono', monospace;
+}
+
+.kvk-cell-total {
+  font-size: 11px;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.text-green {
+  color: #10b981 !important;
+}
+
+.text-red {
+  color: #f43f5e !important;
+}
+
+.text-muted {
+  color: #64748b !important;
+}
+
+.kvk-acclaim-val {
+  font: 700 12.5px 'JetBrains Mono', monospace;
+  color: #fbbf24;
+}
+
+.kvk-dkp-val {
+  font: 700 12.5px 'JetBrains Mono', monospace;
+  color: #38bdf8;
+}
+
+.kvk-trades-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 99px;
+  border: 1px solid currentColor;
+  font: 700 11.5px 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
+}
+
+.kvk-trades-na {
+  color: #64748b;
+  font-size: 12px;
 }
 
 .kvk-pagination {

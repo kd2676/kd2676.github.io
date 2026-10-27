@@ -125,61 +125,107 @@ export async function fetchAndBuildKvkData(headers: any, overviewApiData: any) {
     const closeTime = perfMatch?.closeTime || lkMatch?.closeTime || '';
     const dateFormatted = formatDates(openTime, closeTime);
 
-    // Fetch leaderboard for this KvK - FILTER STRICTLY FOR KINGDOM 2676 ONLY!
+    // Fetch leaderboard & dashboard stats for this KvK - FILTER STRICTLY FOR KINGDOM 2676 ONLY!
     let kdPlayers: any[] = [];
+    let domainData: any = null;
+
     try {
-      const lbRes = await fetch(
-        `https://app.rokstats.online/api/kvk/lost-kingdoms/${code}/kvk-leaderboard`,
+      const dashRes = await fetch(
+        `https://app.rokstats.online/api/kvk/lost-kingdoms/${code}/dashboard`,
         { headers }
       );
-      if (lbRes.ok) {
-        const lbData = await lbRes.json();
-        const allPlayers = lbData.data?.players || [];
-        // STRICT FILTER FOR KINGDOM 2676 ONLY:
-        kdPlayers = allPlayers
-          .filter((p: any) => 
-            String(p.kingdom) === kingdom || 
-            String(p.playerServerId) === '1676' || 
-            String(p.domain) === '1676'
-          )
-          .map((p: any) => ({
+      if (dashRes.ok) {
+        const dashData = await dashRes.json();
+        const allPlayers = dashData.stats?.players || [];
+        domainData = dashData.stats?.domainStats?.[1676] || dashData.stats?.domainStats?.['1676'] || null;
+
+        // Rank all players across Lost Kingdom by DKP (totalPoints)
+        const sortedAll = [...allPlayers].sort((a: any, b: any) => (b.totalPoints || 0) - (a.totalPoints || 0));
+        const rankMap = new Map<number, number>();
+        sortedAll.forEach((p: any, idx: number) => {
+          rankMap.set(p.playerId, idx + 1);
+        });
+
+        // Filter STRICTLY for Kingdom 2676 (domain 1676 or kingdom 2676)
+        const filteredKd = allPlayers.filter((p: any) =>
+          p.domain === 1676 ||
+          p.kingdom === 2676 ||
+          String(p.domain) === '1676' ||
+          String(p.playerServerId) === '1676'
+        );
+
+        // Sort KD 2676 players by killPointsDiff descending (or totalPoints / KP)
+        filteredKd.sort((a: any, b: any) => {
+          const kpDiffB = b.killPointsDiff !== undefined ? b.killPointsDiff : (b.killPoints || 0);
+          const kpDiffA = a.killPointsDiff !== undefined ? a.killPointsDiff : (a.killPoints || 0);
+          if (kpDiffB !== kpDiffA) return kpDiffB - kpDiffA;
+          return (b.totalPoints || 0) - (a.totalPoints || 0);
+        });
+
+        kdPlayers = filteredKd.map((p: any, idx: number) => {
+          const overallRank = rankMap.get(p.playerId) || (idx + 1);
+          const kpDiff = p.killPointsDiff !== undefined ? Number(p.killPointsDiff) : Number(p.killPoints) || 0;
+          const deadDiff = p.deadDiff !== undefined ? Number(p.deadDiff) : Number(p.dead) || 0;
+          const healedDiff = p.troopsHealedDiff !== undefined ? Number(p.troopsHealedDiff) : Number(p.troopsHealed) || 0;
+          const lossSum = (healedDiff + deadDiff) * 20;
+          const tradesRatio = (kpDiff > 0 && lossSum > 0) ? Math.floor((kpDiff / lossSum) * 100) : 0;
+
+          return {
             playerId: p.playerId,
-            name: p.playerName || '',
-            allianceTag: p.guildAbbreviation || '',
+            name: p.name || p.playerName || '',
+            allianceTag: p.guildAbbr || p.guildAbbreviation || '',
             allianceName: p.guildName || '',
+            campNum: p.campNum,
+            overallRank,
+            kdRank: idx + 1,
+            power: Number(p.power) || 0,
+            powerDiff: Number(p.powerDiff) || 0,
             killPoints: Number(p.killPoints) || 0,
-            deathPoints: Number(p.deathPoints) || 0,
-            healPoints: Number(p.healPoints) || 0,
+            killPointsDiff: kpDiff,
+            dead: Number(p.dead) || 0,
+            deadDiff: deadDiff,
+            t4: Number(p.t4) || 0,
+            t4Diff: Number(p.t4Diff) || 0,
+            t5: Number(p.t5) || 0,
+            t5Diff: Number(p.t5Diff) || 0,
+            troopsHealed: Number(p.troopsHealed) || 0,
+            troopsHealedDiff: healedDiff,
+            acclaim: Number(p.acclaim || p.acclaimDiff) || 0,
+            totalPoints: Number(p.totalPoints) || 0,
+            trades: tradesRatio,
             avatar: p.avatar?.url || '',
             avatarFrame: p.avatar?.frame || '',
-            killPointsRank: Number(p.killPointsRank) || 0,
-            deathPointsRank: Number(p.deathPointsRank) || 0,
-            healPointsRank: Number(p.healPointsRank) || 0,
-          }))
-          .sort((a: any, b: any) => b.killPoints - a.killPoints);
+          };
+        });
       }
     } catch (e) {
-      console.warn(`Không thể lấy leaderboard cho KvK ${code}:`, (e as Error).message);
+      console.warn(`Không thể lấy dashboard cho KvK ${code}:`, (e as Error).message);
     }
 
-    const perfObj = perfMatch ? {
-      kp: Number(perfMatch.kp) || 0,
-      kpFormatted: formatCompactNum(perfMatch.kp),
-      dead: Number(perfMatch.dead) || 0,
-      deadFormatted: formatCompactNum(perfMatch.dead),
-      t4t5kp: Number(perfMatch.t4t5kp) || 0,
-      t4t5kpFormatted: formatCompactNum(perfMatch.t4t5kp),
-      healed: Number(perfMatch.healed) || 0,
-      healedFormatted: formatCompactNum(perfMatch.healed),
-      acclaim: Number(perfMatch.acclaim) || 0,
-      acclaimFormatted: formatCompactNum(perfMatch.acclaim),
-      participants: Number(perfMatch.participantKingdoms || perfMatch.participants) || 0,
-      trackedPlayers: Number(perfMatch.trackedPlayers) || kdPlayers.length,
-      campNum: perfMatch.campNum || perfMatch.camp || 4,
-      powerStart: perfMatch.powerStart,
-      powerEnd: perfMatch.powerEnd,
-      powerDiff: perfMatch.powerDiff,
-    } : null;
+    // Build perf object
+    const perfKp = domainData?.killPoints !== undefined ? Number(domainData.killPoints) : Number(perfMatch?.kp) || 0;
+    const perfDead = domainData?.dead !== undefined ? Number(domainData.dead) : Number(perfMatch?.dead) || 0;
+    const perfHealed = domainData?.troopsHealed !== undefined ? Number(domainData.troopsHealed) : Number(perfMatch?.healed) || 0;
+    const perfT4T5 = (domainData?.t4 && domainData?.t5)
+      ? (Number(domainData.t4) * 20 + Number(domainData.t5) * 100)
+      : Number(perfMatch?.t4t5kp) || 0;
+    const perfAcclaim = domainData?.acclaim !== undefined ? Number(domainData.acclaim) : Number(perfMatch?.acclaim) || 0;
+
+    const perfObj = {
+      kp: perfKp,
+      kpFormatted: formatCompactNum(perfKp),
+      dead: perfDead,
+      deadFormatted: formatCompactNum(perfDead),
+      t4t5kp: perfT4T5,
+      t4t5kpFormatted: formatCompactNum(perfT4T5),
+      healed: perfHealed,
+      healedFormatted: formatCompactNum(perfHealed),
+      acclaim: perfAcclaim,
+      acclaimFormatted: formatCompactNum(perfAcclaim),
+      participants: Number(perfMatch?.participantKingdoms || perfMatch?.participants) || 0,
+      trackedPlayers: kdPlayers.length,
+      campNum: perfMatch?.campNum || perfMatch?.camp || 4,
+    };
 
     kvkList.push({
       code,
@@ -190,7 +236,7 @@ export async function fetchAndBuildKvkData(headers: any, overviewApiData: any) {
       tierBadge,
       storyId,
       storyName: story.name,
-      coverUrl: story.cover ? `https://app.rokstats.online/assets/media/game/kvk/covers/${story.cover}` : '',
+      coverUrl: story.cover ? `/covers/${story.cover}` : '',
       openTime,
       closeTime,
       datesEn: dateFormatted.en,

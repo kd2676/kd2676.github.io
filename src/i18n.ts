@@ -17,7 +17,6 @@ export const translations = {
       kvk: 'KvK Performance',
       alliances: 'Liên minh',
       governors: 'Thống đốc',
-      data: 'Cập nhật',
     },
     errorTitle: 'Lỗi dữ liệu',
     kvk: {
@@ -143,7 +142,6 @@ export const translations = {
       kvk: 'KvK Performance',
       alliances: 'Alliances',
       governors: 'Governors',
-      data: 'Data Source',
     },
     errorTitle: 'Data Error',
     kvk: {

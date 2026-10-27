@@ -2,11 +2,28 @@
 export interface KvKPlayer {
   playerId: number;
   name: string;
-  allianceTag: string;
-  allianceName: string;
+  allianceTag?: string;
+  allianceName?: string;
+  campNum?: number;
+  overallRank?: number;
+  kdRank?: number;
+  power?: number;
+  powerDiff?: number;
   killPoints: number;
-  deathPoints: number;
-  healPoints: number;
+  killPointsDiff?: number;
+  deathPoints?: number;
+  dead?: number;
+  deadDiff?: number;
+  healPoints?: number;
+  troopsHealed?: number;
+  troopsHealedDiff?: number;
+  t4?: number;
+  t4Diff?: number;
+  t5?: number;
+  t5Diff?: number;
+  acclaim?: number;
+  totalPoints?: number;
+  trades?: number;
   avatar?: string;
   avatarFrame?: string;
   killPointsRank?: number;
@@ -84,7 +101,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
         )}
       </div>
 
-      {/* Cards Grid (matching Image 2) */}
+      {/* Cards Grid (matching Image 1 & 2) */}
       <div className="kvk-perf-grid">
         {kvks.map(kvk => {
           const isTier1 = kvk.tier === 1;
@@ -97,7 +114,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
               className={`kvk-card ${tierBorderClass}`}
               style={{
                 backgroundImage: kvk.coverUrl
-                  ? `linear-gradient(90deg, rgba(13, 17, 25, 0.96) 0%, rgba(13, 17, 25, 0.88) 45%, rgba(13, 17, 25, 0.40) 100%), url(${kvk.coverUrl})`
+                  ? `linear-gradient(90deg, rgba(13, 17, 25, 0.92) 0%, rgba(13, 17, 25, 0.68) 48%, rgba(13, 17, 25, 0.20) 100%), url(${kvk.coverUrl})`
                   : undefined
               }}
             >
@@ -147,7 +164,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
               <div className="kvk-card-body">
                 {kvk.isActive ? (
                   <div className="kvk-in-progress-banner">
-                    <span className="kvk-progress-spinner" />
+                    <span className="kvk-progress-pulse-dot" />
                     <span className="kvk-progress-text">
                       {lang === 'vi' ? 'Chiến dịch đang diễn ra' : 'Currently in progress'}
                     </span>

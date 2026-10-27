@@ -9,6 +9,72 @@ interface KvkDashboardModalProps {
   onSelectKvk: (code: number) => void;
 }
 
+type SortField = 'kp' | 'dead' | 'heal' | 'power' | 'dkp' | 'trades' | 't4' | 't5';
+
+function formatCompactNum(num?: number): string {
+  if (num === undefined || num === null || isNaN(num) || num === 0) return '0';
+  const abs = Math.abs(num);
+  if (abs >= 1e9) {
+    const v = (num / 1e9).toFixed(2);
+    return v.endsWith('.00') ? `${(num / 1e9).toFixed(0)}B` : v.replace(/\.?0+$/, '') + 'B';
+  }
+  if (abs >= 1e6) {
+    const v = (num / 1e6).toFixed(2);
+    return v.endsWith('.00') ? `${(num / 1e6).toFixed(0)}M` : v.replace(/\.?0+$/, '') + 'M';
+  }
+  if (abs >= 1e3) {
+    const v = (num / 1e3).toFixed(1);
+    return v.endsWith('.0') ? `${(num / 1e3).toFixed(0)}K` : v + 'K';
+  }
+  return num.toLocaleString();
+}
+
+function DiffCell({
+  diff,
+  total,
+  formatCompact = false,
+  inverse = false,
+}: {
+  diff?: number;
+  total?: number;
+  formatCompact?: boolean;
+  inverse?: boolean;
+}) {
+  const hasDiff = diff !== undefined && diff !== null && diff !== 0;
+  const isPos = (diff || 0) > 0;
+  const isNeg = (diff || 0) < 0;
+
+  const diffColorClass = isPos ? (inverse ? 'text-red' : 'text-green') : isNeg ? (inverse ? 'text-green' : 'text-red') : 'text-muted';
+
+  const diffStr = isPos
+    ? `+ ${formatCompact ? formatCompactNum(diff) : (diff || 0).toLocaleString()}`
+    : isNeg
+    ? `- ${formatCompact ? formatCompactNum(Math.abs(diff || 0)) : Math.abs(diff || 0).toLocaleString()}`
+    : '0';
+
+  const totalStr = total !== undefined && total !== null ? (formatCompact ? formatCompactNum(total) : total.toLocaleString()) : null;
+
+  return (
+    <div className="kvk-dual-cell">
+      {hasDiff && <span className={`kvk-cell-diff ${diffColorClass}`}>{diffStr}</span>}
+      {totalStr && <span className="kvk-cell-total">{totalStr}</span>}
+      {!hasDiff && !totalStr && <span className="kvk-muted">—</span>}
+    </div>
+  );
+}
+
+function TradesBadge({ value }: { value?: number }) {
+  if (value === undefined || value === null || value === 0) {
+    return <span className="kvk-trades-na">—</span>;
+  }
+  const color = value >= 100 ? '#10b981' : value >= 70 ? '#38bdf8' : '#f59e0b';
+  return (
+    <span className="kvk-trades-badge" style={{ borderColor: color, color }}>
+      {value}%
+    </span>
+  );
+}
+
 export function KvkDashboardModal({
   kvks,
   selectedCode,
@@ -18,9 +84,20 @@ export function KvkDashboardModal({
 }: KvkDashboardModalProps) {
   const currentKvk = kvks.find(k => k.code === selectedCode) || kvks[0];
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'kp' | 'dead' | 'heal'>('kp');
+  const [sortBy, setSortBy] = useState<SortField>('kp');
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [page, setPage] = useState(1);
   const pageSize = 50;
+
+  const handleSort = (field: SortField) => {
+    if (sortBy === field) {
+      setSortOrder(prev => (prev === 'desc' ? 'asc' : 'desc'));
+    } else {
+      setSortBy(field);
+      setSortOrder('desc');
+    }
+    setPage(1);
+  };
 
   // Filter and sort players for KD 2676
   const filteredPlayers = useMemo(() => {
@@ -32,21 +109,50 @@ export function KvkDashboardModal({
       list = list.filter(
         p =>
           p.name.toLowerCase().includes(q) ||
-          p.allianceTag.toLowerCase().includes(q) ||
-          p.allianceName.toLowerCase().includes(q) ||
+          p.allianceTag?.toLowerCase().includes(q) ||
+          p.allianceName?.toLowerCase().includes(q) ||
           String(p.playerId).includes(q)
       );
     }
 
+    const orderMult = sortOrder === 'desc' ? 1 : -1;
+
     list.sort((a, b) => {
-      if (sortBy === 'kp') return b.killPoints - a.killPoints;
-      if (sortBy === 'dead') return b.deathPoints - a.deathPoints;
-      if (sortBy === 'heal') return b.healPoints - a.healPoints;
-      return 0;
+      let valA = 0;
+      let valB = 0;
+
+      if (sortBy === 'kp') {
+        valA = a.killPointsDiff !== undefined ? a.killPointsDiff : a.killPoints;
+        valB = b.killPointsDiff !== undefined ? b.killPointsDiff : b.killPoints;
+      } else if (sortBy === 'dead') {
+        valA = a.deadDiff !== undefined ? a.deadDiff : (a.dead || a.deathPoints || 0);
+        valB = b.deadDiff !== undefined ? b.deadDiff : (b.dead || b.deathPoints || 0);
+      } else if (sortBy === 'heal') {
+        valA = a.troopsHealedDiff !== undefined ? a.troopsHealedDiff : (a.troopsHealed || a.healPoints || 0);
+        valB = b.troopsHealedDiff !== undefined ? b.troopsHealedDiff : (b.troopsHealed || b.healPoints || 0);
+      } else if (sortBy === 'power') {
+        valA = a.power || 0;
+        valB = b.power || 0;
+      } else if (sortBy === 'dkp') {
+        valA = a.totalPoints || 0;
+        valB = b.totalPoints || 0;
+      } else if (sortBy === 'trades') {
+        valA = a.trades || 0;
+        valB = b.trades || 0;
+      } else if (sortBy === 't4') {
+        valA = a.t4Diff !== undefined ? a.t4Diff : (a.t4 || 0);
+        valB = b.t4Diff !== undefined ? b.t4Diff : (b.t4 || 0);
+      } else if (sortBy === 't5') {
+        valA = a.t5Diff !== undefined ? a.t5Diff : (a.t5 || 0);
+        valB = b.t5Diff !== undefined ? b.t5Diff : (b.t5 || 0);
+      }
+
+      if (valB !== valA) return (valB - valA) * orderMult;
+      return ((b.totalPoints || 0) - (a.totalPoints || 0)) * orderMult;
     });
 
     return list;
-  }, [currentKvk, searchQuery, sortBy]);
+  }, [currentKvk, searchQuery, sortBy, sortOrder]);
 
   const totalPages = Math.ceil(filteredPlayers.length / pageSize) || 1;
   const pagedPlayers = useMemo(() => {
@@ -98,12 +204,12 @@ export function KvkDashboardModal({
           </button>
         </div>
 
-        {/* Hero Banner */}
+        {/* Hero Banner with vivid KvK cover artwork */}
         <div
           className="kvk-dash-hero"
           style={{
             backgroundImage: currentKvk.coverUrl
-              ? `linear-gradient(90deg, rgba(13, 17, 25, 0.96) 0%, rgba(13, 17, 25, 0.82) 50%, rgba(13, 17, 25, 0.35) 100%), url(${currentKvk.coverUrl})`
+              ? `linear-gradient(90deg, rgba(13, 17, 25, 0.94) 0%, rgba(13, 17, 25, 0.72) 48%, rgba(13, 17, 25, 0.25) 100%), url(${currentKvk.coverUrl})`
               : undefined
           }}
         >
@@ -139,7 +245,7 @@ export function KvkDashboardModal({
           </div>
         </div>
 
-        {/* KPI Stats Cards */}
+        {/* 6 KPI Stats Cards */}
         <div className="kvk-dash-kpis">
           <div className="kvk-kpi-card kp-card">
             <div className="kvk-kpi-header">
@@ -156,41 +262,40 @@ export function KvkDashboardModal({
               </svg>
             </div>
             <div className="kvk-kpi-number">
-              {currentKvk.perf?.kpFormatted || (currentKvk.isActive ? `${currentKvk.players.reduce((sum, p) => sum + p.killPoints, 0).toLocaleString()} (live)` : '—')}
+              {currentKvk.perf?.kpFormatted || '—'}
             </div>
-            {currentKvk.perf?.t4t5kpFormatted && (
-              <div className="kvk-kpi-sub">
-                T4+T5 KP: <b>{currentKvk.perf.t4t5kpFormatted}</b>
-              </div>
-            )}
+            <div className="kvk-kpi-sub">
+              {lang === 'vi' ? 'Tổng KP tích lũy trong KvK' : 'Total KP gained in KvK'}
+            </div>
           </div>
 
           <div className="kvk-kpi-card dead-card">
             <div className="kvk-kpi-header">
-              <span className="kvk-kpi-title">{lang === 'vi' ? 'QUÂN TỬ TRẬN (DEATHS)' : 'DEATHS'}</span>
+              <span className="kvk-kpi-title">{lang === 'vi' ? 'TỬ TRẬN (DEATHS)' : 'DEATHS'}</span>
               <svg className="kvk-kpi-icon icon-skull" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="9" cy="12" r="1.5" />
                 <circle cx="15" cy="12" r="1.5" />
                 <path d="M8 20v2h8v-2" />
-                <path d="M12.5 17l-.5-1-.5 1h1z" />
-                <path d="M16 20a3 3 0 0 0 3-3V9a7 7 0 0 0-14 0v8a3 3 0 0 0 3 3" />
+                <path d="M12.5 17l-.5-1-.5 1" />
+                <path d="M16 20a6 6 0 0 0 1-4c0-4.42-3.58-8-8-8s-8 3.58-8 8c0 1.48.4 2.86 1.08 4" />
               </svg>
             </div>
             <div className="kvk-kpi-number">
-              {currentKvk.perf?.deadFormatted || (currentKvk.isActive ? currentKvk.players.reduce((sum, p) => sum + p.deathPoints, 0).toLocaleString() : '—')}
+              {currentKvk.perf?.deadFormatted || '—'}
             </div>
-            <div className="kvk-kpi-sub">{lang === 'vi' ? 'Quân hy sinh trên chiến trường' : 'Troops lost in battle'}</div>
+            <div className="kvk-kpi-sub">{lang === 'vi' ? 'Lính hy sinh trên chiến trường' : 'Troops lost in battle'}</div>
           </div>
 
           <div className="kvk-kpi-card heal-card">
             <div className="kvk-kpi-header">
               <span className="kvk-kpi-title">{lang === 'vi' ? 'HỒI PHỤC (HEALED)' : 'HEALED'}</span>
-              <svg className="kvk-kpi-icon icon-heal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2v20M2 12h20" />
+              <svg className="kvk-kpi-icon icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </div>
             <div className="kvk-kpi-number">
-              {currentKvk.perf?.healedFormatted || (currentKvk.isActive ? currentKvk.players.reduce((sum, p) => sum + p.healPoints, 0).toLocaleString() : '—')}
+              {currentKvk.perf?.healedFormatted || '—'}
             </div>
             <div className="kvk-kpi-sub">{lang === 'vi' ? 'Lượng quân được cứu chữa' : 'Troops healed in hospital'}</div>
           </div>
@@ -223,7 +328,7 @@ export function KvkDashboardModal({
               {currentKvk.players.length}
             </div>
             <div className="kvk-kpi-sub">
-              {lang === 'vi' ? `Thống đốc KD 2676 tham gia` : `KD 2676 governors recorded`}
+              {lang === 'vi' ? `Thống đốc KD 2676 được ghi nhận` : `KD 2676 governors recorded`}
             </div>
           </div>
 
@@ -240,9 +345,7 @@ export function KvkDashboardModal({
               {currentKvk.perf?.participants ? `${currentKvk.perf.participants} KDs` : 'Toàn KvK'}
             </div>
             <div className="kvk-kpi-sub">
-              {currentKvk.perf?.trackedPlayers
-                ? `${currentKvk.perf.trackedPlayers.toLocaleString()} ${lang === 'vi' ? 'người chơi được theo dõi' : 'tracked players'}`
-                : lang === 'vi' ? 'Tất cả vương quốc' : 'All participating kingdoms'}
+              {lang === 'vi' ? 'Các vương quốc tham gia' : 'Participating kingdoms'}
             </div>
           </div>
         </div>
@@ -272,7 +375,7 @@ export function KvkDashboardModal({
                 </svg>
                 <input
                   type="text"
-                  placeholder={lang === 'vi' ? 'Tìm thống đốc hoặc liên minh [FK76]...' : 'Search governor or alliance [ROFF]...'}
+                  placeholder={lang === 'vi' ? 'Tìm thống đốc, ID hoặc liên minh [IF28]...' : 'Search governor, ID or alliance [ROFF]...'}
                   value={searchQuery}
                   onChange={e => {
                     setSearchQuery(e.target.value);
@@ -288,29 +391,36 @@ export function KvkDashboardModal({
                 <button
                   type="button"
                   className={`kvk-sort-btn ${sortBy === 'kp' ? 'active' : ''}`}
-                  onClick={() => setSortBy('kp')}
+                  onClick={() => handleSort('kp')}
                 >
-                  ⚔️ {lang === 'vi' ? 'Kill Points' : 'Kill Points'}
+                  ⚔️ {lang === 'vi' ? 'Kill Points' : 'Kill Points'} {sortBy === 'kp' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </button>
                 <button
                   type="button"
                   className={`kvk-sort-btn ${sortBy === 'dead' ? 'active' : ''}`}
-                  onClick={() => setSortBy('dead')}
+                  onClick={() => handleSort('dead')}
                 >
-                  💀 {lang === 'vi' ? 'Tử trận' : 'Deaths'}
+                  💀 {lang === 'vi' ? 'Tử trận' : 'Deaths'} {sortBy === 'dead' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </button>
                 <button
                   type="button"
                   className={`kvk-sort-btn ${sortBy === 'heal' ? 'active' : ''}`}
-                  onClick={() => setSortBy('heal')}
+                  onClick={() => handleSort('heal')}
                 >
-                  💚 {lang === 'vi' ? 'Hồi phục' : 'Heals'}
+                  💚 {lang === 'vi' ? 'Hồi phục' : 'Heals'} {sortBy === 'heal' && (sortOrder === 'desc' ? '↓' : '↑')}
+                </button>
+                <button
+                  type="button"
+                  className={`kvk-sort-btn ${sortBy === 'dkp' ? 'active' : ''}`}
+                  onClick={() => handleSort('dkp')}
+                >
+                  🏆 DKP {sortBy === 'dkp' && (sortOrder === 'desc' ? '↓' : '↑')}
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Table */}
+          {/* Table (matching ROKStats Image 3) */}
           {filteredPlayers.length === 0 ? (
             <div className="kvk-empty-leaderboard">
               <div className="kvk-empty-icon">🛡️</div>
@@ -335,31 +445,57 @@ export function KvkDashboardModal({
             </div>
           ) : (
             <div className="kvk-table-wrapper">
-              <table className="kvk-leaderboard-table">
+              <table className="kvk-leaderboard-table kvk-detailed-table">
                 <thead>
                   <tr>
                     <th className="th-rank">#</th>
                     <th className="th-gov">{lang === 'vi' ? 'Thống đốc' : 'Governor'}</th>
-                    <th className="th-alliance">{lang === 'vi' ? 'Liên minh' : 'Alliance'}</th>
-                    <th className="th-num th-kp">{lang === 'vi' ? 'Kill Points' : 'Kill Points'}</th>
-                    <th className="th-num th-dead">{lang === 'vi' ? 'Tử trận' : 'Deaths'}</th>
-                    <th className="th-num th-heal">{lang === 'vi' ? 'Hồi phục' : 'Heals'}</th>
+                    <th className="th-kd">{lang === 'vi' ? 'Vương quốc' : 'KD'}</th>
+                    <th className="th-num pointer" onClick={() => handleSort('power')}>
+                      Power {sortBy === 'power' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
+                    <th className="th-num th-kp pointer" onClick={() => handleSort('kp')}>
+                      KP {sortBy === 'kp' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
+                    <th className="th-num pointer" onClick={() => handleSort('t4')}>
+                      T4 {sortBy === 't4' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
+                    <th className="th-num pointer" onClick={() => handleSort('t5')}>
+                      T5 {sortBy === 't5' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
+                    <th className="th-num th-dead pointer" onClick={() => handleSort('dead')}>
+                      {lang === 'vi' ? 'Tử trận' : 'Dead'} {sortBy === 'dead' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
+                    <th className="th-num">{lang === 'vi' ? 'Danh vọng' : 'Acclaim'}</th>
+                    <th className="th-num th-heal pointer" onClick={() => handleSort('heal')}>
+                      {lang === 'vi' ? 'Hồi phục' : 'Healed'} {sortBy === 'heal' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
+                    <th className="th-num pointer" onClick={() => handleSort('dkp')}>
+                      DKP {sortBy === 'dkp' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
+                    <th className="th-num pointer text-center" onClick={() => handleSort('trades')}>
+                      Trades {sortBy === 'trades' && (sortOrder === 'desc' ? '↓' : '↑')}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {pagedPlayers.map((player, idx) => {
                     const localRank = (page - 1) * pageSize + idx + 1;
+                    const overallRank = player.overallRank || player.killPointsRank || localRank;
+
                     return (
                       <tr key={player.playerId} className={`kvk-row-rank-${localRank}`}>
                         <td className="td-rank">
-                          <span className={`kvk-rank-badge ${localRank <= 3 ? `top-${localRank}` : ''}`}>
-                            {localRank}
-                          </span>
-                          {player.killPointsRank && player.killPointsRank > 0 && (
-                            <span className="kvk-global-rank" title={`Overall KvK rank: #${player.killPointsRank}`}>
-                              #{player.killPointsRank} KvK
+                          <div className="kvk-rank-col">
+                            <span className={`kvk-rank-badge ${localRank <= 3 ? `top-${localRank}` : ''}`}>
+                              {localRank}
                             </span>
-                          )}
+                            {overallRank > 0 && (
+                              <span className="kvk-global-rank" title={`Overall Lost Kingdom rank: #${overallRank}`}>
+                                #{overallRank} KvK
+                              </span>
+                            )}
+                          </div>
                         </td>
 
                         <td className="td-gov">
@@ -375,30 +511,81 @@ export function KvkDashboardModal({
                               )}
                             </div>
                             <div className="kvk-gov-info">
-                              <span className="kvk-gov-name">{player.name}</span>
+                              <span className="kvk-gov-name" title={player.name}>{player.name}</span>
                               <span className="kvk-gov-id">ID: {player.playerId}</span>
                             </div>
                           </div>
                         </td>
 
-                        <td className="td-alliance">
-                          {player.allianceTag ? (
-                            <span className="kvk-alliance-tag">[{player.allianceTag}]</span>
-                          ) : (
-                            <span className="kvk-text-muted">—</span>
-                          )}
+                        <td className="td-kd">
+                          <div className="kvk-kd-cell">
+                            <span className="kvk-kd-badge">2676</span>
+                            <span className="kvk-camp-name">
+                              {player.campNum ? (lang === 'vi' ? `Trại ${player.campNum}` : `Camp ${player.campNum}`) : 'Wind'}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td className="td-num">
+                          <DiffCell
+                            diff={player.powerDiff}
+                            total={player.power}
+                            formatCompact
+                          />
                         </td>
 
                         <td className="td-num td-kp">
-                          <b>{player.killPoints.toLocaleString()}</b>
+                          <DiffCell
+                            diff={player.killPointsDiff}
+                            total={player.killPoints}
+                          />
+                        </td>
+
+                        <td className="td-num">
+                          <DiffCell
+                            diff={player.t4Diff}
+                            total={player.t4}
+                            formatCompact
+                          />
+                        </td>
+
+                        <td className="td-num">
+                          <DiffCell
+                            diff={player.t5Diff}
+                            total={player.t5}
+                            formatCompact
+                          />
                         </td>
 
                         <td className="td-num td-dead">
-                          <span>{player.deathPoints.toLocaleString()}</span>
+                          <DiffCell
+                            diff={player.deadDiff}
+                            total={player.dead || player.deathPoints}
+                            inverse
+                          />
+                        </td>
+
+                        <td className="td-num td-acclaim">
+                          <span className="kvk-acclaim-val">
+                            {player.acclaim ? formatCompactNum(player.acclaim) : '—'}
+                          </span>
                         </td>
 
                         <td className="td-num td-heal">
-                          <span>{player.healPoints.toLocaleString()}</span>
+                          <DiffCell
+                            diff={player.troopsHealedDiff}
+                            total={player.troopsHealed || player.healPoints}
+                          />
+                        </td>
+
+                        <td className="td-num td-dkp">
+                          <span className="kvk-dkp-val">
+                            {player.totalPoints ? formatCompactNum(player.totalPoints) : '—'}
+                          </span>
+                        </td>
+
+                        <td className="td-num text-center">
+                          <TradesBadge value={player.trades} />
                         </td>
                       </tr>
                     );
@@ -411,8 +598,8 @@ export function KvkDashboardModal({
                 <div className="kvk-pagination">
                   <span className="kvk-page-info">
                     {lang === 'vi'
-                      ? `Hiển thị ${(page - 1) * pageSize + 1} – ${Math.min(page * pageSize, filteredPlayers.length)} trên ${filteredPlayers.length} chiến binh`
-                      : `Showing ${(page - 1) * pageSize + 1} – ${Math.min(page * pageSize, filteredPlayers.length)} of ${filteredPlayers.length} fighters`}
+                      ? `Hiển thị ${(page - 1) * pageSize + 1} – ${Math.min(page * pageSize, filteredPlayers.length)} trên ${filteredPlayers.length} chiến binh KD 2676`
+                      : `Showing ${(page - 1) * pageSize + 1} – ${Math.min(page * pageSize, filteredPlayers.length)} of ${filteredPlayers.length} KD 2676 fighters`}
                   </span>
 
                   <div className="kvk-page-btns">

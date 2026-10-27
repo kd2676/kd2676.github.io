@@ -68,15 +68,13 @@ type KingdomGuild = {
   };
   previousRank?: number;
 };
-type Status = { lastAttempt?: string; lastSuccess?: string; error?: string | null; running?: boolean };
-type Tab = 'overview' | 'kvk' | 'alliances' | 'governors' | 'data';
+type Tab = 'overview' | 'kvk' | 'alliances' | 'governors';
 
 const TAB_PATHS: Record<Tab, string> = {
   overview: '/overview',
   kvk: '/KvK Performance',
   alliances: '/alliances',
   governors: '/Governors',
-  data: '/Data Source',
 };
 
 function getTabFromPath(pathname: string): Tab {
@@ -93,15 +91,6 @@ function getTabFromPath(pathname: string): Tab {
     }
     if (raw === 'alliances' || raw === 'alliance') return 'alliances';
     if (raw === 'governors' || raw === 'governor') return 'governors';
-    if (
-      raw === 'data source' ||
-      raw === 'data%20source' ||
-      raw === 'data-source' ||
-      raw === 'datasource' ||
-      raw === 'data'
-    ) {
-      return 'data';
-    }
     if (raw === 'overview') return 'overview';
   } catch {
     // fallback
@@ -249,7 +238,6 @@ function App() {
       kvk: 'Kingdom 2676 · KvK Performance',
       alliances: 'Kingdom 2676 · Alliances',
       governors: 'Kingdom 2676 · Governors',
-      data: 'Kingdom 2676 · Data Source',
     };
     document.title = titles[tab] || 'Kingdom 2676 · Kingdom Statistics';
   }, [tab]);
@@ -258,8 +246,6 @@ function App() {
   const [kingdomGuilds, setKingdomGuilds] = useState<KingdomGuild[]>([]);
   const [kvkList, setKvkList] = useState<KvKItem[]>([]);
   const [selectedKvkCode, setSelectedKvkCode] = useState<number | null>(null);
-  const [live, setLive] = useState(false);
-  const [status, setStatus] = useState<Status | null>(null);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [allianceQuery, setAllianceQuery] = useState('');
@@ -289,16 +275,10 @@ function App() {
       ]);
 
       setDataset(govResult.data);
-      setLive(govResult.live);
       if (snapshotData) setSnapshot(snapshotData as KingdomSnapshot);
       if (Array.isArray(guildsData)) setKingdomGuilds(guildsData as KingdomGuild[]);
       if (kvkData && Array.isArray(kvkData.kvks)) setKvkList(kvkData.kvks as KvKItem[]);
       setError('');
-
-      if (govResult.live) {
-        const response = await fetch(`/api/status?t=${ts}`, { cache: 'no-store' });
-        if (response.ok) setStatus(await response.json() as Status);
-      }
     } catch (caught) {
       setError((caught as Error).message);
     }
@@ -660,7 +640,6 @@ function App() {
           ['kvk', i18n.tabs.kvk],
           ['alliances', i18n.tabs.alliances],
           ['governors', i18n.tabs.governors],
-          ['data', i18n.tabs.data]
         ] as const).map(([key, label]) => {
           const path = TAB_PATHS[key];
           return (
@@ -1007,49 +986,7 @@ function App() {
           </section>
         )}
 
-        {tab === 'data' && (
-          <section className="view active">
-            <div className="section-heading">
-              <div>
-                <p className="section-kicker">{i18n.data.kicker}</p>
-                <h2>{i18n.data.title}</h2>
-              </div>
-            </div>
-            <div className="data-layout data-layout-single">
-              <article className="panel guide-panel">
-                <p className="section-kicker">{i18n.data.statusKicker}</p>
-                <h3>{live ? i18n.data.statusLive : i18n.data.statusStatic}</h3>
-                <p>{i18n.data.source} <a href="https://app.rokstats.online/governors" target="_blank" rel="noreferrer">ROKStats All Governors ↗</a></p>
-                <p>{i18n.data.currentExport} <b>{formatDate(updatedAt)}</b></p>
-                <p>
-                  {live
-                    ? `${i18n.data.lastChecked} ${formatDate(status?.lastAttempt)}.${status?.running ? ` ${i18n.data.syncingStatus}` : ''}`
-                    : i18n.data.staticNote}
-                </p>
-                {status?.error && <p className="upload-result error">{status.error}</p>}
-                <div className="sync-scope-box">
-                  <div className="sync-scope-title">{i18n.data.scopeTitle}</div>
-                  <ul className="sync-scope-list">
-                    <li><i>✓</i> <span>{i18n.data.scopeOverview}</span></li>
-                    <li><i>✓</i> <span>{i18n.data.scopeAlliances}</span></li>
-                    <li><i>✓</i> <span>{i18n.data.scopeGovernors}</span></li>
-                  </ul>
-                </div>
-                <div className="sync-wrap">
-                  <button
-                    className={`sync-btn ${syncing ? 'loading' : ''}`}
-                    onClick={triggerSync}
-                    type="button"
-                    disabled={syncing}
-                  >
-                    <span className={`sync-icon ${syncing ? 'spinning' : ''}`}>↻</span>
-                    {syncing ? i18n.syncingRok : i18n.syncNow}
-                  </button>
-                </div>
-              </article>
-            </div>
-          </section>
-        )}
+
       </main>
 
       {selectedKvkCode !== null && kvkList.length > 0 && (
