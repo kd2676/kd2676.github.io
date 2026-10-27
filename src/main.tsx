@@ -5,6 +5,8 @@ import { GuildLogo } from './components/GuildLogo';
 import { GovernorAvatar } from './components/GovernorAvatar';
 import { KingdomGradeRadar, type RadarMetric } from './components/KingdomGradeRadar';
 import { CurrentKvkCard, type CurrentKvkInfo } from './components/CurrentKvkCard';
+import { KvkPerformanceGrid, type KvKItem } from './components/KvkPerformanceGrid';
+import { KvkDashboardModal } from './components/KvkDashboardModal';
 import { Pagination } from './components/Pagination';
 import { FlagVN, FlagGB } from './components/FlagIcons';
 import './styles.css';
@@ -79,6 +81,7 @@ const TAB_PATHS: Record<Tab, string> = {
 function getTabFromPath(pathname: string): Tab {
   try {
     const raw = decodeURIComponent(pathname).trim().replace(/^\/+|\/+$/g, '').toLowerCase();
+    if (raw.startsWith('kvk')) return 'overview';
     if (raw === 'alliances' || raw === 'alliance') return 'alliances';
     if (raw === 'governors' || raw === 'governor') return 'governors';
     if (
@@ -95,6 +98,15 @@ function getTabFromPath(pathname: string): Tab {
     // fallback
   }
   return 'overview';
+}
+
+function getKvkCodeFromPath(pathname: string): number | null {
+  try {
+    const raw = decodeURIComponent(pathname).trim();
+    const match = raw.match(/kvk\/dashboard\/[a-zA-Z]*(\d+)/i);
+    if (match) return parseInt(match[1], 10);
+  } catch {}
+  return null;
 }
 
 const sum = (rows: Governor[], field: keyof Governor) => rows.reduce((total, row) => total + (Number(row[field]) || 0), 0);
@@ -200,12 +212,23 @@ function App() {
     const onPopState = () => {
       const matched = getTabFromPath(window.location.pathname);
       setTabState(matched);
+      const codeFromPath = getKvkCodeFromPath(window.location.pathname);
+      const params = new URLSearchParams(window.location.search);
+      const kvkP = codeFromPath || (params.get('kvk') ? parseInt(params.get('kvk')!, 10) : null);
+      setSelectedKvkCode(kvkP || null);
     };
     window.addEventListener('popstate', onPopState);
 
     const current = window.location.pathname;
     if (current === '' || current === '/') {
       window.history.replaceState({ tab: 'overview' }, '', '/overview');
+    }
+
+    const codeFromPath = getKvkCodeFromPath(window.location.pathname);
+    const initialParams = new URLSearchParams(window.location.search);
+    const initialKvk = codeFromPath || (initialParams.get('kvk') ? parseInt(initialParams.get('kvk')!, 10) : null);
+    if (initialKvk) {
+      setSelectedKvkCode(initialKvk);
     }
 
     return () => window.removeEventListener('popstate', onPopState);
@@ -223,6 +246,8 @@ function App() {
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [snapshot, setSnapshot] = useState<KingdomSnapshot | null>(null);
   const [kingdomGuilds, setKingdomGuilds] = useState<KingdomGuild[]>([]);
+  const [kvkList, setKvkList] = useState<KvKItem[]>([]);
+  const [selectedKvkCode, setSelectedKvkCode] = useState<number | null>(null);
   const [live, setLive] = useState(false);
   const [status, setStatus] = useState<Status | null>(null);
   const [error, setError] = useState('');
@@ -240,12 +265,15 @@ function App() {
   const refreshData = async () => {
     try {
       const ts = Date.now();
-      const [govResult, snapshotData, guildsData] = await Promise.all([
+      const [govResult, snapshotData, guildsData, kvkData] = await Promise.all([
         loadDataset(lang),
         fetch(`/kingdom-snapshot.json?t=${ts}`, { cache: 'no-store' })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
         fetch(`/kingdom-guilds.json?t=${ts}`, { cache: 'no-store' })
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null),
+        fetch(`/kvk-performance.json?t=${ts}`, { cache: 'no-store' })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
       ]);
@@ -254,6 +282,7 @@ function App() {
       setLive(govResult.live);
       if (snapshotData) setSnapshot(snapshotData as KingdomSnapshot);
       if (Array.isArray(guildsData)) setKingdomGuilds(guildsData as KingdomGuild[]);
+      if (kvkData && Array.isArray(kvkData.kvks)) setKvkList(kvkData.kvks as KvKItem[]);
       setError('');
 
       if (govResult.live) {
@@ -774,39 +803,52 @@ function App() {
                 </div>
               </article>
 
-            <article className="panel kvk-panel">
-              <div className="panel-heading">
-                <div>
-                  <p className="section-kicker">{i18n.overview.kvkKicker}</p>
-                  <h3>{i18n.overview.kvkTitle}</h3>
-                </div>
-                <span className="panel-note">{i18n.overview.kvkNote(snapshot?.capturedAt || '25/10/2026')}</span>
-              </div>
-              <div className="kvk-list">
-                {snapshot?.kvks.map(item => (
-                  <div className="kvk-row" key={item.code}>
-                    <div>
-                      <b>{item.name}</b>
-                      <small>{item.code} · {item.dates}</small>
-                    </div>
-                    <div className="kvk-stats">
-                      {item.status ? (
-                        <em>
-                          {item.status === 'Đang diễn ra'
-                            ? (lang === 'vi' ? 'Đang diễn ra' : 'In Progress')
-                            : item.status}
-                        </em>
-                      ) : (
-                        <>
-                          <b>{item.kp} KP</b>
-                          <small>{item.deaths} Dead</small>
-                        </>
-                      )}
-                    </div>
+            {kvkList.length > 0 ? (
+              <KvkPerformanceGrid
+                kvks={kvkList}
+                lang={lang}
+                onOpenDashboard={code => {
+                  setSelectedKvkCode(code);
+                  const url = new URL(window.location.href);
+                  url.searchParams.set('kvk', String(code));
+                  window.history.pushState({ tab, kvk: code }, '', url.toString());
+                }}
+              />
+            ) : (
+              <article className="panel kvk-panel">
+                <div className="panel-heading">
+                  <div>
+                    <p className="section-kicker">{i18n.overview.kvkKicker}</p>
+                    <h3>{i18n.overview.kvkTitle}</h3>
                   </div>
-                ))}
-              </div>
-            </article>
+                  <span className="panel-note">{i18n.overview.kvkNote(snapshot?.capturedAt || '25/10/2026')}</span>
+                </div>
+                <div className="kvk-list">
+                  {snapshot?.kvks.map(item => (
+                    <div className="kvk-row" key={item.code}>
+                      <div>
+                        <b>{item.name}</b>
+                        <small>{item.code} · {item.dates}</small>
+                      </div>
+                      <div className="kvk-stats">
+                        {item.status ? (
+                          <em>
+                            {item.status === 'Đang diễn ra'
+                              ? (lang === 'vi' ? 'Đang diễn ra' : 'In Progress')
+                              : item.status}
+                          </em>
+                        ) : (
+                          <>
+                            <b>{item.kp} KP</b>
+                            <small>{item.deaths} Dead</small>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            )}
           </div>
         </section>
         )}
@@ -1018,6 +1060,26 @@ function App() {
           </section>
         )}
       </main>
+
+      {selectedKvkCode !== null && kvkList.length > 0 && (
+        <KvkDashboardModal
+          kvks={kvkList}
+          selectedCode={selectedKvkCode}
+          lang={lang}
+          onClose={() => {
+            setSelectedKvkCode(null);
+            const url = new URL(window.location.href);
+            url.searchParams.delete('kvk');
+            window.history.pushState({ tab }, '', url.toString());
+          }}
+          onSelectKvk={code => {
+            setSelectedKvkCode(code);
+            const url = new URL(window.location.href);
+            url.searchParams.set('kvk', String(code));
+            window.history.replaceState({ tab, kvk: code }, '', url.toString());
+          }}
+        />
+      )}
 
       <footer>
         <span>{i18n.footer.brand}</span>

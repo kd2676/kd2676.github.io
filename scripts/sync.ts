@@ -186,6 +186,13 @@ export async function syncData() {
     const payload = JSON.stringify(dataset, null, 2);
     await saveToAll('governors.json', payload);
     console.log(`✅ Đồng bộ thành công: ${dataset.rows.length} thống đốc!`);
+
+    try {
+      const { fetchAndBuildKvkData } = await import('./sync-kvk.js');
+      await fetchAndBuildKvkData(headers, overviewApiData);
+    } catch (kvkErr) {
+      console.warn('⚠️ Lỗi khi đồng bộ KvK data:', (kvkErr as Error).message);
+    }
   } catch (err) {
     console.warn('⚠️ Lỗi khi đồng bộ ROKStats API:', (err as Error).message, '— Giữ nguyên dữ liệu hiện tại.');
   }
@@ -194,3 +201,4 @@ export async function syncData() {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   syncData();
 }
+

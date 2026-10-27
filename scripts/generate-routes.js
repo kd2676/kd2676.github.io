@@ -22,7 +22,17 @@ const routes = [
   'governors',
   'data',
   'Data Source',
-  'Data%20Source'
+  'Data%20Source',
+  'kvk',
+  'kvk/dashboard',
+  'kvk/dashboard/C13315',
+  'kvk/dashboard/C13196',
+  'kvk/dashboard/C13085',
+  'kvk/dashboard/C12989',
+  'kvk/dashboard/C12851',
+  'kvk/dashboard/C12743',
+  'kvk/dashboard/C12625',
+  'kvk/dashboard/C12487',
 ];
 
 for (const route of routes) {
