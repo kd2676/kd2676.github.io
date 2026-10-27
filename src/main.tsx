@@ -69,10 +69,11 @@ type KingdomGuild = {
   previousRank?: number;
 };
 type Status = { lastAttempt?: string; lastSuccess?: string; error?: string | null; running?: boolean };
-type Tab = 'overview' | 'alliances' | 'governors' | 'data';
+type Tab = 'overview' | 'kvk' | 'alliances' | 'governors' | 'data';
 
 const TAB_PATHS: Record<Tab, string> = {
   overview: '/overview',
+  kvk: '/KvK Performance',
   alliances: '/alliances',
   governors: '/Governors',
   data: '/Data Source',
@@ -81,7 +82,15 @@ const TAB_PATHS: Record<Tab, string> = {
 function getTabFromPath(pathname: string): Tab {
   try {
     const raw = decodeURIComponent(pathname).trim().replace(/^\/+|\/+$/g, '').toLowerCase();
-    if (raw.startsWith('kvk')) return 'overview';
+    if (
+      raw === 'kvk performance' ||
+      raw === 'kvk%20performance' ||
+      raw === 'kvk-performance' ||
+      raw === 'kvk' ||
+      raw.startsWith('kvk')
+    ) {
+      return 'kvk';
+    }
     if (raw === 'alliances' || raw === 'alliance') return 'alliances';
     if (raw === 'governors' || raw === 'governor') return 'governors';
     if (
@@ -237,6 +246,7 @@ function App() {
   useEffect(() => {
     const titles: Record<Tab, string> = {
       overview: 'Kingdom 2676 · Kingdom Statistics',
+      kvk: 'Kingdom 2676 · KvK Performance',
       alliances: 'Kingdom 2676 · Alliances',
       governors: 'Kingdom 2676 · Governors',
       data: 'Kingdom 2676 · Data Source',
@@ -647,6 +657,7 @@ function App() {
       <nav className="tabs" aria-label="Tabs">
         {([
           ['overview', i18n.tabs.overview],
+          ['kvk', i18n.tabs.kvk],
           ['alliances', i18n.tabs.alliances],
           ['governors', i18n.tabs.governors],
           ['data', i18n.tabs.data]
@@ -778,31 +789,42 @@ function App() {
               </article>
             </div>
 
-            <div className="two-col">
-              <article className="panel">
-                <div className="panel-heading">
-                  <div>
-                    <p className="section-kicker">{i18n.overview.distKicker}</p>
-                    <h3>{i18n.overview.distTitle}</h3>
-                  </div>
-                  <span className="panel-note">{i18n.overview.alliancesCount(alliances.length)}</span>
+            <article className="panel full-width-panel">
+              <div className="panel-heading">
+                <div>
+                  <p className="section-kicker">{i18n.overview.distKicker}</p>
+                  <h3>{i18n.overview.distTitle}</h3>
                 </div>
-                <div className="category-list">
-                  {alliances.slice(0, 8).map(item => (
-                    <div className="category-row" key={item.tag || item.name}>
-                      <GuildLogo logo={item.logo} size={26} />
-                      <div className="category-name" title={item.displayName}>
-                        <span>{item.displayName}</span>
-                      </div>
-                      <div className="bar">
-                        <i style={{ width: `${Math.min(100, Math.max(5, (item.power / (alliances[0]?.power || 1)) * 100))}%` }} />
-                      </div>
-                      <b>{compact.format(item.power)}</b>
+                <span className="panel-note">{i18n.overview.alliancesCount(alliances.length)}</span>
+              </div>
+              <div className="category-list two-col-list">
+                {alliances.slice(0, 10).map((item, index) => (
+                  <div className="category-row" key={item.tag || item.name}>
+                    <span className="category-rank">#{index + 1}</span>
+                    <GuildLogo logo={item.logo} size={26} />
+                    <div className="category-name" title={item.displayName}>
+                      <span>{item.displayName}</span>
                     </div>
-                  ))}
-                </div>
-              </article>
+                    <div className="bar">
+                      <i style={{ width: `${Math.min(100, Math.max(5, (item.power / (alliances[0]?.power || 1)) * 100))}%` }} />
+                    </div>
+                    <b>{compact.format(item.power)}</b>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </section>
+        )}
 
+        {tab === 'kvk' && (
+          <section className="view active">
+            <div className="section-heading">
+              <div>
+                <p className="section-kicker">{i18n.kvk.kicker}</p>
+                <h2>{i18n.kvk.title}</h2>
+              </div>
+              <span className="section-meta">{kvkList.length} KvK Season</span>
+            </div>
             {kvkList.length > 0 ? (
               <KvkPerformanceGrid
                 kvks={kvkList}
@@ -811,46 +833,15 @@ function App() {
                   setSelectedKvkCode(code);
                   const url = new URL(window.location.href);
                   url.searchParams.set('kvk', String(code));
-                  window.history.pushState({ tab, kvk: code }, '', url.toString());
+                  window.history.pushState({ tab: 'kvk', kvk: code }, '', url.toString());
                 }}
               />
             ) : (
-              <article className="panel kvk-panel">
-                <div className="panel-heading">
-                  <div>
-                    <p className="section-kicker">{i18n.overview.kvkKicker}</p>
-                    <h3>{i18n.overview.kvkTitle}</h3>
-                  </div>
-                  <span className="panel-note">{i18n.overview.kvkNote(snapshot?.capturedAt || '25/10/2026')}</span>
-                </div>
-                <div className="kvk-list">
-                  {snapshot?.kvks.map(item => (
-                    <div className="kvk-row" key={item.code}>
-                      <div>
-                        <b>{item.name}</b>
-                        <small>{item.code} · {item.dates}</small>
-                      </div>
-                      <div className="kvk-stats">
-                        {item.status ? (
-                          <em>
-                            {item.status === 'Đang diễn ra'
-                              ? (lang === 'vi' ? 'Đang diễn ra' : 'In Progress')
-                              : item.status}
-                          </em>
-                        ) : (
-                          <>
-                            <b>{item.kp} KP</b>
-                            <small>{item.deaths} Dead</small>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </article>
+              <div className="panel" style={{ padding: '32px', textAlign: 'center', color: 'var(--text3)' }}>
+                <p>{lang === 'vi' ? 'Đang tải thông tin KvK...' : 'Loading KvK information...'}</p>
+              </div>
             )}
-          </div>
-        </section>
+          </section>
         )}
 
         {tab === 'alliances' && (
@@ -1070,7 +1061,11 @@ function App() {
             setSelectedKvkCode(null);
             const url = new URL(window.location.href);
             url.searchParams.delete('kvk');
-            window.history.pushState({ tab }, '', url.toString());
+            let targetPath = url.pathname;
+            if (targetPath.toLowerCase().includes('kvk/dashboard')) {
+              targetPath = TAB_PATHS.kvk;
+            }
+            window.history.pushState({ tab }, '', targetPath + (url.search ? url.search : ''));
           }}
           onSelectKvk={code => {
             setSelectedKvkCode(code);

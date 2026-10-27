@@ -14,11 +14,17 @@ export const translations = {
     reportSubtitle: 'RISE OF KINGDOMS · THÔNG TIN VƯƠNG QUỐC',
     tabs: {
       overview: 'Tổng quan',
+      kvk: 'KvK Performance',
       alliances: 'Liên minh',
       governors: 'Thống đốc',
       data: 'Cập nhật',
     },
     errorTitle: 'Lỗi dữ liệu',
+    kvk: {
+      kicker: '02 / KVK PERFORMANCE',
+      title: 'Hiệu suất KvK Kingdom 2676',
+      subtitle: 'Lịch sử chiến đấu và thành tích các mùa KvK của Kingdom 2676',
+    },
     overview: {
       kicker: '01 / OVERVIEW',
       title: 'Toàn cảnh vương quốc',
@@ -60,7 +66,7 @@ export const translations = {
       kvkNote: (d: string) => `Dữ liệu lịch sử từ ${d}`,
     },
     alliances: {
-      kicker: '02 / ALLIANCES',
+      kicker: '03 / ALLIANCES',
       title: 'Liên minh vương quốc 2676',
       alliancesCount: (n: number) => `${n} liên minh chính thức`,
       rank: 'Hạng',
@@ -73,7 +79,7 @@ export const translations = {
       filterPlaceholder: 'Tìm liên minh theo tên hoặc tag...',
     },
     governors: {
-      kicker: '03 / GOVERNORS',
+      kicker: '04 / GOVERNORS',
       title: 'Danh sách thống đốc',
       countMeta: (f: number, total: number) => `${f} / ${total} thống đốc`,
       searchPlaceholder: 'Tìm tên, ID hoặc liên minh...',
@@ -96,7 +102,7 @@ export const translations = {
       maxAcclaim: 'tối đa',
     },
     data: {
-      kicker: '04 / DATA SOURCE',
+      kicker: '05 / DATA SOURCE',
       title: 'Cập nhật dữ liệu',
       statusKicker: 'TRẠNG THÁI HỆ THỐNG',
       statusLive: 'Hệ thống đồng bộ trực tuyến tự động',
@@ -134,11 +140,17 @@ export const translations = {
     reportSubtitle: 'RISE OF KINGDOMS · KINGDOM INFORMATION',
     tabs: {
       overview: 'Overview',
+      kvk: 'KvK Performance',
       alliances: 'Alliances',
       governors: 'Governors',
       data: 'Data Source',
     },
     errorTitle: 'Data Error',
+    kvk: {
+      kicker: '02 / KVK PERFORMANCE',
+      title: 'Kingdom 2676 KvK Performance',
+      subtitle: 'Historical performance records and combat statistics of Kingdom 2676',
+    },
     overview: {
       kicker: '01 / OVERVIEW',
       title: 'Kingdom Overview',
@@ -180,7 +192,7 @@ export const translations = {
       kvkNote: (d: string) => `Historical records from ${d}`,
     },
     alliances: {
-      kicker: '02 / ALLIANCES',
+      kicker: '03 / ALLIANCES',
       title: 'Kingdom 2676 Alliances',
       alliancesCount: (n: number) => `${n} official alliances`,
       rank: 'Rank',
@@ -193,7 +205,7 @@ export const translations = {
       filterPlaceholder: 'Search alliance by name or tag...',
     },
     governors: {
-      kicker: '03 / GOVERNORS',
+      kicker: '04 / GOVERNORS',
       title: 'Governors List',
       countMeta: (f: number, total: number) => `${f} / ${total} governors`,
       searchPlaceholder: 'Search name, ID or alliance...',
@@ -216,7 +228,7 @@ export const translations = {
       maxAcclaim: 'max',
     },
     data: {
-      kicker: '04 / DATA SOURCE',
+      kicker: '05 / DATA SOURCE',
       title: 'Data Source & Sync',
       statusKicker: 'SYSTEM STATUS',
       statusLive: 'Automatic Real-time Synchronization',
