@@ -65,9 +65,7 @@ function formatDates(startIso?: string, endIso?: string) {
 
 async function saveAtomic(filename: string, value: string) {
   await mkdir(path.dirname(filename), { recursive: true });
-  const temp = `${filename}.${process.pid}.tmp`;
-  await writeFile(temp, value, 'utf8');
-  await rename(temp, filename);
+  await writeFile(filename, value, 'utf8');
 }
 
 async function saveToAll(relPath: string, content: string) {
