@@ -1,13 +1,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import type { KvKItem } from './KvkPerformanceGrid';
+import { CopyIdButton } from './CopyIdButton';
 
 interface KvkDashboardModalProps {
   kvks: KvKItem[];
   selectedCode: number;
   lang?: 'vi' | 'en';
   onClose: () => void;
-  onSelectKvk: (code: number) => void;
+  onSelectKvk?: (code: number) => void;
 }
 
 type SortField = 'kp' | 'dead' | 'heal' | 'power' | 'dkp' | 'trades' | 't4' | 't5';
@@ -81,7 +82,6 @@ export function KvkDashboardModal({
   selectedCode,
   lang = 'vi',
   onClose,
-  onSelectKvk,
 }: KvkDashboardModalProps) {
   const currentKvk = kvks.find(k => k.code === selectedCode) || kvks[0];
   const [searchQuery, setSearchQuery] = useState('');
@@ -202,27 +202,6 @@ export function KvkDashboardModal({
             <span>{lang === 'vi' ? 'Quay lại danh sách KvK' : 'Back to KvK Performance'}</span>
           </button>
 
-          {/* KvK Season Switcher */}
-          <div className="kvk-dash-switcher">
-            <span className="kvk-switcher-label">{lang === 'vi' ? 'Mùa KvK:' : 'KvK Season:'}</span>
-            <div className="kvk-switcher-buttons">
-              {kvks.map(k => (
-                <button
-                  key={k.code}
-                  type="button"
-                  className={`kvk-switcher-pill ${k.code === currentKvk.code ? 'active' : ''}`}
-                  onClick={() => {
-                    onSelectKvk(k.code);
-                    setPage(1);
-                  }}
-                >
-                  {k.formattedCode}
-                  {k.isActive && <span className="kvk-pill-dot" />}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <button type="button" className="kvk-dash-close-icon" onClick={onClose} title="Close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" />
@@ -258,9 +237,6 @@ export function KvkDashboardModal({
                   {lang === 'vi' ? 'Đang diễn ra' : 'Active In Progress'}
                 </span>
               )}
-              <span className="kvk-scope-badge">
-                {lang === 'vi' ? '🛡️ Dữ liệu Kingdom 2676' : '🛡️ Kingdom 2676 Only'}
-              </span>
             </div>
 
             <h1 className="kvk-hero-title">{currentKvk.storyName}</h1>
@@ -386,9 +362,7 @@ export function KvkDashboardModal({
           <div className="kvk-leaderboard-header">
             <div>
               <h2 className="kvk-leaderboard-title">
-                {lang === 'vi'
-                  ? `Bảng xếp hạng Chiến Binh Kingdom 2676 (${filteredPlayers.length})`
-                  : `Kingdom 2676 Governor Leaderboard (${filteredPlayers.length})`}
+                KvK Dashboard ({filteredPlayers.length})
               </h2>
               <p className="kvk-leaderboard-subtitle">
                 {lang === 'vi'
@@ -543,7 +517,7 @@ export function KvkDashboardModal({
                             </div>
                             <div className="kvk-gov-info">
                               <span className="kvk-gov-name" title={player.name}>{player.name}</span>
-                              <span className="kvk-gov-id">ID: {player.playerId}</span>
+                              <CopyIdButton id={player.playerId} lang={lang} />
                             </div>
                           </div>
                         </td>

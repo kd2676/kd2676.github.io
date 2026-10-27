@@ -9,6 +9,7 @@ import { KvkPerformanceGrid, type KvKItem } from './components/KvkPerformanceGri
 import { KvkDashboardModal } from './components/KvkDashboardModal';
 import { Pagination } from './components/Pagination';
 import { FlagVN, FlagGB } from './components/FlagIcons';
+import { CopyIdButton } from './components/CopyIdButton';
 import './styles.css';
 
 type Governor = {
@@ -510,14 +511,109 @@ function App() {
   }, [filtered, govPage]);
 
   const metrics = [
-    [i18n.overview.metrics.governors, fmt.format(rows.length), i18n.overview.metrics.governorsFoot],
-    [i18n.overview.metrics.power, compact.format(sum(rows, 'power')), i18n.overview.metrics.powerFoot],
-    [i18n.overview.metrics.killPoints, compact.format(sum(rows, 'killPoints')), i18n.overview.metrics.killPointsFoot],
-    [i18n.overview.metrics.dead, compact.format(sum(rows, 'dead')), i18n.overview.metrics.deadFoot],
-    [i18n.overview.metrics.t4Kills, compact.format(sum(rows, 't4Kills')), i18n.overview.metrics.t4KillsFoot],
-    [i18n.overview.metrics.t5Kills, compact.format(sum(rows, 't5Kills')), i18n.overview.metrics.t5KillsFoot],
-    [i18n.overview.metrics.troopPower, compact.format(sum(rows, 'troopPower')), i18n.overview.metrics.troopPowerFoot],
-    [i18n.overview.metrics.alliances, fmt.format(alliances.length), i18n.overview.metrics.alliancesFoot],
+    {
+      label: i18n.overview.metrics.governors,
+      value: fmt.format(rows.length),
+      foot: i18n.overview.metrics.governorsFoot,
+      iconClass: 'stat-icon-cyan',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      )
+    },
+    {
+      label: i18n.overview.metrics.power,
+      value: compact.format(sum(rows, 'power')),
+      foot: i18n.overview.metrics.powerFoot,
+      iconClass: 'stat-icon-gold',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>
+      )
+    },
+    {
+      label: i18n.overview.metrics.killPoints,
+      value: compact.format(sum(rows, 'killPoints')),
+      foot: i18n.overview.metrics.killPointsFoot,
+      iconClass: 'stat-icon-red',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
+          <line x1="13" y1="19" x2="19" y2="13" />
+          <polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5" />
+          <line x1="5" y1="14" x2="9" y2="18" />
+        </svg>
+      )
+    },
+    {
+      label: i18n.overview.metrics.dead,
+      value: compact.format(sum(rows, 'dead')),
+      foot: i18n.overview.metrics.deadFoot,
+      iconClass: 'stat-icon-purple',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="9" cy="12" r="1.5" />
+          <circle cx="15" cy="12" r="1.5" />
+          <path d="M8 20v2h8v-2" />
+          <path d="M12.5 17l-.5-1-.5 1h1z" />
+          <path d="M16 20a6 6 0 0 0 1-4c0-4.42-3.58-8-8-8s-8 3.58-8 8c0 1.48.4 2.86 1.08 4" />
+        </svg>
+      )
+    },
+    {
+      label: i18n.overview.metrics.t4Kills,
+      value: compact.format(sum(rows, 't4Kills')),
+      foot: i18n.overview.metrics.t4KillsFoot,
+      iconClass: 'stat-icon-blue',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <polyline points="9 11 12 14 15 11" />
+        </svg>
+      )
+    },
+    {
+      label: i18n.overview.metrics.t5Kills,
+      value: compact.format(sum(rows, 't5Kills')),
+      foot: i18n.overview.metrics.t5KillsFoot,
+      iconClass: 'stat-icon-amber',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      )
+    },
+    {
+      label: i18n.overview.metrics.troopPower,
+      value: compact.format(sum(rows, 'troopPower')),
+      foot: i18n.overview.metrics.troopPowerFoot,
+      iconClass: 'stat-icon-emerald',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+          <line x1="4" y1="22" x2="4" y2="15" />
+        </svg>
+      )
+    },
+    {
+      label: i18n.overview.metrics.alliances,
+      value: fmt.format(alliances.length),
+      foot: i18n.overview.metrics.alliancesFoot,
+      iconClass: 'stat-icon-teal',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 21h18" />
+          <path d="M5 21V7l4-4 4 4v14" />
+          <path d="M15 21V11l4-4v14" />
+          <rect x="8" y="11" width="2" height="3" />
+        </svg>
+      )
+    },
   ];
 
   const updatedAt = dataset?.exportedAt;
@@ -683,11 +779,16 @@ function App() {
             <CurrentKvkCard kvk={snapshot?.currentKvk} lang={lang} />
 
             <div className="stats-grid">
-              {metrics.map(([label, value, foot]) => (
-                <article className="stat" key={label}>
-                  <div className="stat-label">{label}</div>
-                  <div className="stat-value">{value}</div>
-                  <div className="stat-foot">{foot}</div>
+              {metrics.map(m => (
+                <article className="stat" key={m.label}>
+                  <div className="stat-header">
+                    <div className="stat-label">{m.label}</div>
+                    <div className={`stat-icon-wrap ${m.iconClass}`}>
+                      {m.icon}
+                    </div>
+                  </div>
+                  <div className="stat-value">{m.value}</div>
+                  <div className="stat-foot">{m.foot}</div>
                 </article>
               ))}
             </div>
@@ -758,7 +859,10 @@ function App() {
                         <GovernorAvatar src={row.avatar} frame={row.avatarFrame} name={row.name} size={40} />
                         <div>
                           <b>{row.name}</b>
-                          <small>{row.guildTag ? `[${row.guildTag}] ` : ''}{row.alliance || i18n.overview.noAlliance} · ID {row.id}</small>
+                          <div className="gov-meta-row">
+                            <small>{row.guildTag ? `[${row.guildTag}] ` : ''}{row.alliance || i18n.overview.noAlliance}</small>
+                            <CopyIdButton id={row.id} lang={lang} />
+                          </div>
                         </div>
                         <span className="value">{compact.format(row.power)}</span>
                       </div>
@@ -949,7 +1053,10 @@ function App() {
                             <GovernorAvatar src={row.avatar} frame={row.avatarFrame} name={row.name} size={38} />
                             <div className="gov-cell-text">
                               <b>{row.name}</b>
-                              <small>ID {row.id} · CH {row.ch ?? '?'}</small>
+                              <div className="gov-meta-row">
+                                <CopyIdButton id={row.id} lang={lang} />
+                                <span className="gov-ch-pill">CH {row.ch ?? '?'}</span>
+                              </div>
                             </div>
                           </div>
                         </td>

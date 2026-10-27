@@ -826,6 +826,13 @@ main {
   transform: scale(1.3);
 }
 
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .stat-label {
   color: #94a3b8;
   font: 800 11px 'Manrope', sans-serif;
@@ -833,8 +840,84 @@ main {
   text-transform: uppercase;
 }
 
+.stat-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-icon-wrap svg {
+  width: 19px;
+  height: 19px;
+}
+
+.stat:hover .stat-icon-wrap {
+  transform: scale(1.1);
+}
+
+.stat-icon-cyan {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.18);
+}
+
+.stat-icon-gold {
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #facc15;
+  box-shadow: 0 0 14px rgba(234, 179, 8, 0.18);
+}
+
+.stat-icon-red {
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #fb7185;
+  box-shadow: 0 0 14px rgba(244, 63, 94, 0.18);
+}
+
+.stat-icon-purple {
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #c084fc;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.18);
+}
+
+.stat-icon-blue {
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #818cf8;
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.18);
+}
+
+.stat-icon-amber {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.18);
+}
+
+.stat-icon-emerald {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.18);
+}
+
+.stat-icon-teal {
+  background: rgba(20, 184, 166, 0.12);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  color: #2dd4bf;
+  box-shadow: 0 0 14px rgba(20, 184, 166, 0.18);
+}
+
 .stat-value {
-  margin-top: 18px;
+  margin-top: 14px;
   font: 800 clamp(26px, 2.7vw, 40px)/1 'JetBrains Mono', 'Manrope', monospace;
   letter-spacing: -0.03em;
   background: linear-gradient(135deg, #ffffff 40%, #e0f2fe 75%, #38bdf8 100%);
@@ -1746,7 +1829,7 @@ main {
 
 .kvk-dash-container {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1380px;
   background: #0b0f19;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
@@ -2177,17 +2260,18 @@ main {
 
 .kvk-leaderboard-table thead th {
   background: rgba(15, 23, 42, 0.7);
-  padding: 13px 18px;
+  padding: 11px 8px;
   color: #94a3b8;
   font-weight: 700;
-  font-size: 11.5px;
-  letter-spacing: 0.04em;
+  font-size: 11px;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
 }
 
 .kvk-leaderboard-table tbody td {
-  padding: 13px 18px;
+  padding: 10px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   color: #e2e8f0;
 }
@@ -2197,7 +2281,8 @@ main {
 }
 
 .td-rank {
-  width: 90px;
+  width: 58px;
+  padding-left: 12px !important;
 }
 
 .kvk-rank-badge {
@@ -2238,19 +2323,20 @@ main {
 }
 
 .td-gov {
-  min-width: 220px;
+  min-width: 175px;
+  max-width: 220px;
 }
 
 .kvk-gov-cell {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .kvk-avatar-wrap {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
 }
 
@@ -2284,12 +2370,24 @@ main {
 .kvk-gov-info {
   display: flex;
   flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.kvk-gov-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .kvk-gov-name {
   font-weight: 700;
   color: #f8fafc;
-  font-size: 14px;
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .kvk-gov-id {
@@ -2302,9 +2400,9 @@ main {
   background: rgba(56, 189, 248, 0.1);
   color: #38bdf8;
   font-weight: 700;
-  font-size: 12px;
-  padding: 2px 7px;
-  border-radius: 5px;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
 }
 
 .th-num,
@@ -2326,9 +2424,11 @@ main {
   color: #34d399;
 }
 
-/* ─── KvK Detailed Table (ROKStats match) ────────── */
+/* ─── KvK Detailed Table (Fits seamlessly in 1 view) ── */
 .kvk-detailed-table {
-  min-width: 1080px;
+  width: 100%;
+  min-width: 960px;
+  table-layout: auto;
 }
 
 .kvk-rank-col {
@@ -2349,7 +2449,8 @@ main {
 }
 
 .td-kd {
-  min-width: 80px;
+  width: 65px;
+  min-width: 60px;
 }
 
 .kvk-kd-cell {
@@ -4010,4 +4111,113 @@ footer {
 .sync-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+/* ─── Governor Meta & Copy ID Button ────────────── */
+.gov-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+
+.gov-ch-pill {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #94a3b8;
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.copy-id-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  position: relative;
+  user-select: none;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.copy-id-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+.copy-id-btn.copied {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #34d399;
+}
+
+.copy-id-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-svg {
+  transition: transform 0.15s ease;
+}
+
+.copy-id-btn:hover .copy-svg {
+  transform: scale(1.15);
+}
+
+.check-svg {
+  color: #34d399;
+  animation: checkPop 0.2s ease-out;
+}
+
+@keyframes checkPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.copied-tooltip {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #10b981;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  animation: tooltipFade 0.2s ease-out;
+  z-index: 10;
+}
+
+.copied-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 3px 3px 0 3px;
+  border-style: solid;
+  border-color: #10b981 transparent transparent transparent;
+}
+
+@keyframes tooltipFade {
+  from { opacity: 0; transform: translate(-50%, 4px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
 }
