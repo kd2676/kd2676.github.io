@@ -112,15 +112,16 @@ const sum = (rows: Governor[], field: keyof Governor) => rows.reduce((total, row
 
 async function loadDataset(lang: Lang): Promise<{ data: Dataset; live: boolean }> {
   const ts = Date.now();
+  const headers = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' };
   try {
-    const response = await fetch(`/governors.json?t=${ts}`, { cache: 'no-store' });
+    const response = await fetch(`/governors.json?t=${ts}`, { cache: 'no-store', headers });
     if (!response.ok) throw new Error('Static file not ready');
     const data = await response.json() as Dataset;
     if (!Array.isArray(data.rows)) throw new Error('Invalid governors dataset');
     return { data, live: false };
   } catch {
     try {
-      const response = await fetch(`/api/governors?t=${ts}`, { cache: 'no-store' });
+      const response = await fetch(`/api/governors?t=${ts}`, { cache: 'no-store', headers });
       if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
         const data = await response.json() as Dataset;
         if (Array.isArray(data.rows)) return { data, live: true };
@@ -262,20 +263,21 @@ function App() {
   const refreshData = async () => {
     try {
       const ts = Date.now();
+      const headers = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' };
       const [govResult, snapshotData, guildsData, kvkData] = await Promise.all([
         loadDataset(lang),
-        fetch(`/kingdom-snapshot.json?t=${ts}`, { cache: 'no-store' })
+        fetch(`/kingdom-snapshot.json?t=${ts}`, { cache: 'no-store', headers })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
-        fetch(`/kingdom-guilds.json?t=${ts}`, { cache: 'no-store' })
+        fetch(`/kingdom-guilds.json?t=${ts}`, { cache: 'no-store', headers })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
-        fetch(`/kvk-performance.json?t=${ts}`, { cache: 'no-store' })
+        fetch(`/kvk-performance.json?t=${ts}`, { cache: 'no-store', headers })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
       ]);
 
-      setDataset(govResult.data);
+      if (govResult?.data) setDataset(govResult.data);
       if (snapshotData) setSnapshot(snapshotData as KingdomSnapshot);
       if (Array.isArray(guildsData)) setKingdomGuilds(guildsData as KingdomGuild[]);
       if (kvkData && Array.isArray(kvkData.kvks)) setKvkList(kvkData.kvks as KvKItem[]);
@@ -401,8 +403,23 @@ function App() {
 
   useEffect(() => {
     void refreshData();
-    const timer = window.setInterval(refreshData, 5 * 60_000);
-    return () => { window.clearInterval(timer); };
+    // Tự động kiểm tra làm mới dữ liệu mỗi 60 giây ngay trên trình duyệt
+    const timer = window.setInterval(refreshData, 60_000);
+
+    // Chủ động cập nhật ngay tức thì khi người dùng mở lại tab hoặc focus vào trình duyệt
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        void refreshData();
+      }
+    };
+    window.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('focus', handleVisibility);
+
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('focus', handleVisibility);
+    };
   }, [lang]);
 
   const rows = dataset?.rows ?? [];
