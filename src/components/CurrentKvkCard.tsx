@@ -25,12 +25,21 @@ export interface CurrentKvkInfo {
   startDate?: string;
   endDate?: string;
   status?: string;
+  coverUrl?: string;
   chronicles?: ChronicleStage[];
 }
 
 interface CurrentKvkCardProps {
   kvk?: CurrentKvkInfo;
   lang?: 'vi' | 'en';
+}
+
+function formatUtcDisplay(utcStr: string, lang: 'vi' | 'en') {
+  if (lang !== 'vi') return utcStr;
+  return utcStr
+    .replace('Sep', 'Th09')
+    .replace('Oct', 'Th10')
+    .replace('Nov', 'Th11');
 }
 
 const DEFAULT_CHRONICLES: ChronicleStage[] = [
@@ -414,15 +423,26 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
     }
   };
 
+  const coverUrl = kvk?.coverUrl || '/covers/s21mighty_assembly_cover.png';
   const currentStageIndex = selectedStage ? chronicles.findIndex(c => c.id === selectedStage.id) : -1;
 
   return (
     <>
-      <article className="panel current-kvk-card">
+      <article
+        className="panel current-kvk-card"
+        style={{
+          backgroundImage: `linear-gradient(90deg, rgba(13, 17, 25, 0.94) 0%, rgba(13, 17, 25, 0.72) 48%, rgba(13, 17, 25, 0.22) 100%), url(${coverUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'right center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         {/* Header: KvK Dashboard */}
         <div className="current-kvk-header">
           <div className="current-kvk-title-group">
-            <span className="kvk-section-title">KvK Dashboard</span>
+            <span className="kvk-section-title">
+              {lang === 'vi' ? 'BẢNG ĐIỀU KHIỂN KVK' : 'KVK DASHBOARD'}
+            </span>
             <div className="kvk-code-row">
               <h2 className="kvk-code-heading">#{code}</h2>
               <span className="kvk-name-badge">{name}</span>
@@ -438,10 +458,10 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
         <div className="rok-progress-section">
           <div className="rok-progress-header">
             <div className="rok-progress-label">
-              <span>KvK Progress</span> <b>{progressPercent}%</b>
+              <span>{lang === 'vi' ? 'Tiến độ KvK' : 'KvK Progress'}</span> <b>{progressPercent}%</b>
             </div>
             <div className="rok-progress-schedule">
-              25 Sep 2026 — 16 Nov 2026
+              {lang === 'vi' ? '25/09/2026 – 16/11/2026' : '25 Sep 2026 — 16 Nov 2026'}
             </div>
           </div>
 
@@ -459,8 +479,8 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
           </div>
 
           <div className="rok-dates-row">
-            <span>25 Sep 2026</span>
-            <span>16 Nov 2026</span>
+            <span>{lang === 'vi' ? '25/09/2026' : '25 Sep 2026'}</span>
+            <span>{lang === 'vi' ? '16/11/2026' : '16 Nov 2026'}</span>
           </div>
         </div>
 
@@ -468,7 +488,7 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
         <div className="chronicles-container">
           <div className="chronicles-header">
             <div className="chronicles-title-wrap">
-              <h4>Chronicles</h4>
+              <h4>{lang === 'vi' ? 'Biên niên sử' : 'Chronicles'}</h4>
               <span className="chronicles-count-badge">
                 {chronicles.length} {lang === 'vi' ? 'Giai đoạn' : 'Stages'}
               </span>
@@ -530,7 +550,7 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
                       </b>
                     </div>
                     <span className="card-sub">{stage.subtitle}</span>
-                    <small className="card-date">{stage.utcDate}</small>
+                    <small className="card-date">{formatUtcDisplay(stage.utcDate, lang)}</small>
                   </div>
 
                   <div className="card-icon-wrap">

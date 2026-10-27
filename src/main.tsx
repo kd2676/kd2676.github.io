@@ -802,7 +802,9 @@ function App() {
                 <p className="section-kicker">{i18n.kvk.kicker}</p>
                 <h2>{i18n.kvk.title}</h2>
               </div>
-              <span className="section-meta">{kvkList.length} KvK Season</span>
+              <span className="section-meta">
+                {kvkList.length} {lang === 'vi' ? 'mùa KvK' : 'KvK Seasons'}
+              </span>
             </div>
             {kvkList.length > 0 ? (
               <KvkPerformanceGrid

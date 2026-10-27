@@ -342,10 +342,16 @@ export function KvkDashboardModal({
               </svg>
             </div>
             <div className="kvk-kpi-number">
-              {currentKvk.perf?.participants ? `${currentKvk.perf.participants} KDs` : 'Toàn KvK'}
+              {currentKvk.perf?.participants
+                ? (lang === 'vi' ? `${currentKvk.perf.participants} Vương quốc` : `${currentKvk.perf.participants} KDs`)
+                : (lang === 'vi' ? 'Toàn KvK' : 'All Lost Kingdom')}
             </div>
             <div className="kvk-kpi-sub">
-              {lang === 'vi' ? 'Các vương quốc tham gia' : 'Participating kingdoms'}
+              {currentKvk.perf?.trackedPlayers
+                ? (lang === 'vi'
+                    ? `${currentKvk.perf.trackedPlayers.toLocaleString('vi-VN')} chiến binh được theo dõi`
+                    : `${currentKvk.perf.trackedPlayers.toLocaleString('en-US')} tracked players`)
+                : (lang === 'vi' ? 'Các vương quốc tham gia' : 'Participating kingdoms')}
             </div>
           </div>
         </div>
@@ -449,10 +455,10 @@ export function KvkDashboardModal({
                 <thead>
                   <tr>
                     <th className="th-rank">#</th>
-                    <th className="th-gov">{lang === 'vi' ? 'Thống đốc' : 'Governor'}</th>
-                    <th className="th-kd">{lang === 'vi' ? 'Vương quốc' : 'KD'}</th>
+                    <th className="th-gov">{lang === 'vi' ? 'THỐNG ĐỐC' : 'GOVERNOR'}</th>
+                    <th className="th-kd">{lang === 'vi' ? 'VƯƠNG QUỐC' : 'KD'}</th>
                     <th className="th-num pointer" onClick={() => handleSort('power')}>
-                      Power {sortBy === 'power' && (sortOrder === 'desc' ? '↓' : '↑')}
+                      POWER {sortBy === 'power' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </th>
                     <th className="th-num th-kp pointer" onClick={() => handleSort('kp')}>
                       KP {sortBy === 'kp' && (sortOrder === 'desc' ? '↓' : '↑')}
@@ -464,17 +470,17 @@ export function KvkDashboardModal({
                       T5 {sortBy === 't5' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </th>
                     <th className="th-num th-dead pointer" onClick={() => handleSort('dead')}>
-                      {lang === 'vi' ? 'Tử trận' : 'Dead'} {sortBy === 'dead' && (sortOrder === 'desc' ? '↓' : '↑')}
+                      {lang === 'vi' ? 'TỬ TRẬN' : 'DEAD'} {sortBy === 'dead' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </th>
-                    <th className="th-num">{lang === 'vi' ? 'Danh vọng' : 'Acclaim'}</th>
+                    <th className="th-num">{lang === 'vi' ? 'DANH VỌNG' : 'ACCLAIM'}</th>
                     <th className="th-num th-heal pointer" onClick={() => handleSort('heal')}>
-                      {lang === 'vi' ? 'Hồi phục' : 'Healed'} {sortBy === 'heal' && (sortOrder === 'desc' ? '↓' : '↑')}
+                      {lang === 'vi' ? 'HỒI PHỤC' : 'HEALED'} {sortBy === 'heal' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </th>
                     <th className="th-num pointer" onClick={() => handleSort('dkp')}>
                       DKP {sortBy === 'dkp' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </th>
                     <th className="th-num pointer text-center" onClick={() => handleSort('trades')}>
-                      Trades {sortBy === 'trades' && (sortOrder === 'desc' ? '↓' : '↑')}
+                      TRADES {sortBy === 'trades' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </th>
                   </tr>
                 </thead>

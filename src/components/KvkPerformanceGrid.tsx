@@ -134,7 +134,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
                       {kvk.isActive && (
                         <span className="kvk-live-badge">
                           <span className="kvk-live-dot" />
-                          Active
+                          {lang === 'vi' ? 'Đang diễn ra' : 'Active'}
                         </span>
                       )}
                     </div>
@@ -184,7 +184,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
                           <line x1="7" y1="17" x2="4" y2="20" />
                           <line x1="3" y1="19" x2="5" y2="21" />
                         </svg>
-                        <span>KILL POINTS</span>
+                        <span>{lang === 'vi' ? 'ĐIỂM HẠ GỤC' : 'KILL POINTS'}</span>
                       </div>
                       <div className="kvk-metric-value value-kp">{kvk.perf.kpFormatted}</div>
                     </div>
@@ -199,7 +199,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
                           <path d="M12.5 17l-.5-1-.5 1h1z" />
                           <path d="M16 20a3 3 0 0 0 3-3V9a7 7 0 0 0-14 0v8a3 3 0 0 0 3 3" />
                         </svg>
-                        <span>DEATHS</span>
+                        <span>{lang === 'vi' ? 'TỬ TRẬN' : 'DEATHS'}</span>
                       </div>
                       <div className="kvk-metric-value value-dead">{kvk.perf.deadFormatted}</div>
                     </div>
@@ -224,7 +224,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
                           <svg className="kvk-metric-icon icon-heal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M12 2v20M2 12h20" />
                           </svg>
-                          <span>HEALED</span>
+                          <span>{lang === 'vi' ? 'HỒI PHỤC' : 'HEALED'}</span>
                         </div>
                         <div className="kvk-metric-value value-heal">{kvk.perf.healedFormatted}</div>
                       </div>
@@ -238,7 +238,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
                             <circle cx="12" cy="8" r="7" />
                             <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
                           </svg>
-                          <span>ACCLAIM</span>
+                          <span>{lang === 'vi' ? 'DANH VỌNG' : 'ACCLAIM'}</span>
                         </div>
                         <div className="kvk-metric-value value-acclaim">{kvk.perf.acclaimFormatted}</div>
                       </div>
@@ -254,7 +254,7 @@ export function KvkPerformanceGrid({ kvks, lang = 'vi', onOpenDashboard }: KvkPe
                             <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                           </svg>
-                          <span>PARTICIPANTS</span>
+                          <span>{lang === 'vi' ? 'QUY MÔ KVK' : 'PARTICIPANTS'}</span>
                         </div>
                         <div className="kvk-metric-value">{kvk.perf.participants}</div>
                       </div>
