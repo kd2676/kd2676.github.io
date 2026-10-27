@@ -36,6 +36,12 @@ const routes = [
   'kvk/dashboard/C12743',
   'kvk/dashboard/C12625',
   'kvk/dashboard/C12487',
+  'mge',
+  'MGE',
+  'zenith',
+  'Zenith',
+  'Zenith of Power',
+  'Zenith%20of%20Power',
 ];
 
 for (const route of routes) {

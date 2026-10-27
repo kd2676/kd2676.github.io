@@ -10,6 +10,8 @@ import { KvkDashboardModal } from './components/KvkDashboardModal';
 import { Pagination } from './components/Pagination';
 import { FlagVN, FlagGB } from './components/FlagIcons';
 import { CopyIdButton } from './components/CopyIdButton';
+import { MgeView, type MgeEvent } from './components/MgeView';
+import { ZenithView, type ZenithEvent } from './components/ZenithView';
 import './styles.css';
 
 type Governor = {
@@ -69,13 +71,15 @@ type KingdomGuild = {
   };
   previousRank?: number;
 };
-type Tab = 'overview' | 'kvk' | 'alliances' | 'governors';
+type Tab = 'overview' | 'kvk' | 'alliances' | 'governors' | 'mge' | 'zenith';
 
 const TAB_PATHS: Record<Tab, string> = {
   overview: '/overview',
   kvk: '/KvK Performance',
   alliances: '/alliances',
   governors: '/Governors',
+  mge: '/mge',
+  zenith: '/zenith',
 };
 
 function getTabFromPath(pathname: string): Tab {
@@ -92,6 +96,8 @@ function getTabFromPath(pathname: string): Tab {
     }
     if (raw === 'alliances' || raw === 'alliance') return 'alliances';
     if (raw === 'governors' || raw === 'governor') return 'governors';
+    if (raw === 'mge') return 'mge';
+    if (raw === 'zenith' || raw === 'zenith of power' || raw === 'zenith-of-power') return 'zenith';
     if (raw === 'overview') return 'overview';
   } catch {
     // fallback
@@ -240,6 +246,8 @@ function App() {
       kvk: 'Kingdom 2676 · KvK Performance',
       alliances: 'Kingdom 2676 · Alliances',
       governors: 'Kingdom 2676 · Governors',
+      mge: 'Kingdom 2676 · The Mightiest Governor (MGE)',
+      zenith: 'Kingdom 2676 · Zenith of Power Ranking',
     };
     document.title = titles[tab] || 'Kingdom 2676 · Kingdom Statistics';
   }, [tab]);
@@ -248,6 +256,10 @@ function App() {
   const [kingdomGuilds, setKingdomGuilds] = useState<KingdomGuild[]>([]);
   const [kvkList, setKvkList] = useState<KvKItem[]>([]);
   const [selectedKvkCode, setSelectedKvkCode] = useState<number | null>(null);
+  const [mgeData, setMgeData] = useState<{ updatedAt?: string; events: MgeEvent[] } | null>(null);
+  const [zenithData, setZenithData] = useState<{ updatedAt?: string; events: ZenithEvent[] } | null>(null);
+  const [selectedMgeId, setSelectedMgeId] = useState<string>('');
+  const [selectedZenithId, setSelectedZenithId] = useState<string>('');
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [allianceQuery, setAllianceQuery] = useState('');
@@ -264,7 +276,7 @@ function App() {
     try {
       const ts = Date.now();
       const headers = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' };
-      const [govResult, snapshotData, guildsData, kvkData] = await Promise.all([
+      const [govResult, snapshotData, guildsData, kvkData, mgeResult, zenithResult] = await Promise.all([
         loadDataset(lang),
         fetch(`/kingdom-snapshot.json?t=${ts}`, { cache: 'no-store', headers })
           .then(r => r.ok ? r.json() : null)
@@ -275,12 +287,26 @@ function App() {
         fetch(`/kvk-performance.json?t=${ts}`, { cache: 'no-store', headers })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
+        fetch(`/mge-events.json?t=${ts}`, { cache: 'no-store', headers })
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null),
+        fetch(`/zenith-events.json?t=${ts}`, { cache: 'no-store', headers })
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null),
       ]);
 
       if (govResult?.data) setDataset(govResult.data);
       if (snapshotData) setSnapshot(snapshotData as KingdomSnapshot);
       if (Array.isArray(guildsData)) setKingdomGuilds(guildsData as KingdomGuild[]);
       if (kvkData && Array.isArray(kvkData.kvks)) setKvkList(kvkData.kvks as KvKItem[]);
+      if (mgeResult && Array.isArray(mgeResult.events)) {
+        setMgeData(mgeResult);
+        setSelectedMgeId(prev => (prev && mgeResult.events.some((e: MgeEvent) => e.id === prev)) ? prev : mgeResult.events[0]?.id || '');
+      }
+      if (zenithResult && Array.isArray(zenithResult.events)) {
+        setZenithData(zenithResult);
+        setSelectedZenithId(prev => (prev && zenithResult.events.some((e: ZenithEvent) => e.id === prev)) ? prev : zenithResult.events[0]?.id || '');
+      }
       setError('');
     } catch (caught) {
       setError((caught as Error).message);
@@ -797,6 +823,8 @@ function App() {
           ['kvk', i18n.tabs.kvk],
           ['alliances', i18n.tabs.alliances],
           ['governors', i18n.tabs.governors],
+          ['mge', i18n.tabs.mge],
+          ['zenith', i18n.tabs.zenith],
         ] as const).map(([key, label]) => {
           const path = TAB_PATHS[key];
           return (
@@ -1156,7 +1184,57 @@ function App() {
           </section>
         )}
 
+        {tab === 'mge' && (
+          mgeData && mgeData.events.length > 0 ? (
+            <MgeView
+              events={mgeData.events}
+              selectedId={selectedMgeId || mgeData.events[0]?.id}
+              onSelectEvent={setSelectedMgeId}
+              lang={lang}
+              i18n={i18n}
+              fmt={fmt}
+            />
+          ) : (
+            <section className="view active">
+              <div className="section-heading">
+                <div>
+                  <p className="section-kicker">{i18n.mge.kicker}</p>
+                  <h2>{i18n.mge.title}</h2>
+                </div>
+              </div>
+              <div className="empty-event-card">
+                <div className="empty-event-icon">⏳</div>
+                <p>{lang === 'vi' ? 'Đang tải dữ liệu MGE...' : 'Loading MGE data...'}</p>
+              </div>
+            </section>
+          )
+        )}
 
+        {tab === 'zenith' && (
+          zenithData && zenithData.events.length > 0 ? (
+            <ZenithView
+              events={zenithData.events}
+              selectedId={selectedZenithId || zenithData.events[0]?.id}
+              onSelectEvent={setSelectedZenithId}
+              lang={lang}
+              i18n={i18n}
+              fmt={fmt}
+            />
+          ) : (
+            <section className="view active">
+              <div className="section-heading">
+                <div>
+                  <p className="section-kicker">{i18n.zenith.kicker}</p>
+                  <h2>{i18n.zenith.title}</h2>
+                </div>
+              </div>
+              <div className="empty-event-card">
+                <div className="empty-event-icon">⏳</div>
+                <p>{lang === 'vi' ? 'Đang tải dữ liệu Zenith...' : 'Loading Zenith data...'}</p>
+              </div>
+            </section>
+          )
+        )}
       </main>
 
       {selectedKvkCode !== null && kvkList.length > 0 && (

@@ -191,6 +191,15 @@ export async function syncData() {
     } catch (kvkErr) {
       console.warn('⚠️ Lỗi khi đồng bộ KvK data:', (kvkErr as Error).message);
     }
+
+    try {
+      // @ts-ignore
+      const { fetchAndSyncMge, fetchAndSyncZenith } = await import('./sync-events.mjs');
+      await fetchAndSyncMge(headers);
+      await fetchAndSyncZenith(headers);
+    } catch (eventsErr) {
+      console.warn('⚠️ Lỗi khi đồng bộ MGE & Zenith:', (eventsErr as Error).message);
+    }
   } catch (err) {
     console.warn('⚠️ Lỗi khi đồng bộ ROKStats API:', (err as Error).message, '— Giữ nguyên dữ liệu hiện tại.');
   }

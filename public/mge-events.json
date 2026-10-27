@@ -1,0 +1,892 @@
+{
+  "updatedAt": "2026-10-27T17:30:01.895Z",
+  "events": [
+    {
+      "id": "mge_c4f02e23effa61dc505aef4758aa0e97",
+      "edition": 124,
+      "title": "Nov 2, 2026 · #124",
+      "dateLabel": "Nov 2, 2026",
+      "dates": "Nov 2, 2026 — Nov 8, 2026",
+      "status": "upcoming",
+      "commanders": [
+        "Hayam Wuruk",
+        "Shapur I",
+        "Choe Yeong"
+      ],
+      "rankings": []
+    },
+    {
+      "id": "mge_4aba898a434d9d95b55e41134b16cdd5",
+      "edition": 123,
+      "title": "Oct 19, 2026 · #123",
+      "dateLabel": "Oct 19, 2026",
+      "dates": "Oct 19, 2026 — Oct 25, 2026",
+      "status": "closed",
+      "commanders": [
+        "Ivar",
+        "Tokugawa Ieyasu",
+        "Scipio Aemilianus"
+      ],
+      "rankings": [
+        {
+          "rank": 1,
+          "governorId": "15981459",
+          "name": "Genie 乡 Elite",
+          "score": 210440698,
+          "allianceTag": "ROFF",
+          "allianceName": "Rise of FinalFantasy",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/14504362/2026-10-24/775953C0CA886215757340BE10B089B3_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_16.png"
+        },
+        {
+          "rank": 2,
+          "governorId": "149530952",
+          "name": "Sundaysun",
+          "score": 190171903,
+          "allianceTag": "ROFF",
+          "allianceName": "Rise of FinalFantasy",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/207448894/2026-10-24/59B57B18E066FB4AABF7473A8652C1E9_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_61.png"
+        },
+        {
+          "rank": 3,
+          "governorId": "12550083",
+          "name": "MexNoobie",
+          "score": 153595299,
+          "allianceTag": "ROFF",
+          "allianceName": "Rise of FinalFantasy",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/11405035/2026-07-16/897C5167B2FA69B6F270DD9A887BB9F3_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_252.png"
+        },
+        {
+          "rank": 4,
+          "governorId": "156916258",
+          "name": "ᴱˢGympinky",
+          "score": 107603562,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/212032636/2026-09-24/8435684BA15E3C086AFD9FA8DAA39503_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_207.png"
+        },
+        {
+          "rank": 5,
+          "governorId": "2709537",
+          "name": "Ҝ0乇几iG",
+          "score": 93601359,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/2554018/2026-10-17/D334C87DEA9E7F26140D0506CE5E920F_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_63.png"
+        },
+        {
+          "rank": 6,
+          "governorId": "116999038",
+          "name": "S is Ffrshfr",
+          "score": 47034035,
+          "allianceTag": "ROFF",
+          "allianceName": "Rise of FinalFantasy",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/94919934/2026-10-07/5CC1139CA31D3A11136A0416648BEDB4_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_239.png"
+        },
+        {
+          "rank": 7,
+          "governorId": "143713134",
+          "name": "乡DarkElite乡",
+          "score": 46527340,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/203835116/2026-10-24/2B43D0AEC186B578F33EFB25B10B196B_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_7.png"
+        },
+        {
+          "rank": 8,
+          "governorId": "139794266",
+          "name": "IStarlightI",
+          "score": 43825390,
+          "allianceTag": "ROFF",
+          "allianceName": "Rise of FinalFantasy",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/201692076/2026-07-09/C3F214BED8617DB90183C9DFE6CC2414_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_185.png"
+        },
+        {
+          "rank": 9,
+          "governorId": "159631184",
+          "name": "匚六个 ヅ",
+          "score": 41577639,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/23367866/2026-02-06/E48656FD3C404A4DFD150BBE242B7F53_250x250.jpg",
+          "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png"
+        },
+        {
+          "rank": 10,
+          "governorId": "81617240",
+          "name": "JOKER ᴬʳᴹ",
+          "score": 33004627,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/IM/10043/0/12352/2024-10-28/64166365C433E5E634F0E4DEDE8524B4_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_206.png"
+        }
+      ]
+    },
+    {
+      "id": "mge_b0ab2eb6ef3adb4a2f940262a014599e",
+      "edition": null,
+      "title": "Oct 5, 2026",
+      "dateLabel": "Oct 5, 2026",
+      "dates": "Oct 5, 2026 — Oct 11, 2026",
+      "status": "finished",
+      "commanders": [
+        "David IV",
+        "William Marshal",
+        "Attila"
+      ],
+      "rankings": [
+        {
+          "rank": 1,
+          "governorId": "143713134",
+          "name": "乡DarkElite乡",
+          "score": 44041558,
+          "allianceTag": 3867,
+          "allianceName": "BLACKSPIRE SYNDICATE",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/203835116/2026-10-10/82400B70E85341EFA552AE87AD40FBD0_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_233.png"
+        },
+        {
+          "rank": 2,
+          "governorId": "125918725",
+          "name": "Sent0sa",
+          "score": 42888858,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2026-05-03/E8BF3318DAF4472684032FC72B027B85_250x250.jpg",
+          "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png"
+        },
+        {
+          "rank": 3,
+          "governorId": "2709537",
+          "name": "Ҝ0乇几iG",
+          "score": 21047585,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/2554018/2026-10-05/30B327C96CD1F9957DA2B82AF2EA5B52_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_28.png"
+        },
+        {
+          "rank": 4,
+          "governorId": "135640629",
+          "name": "Salsa Fierce",
+          "score": 17790882,
+          "allianceTag": "",
+          "allianceName": "",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-03-25/08E6B087CE58952F2ACC2D266BC25246_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_251.png"
+        },
+        {
+          "rank": 5,
+          "governorId": "130928087",
+          "name": "Maximus180AD",
+          "score": 14999987,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/65434316/2026-03-28/AA9CB0239B4F400ABE19EA4795E6EC95_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+        },
+        {
+          "rank": 6,
+          "governorId": "68208358",
+          "name": "Hope4Umay",
+          "score": 14877327,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/55813239/2026-09-26/4D2240F901E7A2F47FE35B1642ECC5CB_250x250.jpg",
+          "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_260.png"
+        },
+        {
+          "rank": 7,
+          "governorId": "135589782",
+          "name": "bighog",
+          "score": 13535251,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://imv2-gl.lilithgame.com/p/10043/0/135589782/220924/9AEC77B0E92A9022CE5467016589B084_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_26.png"
+        },
+        {
+          "rank": 8,
+          "governorId": "141021766",
+          "name": "ᴷᴰJumbo",
+          "score": 12324313,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://imv2-gl.lilithgame.com/p/roc/avatar/141021766/24/03/26/6cf5f754a49b574b_800x800.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_149.png"
+        },
+        {
+          "rank": 9,
+          "governorId": "149530952",
+          "name": "Lionroot",
+          "score": 9619940,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/207448894/2026-10-05/8F6C7F33FD94ED488C7D55F6E13D01A4_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_4.png"
+        },
+        {
+          "rank": 10,
+          "governorId": "124508740",
+          "name": "I am Camille",
+          "score": 9577652,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/99997081/2026-08-12/10C66F8D1FB59D39345DF21A219DCC42_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_26.png"
+        }
+      ]
+    },
+    {
+      "id": "mge_dbd3e96edc6c6fa0c6e4aabea7072ae7",
+      "edition": null,
+      "title": "Sep 21, 2026",
+      "dateLabel": "Sep 21, 2026",
+      "dates": "Sep 21, 2026 — Sep 27, 2026",
+      "status": "finished",
+      "commanders": [
+        "William Marshal",
+        "Vercingetorix",
+        "Heraclius"
+      ],
+      "rankings": [
+        {
+          "rank": 1,
+          "governorId": "143713134",
+          "name": "乡DarkElite乡",
+          "score": 294066794,
+          "allianceTag": 3867,
+          "allianceName": "BLACKSPIRE SYNDICATE",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/203835116/2026-09-26/A81B9AA3712A4A9354D10640749B8528_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_7.png"
+        },
+        {
+          "rank": 2,
+          "governorId": "17105438",
+          "name": "悪K Z Ʌ F魔",
+          "score": 282897913,
+          "allianceTag": "",
+          "allianceName": "",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/15559924/2026-08-27/DDCD813890F070564AB18C6E1A74156C_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_45.png"
+        },
+        {
+          "rank": 3,
+          "governorId": "125918725",
+          "name": "Sent0sa",
+          "score": 112423103,
+          "allianceTag": "ROFF",
+          "allianceName": "Rise of FinalFantasy",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2026-05-03/E8BF3318DAF4472684032FC72B027B85_250x250.jpg",
+          "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png"
+        },
+        {
+          "rank": 4,
+          "governorId": "2709537",
+          "name": "Ҝ0乇几iG",
+          "score": 51672446,
+          "allianceTag": "",
+          "allianceName": "",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/2554018/2026-09-26/A6ADF81D7521FDA226B122A3DF7BFB93_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_84.png"
+        },
+        {
+          "rank": 5,
+          "governorId": "10957160",
+          "name": "Alfaquadˢᵍ",
+          "score": 47738277,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://imimg.lilithcdn.com/roc/llc_avatar/10957160/23/01/20/494272802f71f13c_800x800.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_249.png"
+        },
+        {
+          "rank": 6,
+          "governorId": "7102314",
+          "name": "Ć3RB3ŘØx",
+          "score": 26586734,
+          "allianceTag": "ROFF",
+          "allianceName": "Rise of FinalFantasy",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/6601319/2026-09-23/7FB7BE70EFCD1391015466BC2ADFDD9F_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_26.png"
+        },
+        {
+          "rank": 7,
+          "governorId": "116999038",
+          "name": "S is prafa34",
+          "score": 20228450,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/94919934/2025-05-28/CE5D92DD03BAE5D685A6B1D79D9A6E0A_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_239.png"
+        },
+        {
+          "rank": 8,
+          "governorId": "124508740",
+          "name": "I am Camille",
+          "score": 18531350,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/99997081/2026-08-12/10C66F8D1FB59D39345DF21A219DCC42_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_194.png"
+        },
+        {
+          "rank": 9,
+          "governorId": "129642353",
+          "name": "๛ÐRACULEAツ",
+          "score": 17124946,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/102932530/2026-08-09/E1442EB2CBBF8EA046BDDCF5E7ACF794_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+        },
+        {
+          "rank": 10,
+          "governorId": "159631184",
+          "name": "匚六个 ヅ",
+          "score": 15719776,
+          "allianceTag": "IF28",
+          "allianceName": "Invincible Family 28",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/23367866/2026-02-06/E48656FD3C404A4DFD150BBE242B7F53_250x250.jpg",
+          "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png"
+        }
+      ]
+    },
+    {
+      "id": "mge_9c2b11f709e7dfa1cff3e99d627d0b73",
+      "edition": null,
+      "title": "Sep 7, 2026",
+      "dateLabel": "Sep 7, 2026",
+      "dates": "Sep 7, 2026 — Sep 13, 2026",
+      "status": "finished",
+      "commanders": [
+        "William Marshal"
+      ],
+      "rankings": [
+        {
+          "rank": 1,
+          "governorId": "143713134",
+          "name": "乡DarkElite乡",
+          "score": 17134795,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/203835116/2026-09-11/07DE9FB21289828D35294C7FCC4AB105_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_7.png"
+        },
+        {
+          "rank": 2,
+          "governorId": "125918725",
+          "name": "Sent0sa",
+          "score": 13342278,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2026-05-03/E8BF3318DAF4472684032FC72B027B85_250x250.jpg",
+          "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_255.png"
+        },
+        {
+          "rank": 3,
+          "governorId": "2709537",
+          "name": "k0eniGs HeaveN",
+          "score": 10697813,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "http://imimg.lilithcdn.com/roc/img_player_head_festive_1001.png",
+          "avatarFrame": "null"
+        },
+        {
+          "rank": 4,
+          "governorId": "55754603",
+          "name": "ﷻB๖E๖A๖Rﷻ",
+          "score": 10048529,
+          "allianceTag": "FK76",
+          "allianceName": "Foolish Knoobs",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/13864/2026-05-10/09345F673EA18AAB0C5DCC99DA42F55E_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_16.png"
+        },
+        {
+          "rank": 5,
+          "governorId": "120187563",
+          "name": "Aixleft",
+          "score": 8842240,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "http://imimg.lilithcdn.com/roc/img_player_head_festive_1023.png",
+          "avatarFrame": "null"
+        },
+        {
+          "rank": 6,
+          "governorId": "139794266",
+          "name": "IStarlightI",
+          "score": 8822723,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/201692076/2026-07-09/C3F214BED8617DB90183C9DFE6CC2414_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_185.png"
+        },
+        {
+          "rank": 7,
+          "governorId": "141021766",
+          "name": "ᴷᴰJumbo",
+          "score": 7871259,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://imv2-gl.lilithgame.com/p/roc/avatar/141021766/24/03/26/6cf5f754a49b574b_800x800.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_149.png"
+        },
+        {
+          "rank": 8,
+          "governorId": "135640629",
+          "name": "Salsa Fierce",
+          "score": 7862455,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-03-25/08E6B087CE58952F2ACC2D266BC25246_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_251.png"
+        },
+        {
+          "rank": 9,
+          "governorId": "17105438",
+          "name": "悪K Z Ʌ F魔",
+          "score": 7858042,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/15559924/2026-08-27/DDCD813890F070564AB18C6E1A74156C_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_45.png"
+        },
+        {
+          "rank": 10,
+          "governorId": "12550083",
+          "name": "MexNoobie",
+          "score": 6533508,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/11405035/2026-07-16/897C5167B2FA69B6F270DD9A887BB9F3_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_252.png"
+        }
+      ]
+    },
+    {
+      "id": "mge_6d06d4b71cc18e31e3d64a4fa872c733",
+      "edition": null,
+      "title": "Aug 24, 2026",
+      "dateLabel": "Aug 24, 2026",
+      "dates": "Aug 24, 2026 — Aug 30, 2026",
+      "status": "finished",
+      "commanders": [
+        "Ivar",
+        "Gorgo",
+        "Tokugawa Ieyasu"
+      ],
+      "rankings": [
+        {
+          "rank": 1,
+          "governorId": "116999038",
+          "name": "S is prafa34",
+          "score": 9088226,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/94919934/2025-05-28/CE5D92DD03BAE5D685A6B1D79D9A6E0A_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_239.png"
+        },
+        {
+          "rank": 2,
+          "governorId": "34475412",
+          "name": "Hellebore",
+          "score": 8977458,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/404798/2026-02-24/D0DAE731D30841110C545CAED0F60A15_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_7.png"
+        },
+        {
+          "rank": 3,
+          "governorId": "15981459",
+          "name": "Genie 乡 Elite",
+          "score": 8693230,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/14504362/2026-08-14/F9E55C11867EF316A328BC935FBCCBA0_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_16.png"
+        },
+        {
+          "rank": 4,
+          "governorId": "62108250",
+          "name": "k0eniG s K9",
+          "score": 8339107,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "http://imimg.lilithcdn.com/roc/img_player_head_SP_01.png",
+          "avatarFrame": "null"
+        },
+        {
+          "rank": 5,
+          "governorId": "129642353",
+          "name": "๛ÐRACULEAツ",
+          "score": 7812241,
+          "allianceTag": "",
+          "allianceName": "",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/102932530/2026-08-09/E1442EB2CBBF8EA046BDDCF5E7ACF794_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+        },
+        {
+          "rank": 6,
+          "governorId": "135640629",
+          "name": "Salsa Fierce",
+          "score": 7632191,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-03-25/08E6B087CE58952F2ACC2D266BC25246_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_251.png"
+        },
+        {
+          "rank": 7,
+          "governorId": "156916258",
+          "name": "ᴱˢGympinky",
+          "score": 7017609,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/212032636/2026-08-29/DF4796DE8308DDFCA45108C6D39D5A6B_250x250.jpg",
+          "avatarFrame": "null"
+        },
+        {
+          "rank": 8,
+          "governorId": "141021766",
+          "name": "ᴷᴰJumbo",
+          "score": 6836522,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://imv2-gl.lilithgame.com/p/roc/avatar/141021766/24/03/26/6cf5f754a49b574b_800x800.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_149.png"
+        },
+        {
+          "rank": 9,
+          "governorId": "130928087",
+          "name": "Maximus180AD",
+          "score": 5505980,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/65434316/2026-03-28/AA9CB0239B4F400ABE19EA4795E6EC95_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+        },
+        {
+          "rank": 10,
+          "governorId": "21784065",
+          "name": "DOPAMINЕ",
+          "score": 4747500,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "http://imimg.lilithcdn.com/roc/img_player_head08.png",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+        }
+      ]
+    },
+    {
+      "id": "mge_e93d67c0fcbf72ea8703190402f1fe0a",
+      "edition": null,
+      "title": "Aug 10, 2026",
+      "dateLabel": "Aug 10, 2026",
+      "dates": "Aug 10, 2026 — Aug 16, 2026",
+      "status": "finished",
+      "commanders": [
+        "David IV",
+        "Attila",
+        "Subutai"
+      ],
+      "rankings": [
+        {
+          "rank": 1,
+          "governorId": "143713134",
+          "name": "乡DarkElite乡",
+          "score": 27498434,
+          "allianceTag": "FK76",
+          "allianceName": "Foolish Knoobs",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/203835116/2026-08-14/EB6A3547CD0A202E5BF95A8E24F4EB5D_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_233.png"
+        },
+        {
+          "rank": 2,
+          "governorId": "6769650",
+          "name": "Jagster",
+          "score": 10505145,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://imimg.lilithcdn.com/llc_avatar/6769650/22/03/09/87c2fba5f79cf2be_800x800.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_9.png"
+        },
+        {
+          "rank": 3,
+          "governorId": "120187563",
+          "name": "Aixleft",
+          "score": 9719986,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "http://imimg.lilithcdn.com/roc/img_player_head_festive_1023.png",
+          "avatarFrame": "null"
+        },
+        {
+          "rank": 4,
+          "governorId": "135640629",
+          "name": "Salsa Fierce",
+          "score": 8857389,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-03-25/08E6B087CE58952F2ACC2D266BC25246_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_251.png"
+        },
+        {
+          "rank": 5,
+          "governorId": "149530952",
+          "name": "Sterlingsilver",
+          "score": 8570060,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/207448894/2026-07-09/C4C1F0D7C373DEB68DE31DD97765DF41_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_230.png"
+        },
+        {
+          "rank": 6,
+          "governorId": "34475412",
+          "name": "Hellebore",
+          "score": 6278282,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/404798/2026-02-24/D0DAE731D30841110C545CAED0F60A15_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_7.png"
+        },
+        {
+          "rank": 7,
+          "governorId": "15981459",
+          "name": "Genie 乡 Elite",
+          "score": 6021258,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/14504362/2026-08-14/F9E55C11867EF316A328BC935FBCCBA0_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_16.png"
+        },
+        {
+          "rank": 8,
+          "governorId": "68208358",
+          "name": "ᴶˢᵀH O P E",
+          "score": 6007805,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/55813239/2026-03-22/355F9C264CF9AC8A63AC616FF51E9F78_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_227.png"
+        },
+        {
+          "rank": 9,
+          "governorId": "130928087",
+          "name": "Maximus180AD",
+          "score": 5879073,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/65434316/2026-03-28/AA9CB0239B4F400ABE19EA4795E6EC95_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+        },
+        {
+          "rank": 10,
+          "governorId": "62108250",
+          "name": "k0eniG s K9",
+          "score": 5770516,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/18366/2026-08-11/E1F252A5A0D192D4B1EC83424AD215EC_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_233.png"
+        }
+      ]
+    },
+    {
+      "id": "mge_01985a2fa67d02d027e2c09b05a23838",
+      "edition": null,
+      "title": "Jul 27, 2026",
+      "dateLabel": "Jul 27, 2026",
+      "dates": "Jul 27, 2026 — Aug 2, 2026",
+      "status": "finished",
+      "commanders": [
+        "Vercingetorix",
+        "Matthias I",
+        "Heraclius"
+      ],
+      "rankings": [
+        {
+          "rank": 1,
+          "governorId": "135640629",
+          "name": "Salsa Fierce",
+          "score": 13542843,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2025-03-25/08E6B087CE58952F2ACC2D266BC25246_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_251.png"
+        },
+        {
+          "rank": 2,
+          "governorId": "12550083",
+          "name": "MexNoobie",
+          "score": 11184358,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/11405035/2026-07-16/897C5167B2FA69B6F270DD9A887BB9F3_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_252.png"
+        },
+        {
+          "rank": 3,
+          "governorId": "130928087",
+          "name": "Maximus180AD",
+          "score": 8994842,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/65434316/2026-03-28/AA9CB0239B4F400ABE19EA4795E6EC95_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
+        },
+        {
+          "rank": 4,
+          "governorId": "125918725",
+          "name": "Sent0sa",
+          "score": 8069057,
+          "allianceTag": "",
+          "allianceName": "",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97142368/2026-05-03/E8BF3318DAF4472684032FC72B027B85_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_251.png"
+        },
+        {
+          "rank": 5,
+          "governorId": "141021766",
+          "name": "ᴷᴰJumbo",
+          "score": 6859691,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://imv2-gl.lilithgame.com/p/roc/avatar/141021766/24/03/26/6cf5f754a49b574b_800x800.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_149.png"
+        },
+        {
+          "rank": 6,
+          "governorId": "17105438",
+          "name": "悪K Z Ʌ F魔",
+          "score": 6756341,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/15559924/2026-04-19/01223B240DF82846CF94AC087F9E5B4B_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_27.png"
+        },
+        {
+          "rank": 7,
+          "governorId": "35964016",
+          "name": "Sk0rm",
+          "score": 5354832,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "http://imimg.lilithcdn.com/roc/img_player_head12.png",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_26.png"
+        },
+        {
+          "rank": 8,
+          "governorId": "68208358",
+          "name": "ᴶˢᵀH O P E",
+          "score": 4531362,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/55813239/2026-03-22/355F9C264CF9AC8A63AC616FF51E9F78_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_227.png"
+        },
+        {
+          "rank": 9,
+          "governorId": "69527755",
+          "name": "亗 Molaris",
+          "score": 3410393,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/56839949/2026-07-20/9E5ED2DF3C8598E85CE4E3E963972275_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_9.png"
+        },
+        {
+          "rank": 10,
+          "governorId": "120217128",
+          "name": "HairyPotter",
+          "score": 2552473,
+          "allianceTag": "76WN",
+          "allianceName": "Wolfs Nest",
+          "ch": 25,
+          "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97211442/2026-05-09/11A7E21B44F9CEEDE9C82FE0C441281F_250x250.jpg",
+          "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_105.png"
+        }
+      ]
+    }
+  ]
+}
