@@ -529,10 +529,12 @@ function App() {
       label: i18n.overview.metrics.power,
       value: compact.format(sum(rows, 'power')),
       foot: i18n.overview.metrics.powerFoot,
-      iconClass: 'stat-icon-gold',
+      iconClass: 'stat-icon-green',
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        <svg viewBox="0 0 1024 1024" fill="currentColor">
+          <g transform="scale(1, -1) translate(0, -1024)">
+            <path d="M319.653 1020.153c-321.868-86.92-445.593-385.142-156.714-485.409 0 0-2.345 0-2.345 0 1.36-0.184 2.728-0.398 4.081-0.599 19.24-6.589 40.322-12.277 63.238-17.003 107.702-42.301 185.603-144.806 191.92-244.977-71.764-49.456-127.344-134.569-127.344-134.569s56.274-82.839 56.274-82.839c0 0-88.266-50.257-88.266-50.257s175.524 0 175.524 0c-86.563 86.584-25.182 183.952 77.355 183.952 103.94 0 158.34-103.023 77.422-183.952 0 0 173.717 0 173.717 0s-86.456 50.257-86.456 50.257c0 0 56.28 82.839 56.28 82.839s-56.479 86.509-129.083 135.772c6.861 99.79 84.582 201.642 191.852 243.777 22.925 4.725 43.995 10.406 63.233 16.997 1.355 0.204 2.726 0.418 4.085 0.6 0 0-2.409 0-2.409 0 288.922 100.256 165.231 398.487-156.652 485.416-87.199-84.304 14.004-217.736 93.417-121.792 79.015-147.923 18.422-273.205-154.774-178.599-25.439-52.445-73.261-88.595-129.953-88.595-57.179 0-105.284 36.76-130.556 89.935-175.104-97.173-236.641 28.634-157.252 177.259 79.421-95.942 180.62 37.49 93.417 121.789 0 0-0.011-0.002-0.011-0.002M514.064 943.237c-58.647 0-109.914-59.006-109.914-136.209 0-77.208 51.267-134.893 109.914-134.893 58.644 0 109.907 57.688 109.907 134.891 0 77.211-51.263 136.209-109.909 136.209 0 0 0.002 0.002 0.002 0.002" />
+          </g>
         </svg>
       )
     },
@@ -542,11 +544,10 @@ function App() {
       foot: i18n.overview.metrics.killPointsFoot,
       iconClass: 'stat-icon-red',
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
-          <line x1="13" y1="19" x2="19" y2="13" />
-          <polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5" />
-          <line x1="5" y1="14" x2="9" y2="18" />
+        <svg viewBox="0 0 1024 1024" fill="currentColor">
+          <g transform="scale(1, -1) translate(0, -1024)">
+            <path d="M246.507 451.214c0 0 189.546-189.654 189.546-189.654s-75.787-75.84-75.787-75.84c0 0 75.894-75.893 75.894-75.893s-75.84-75.84-75.84-75.84c0 0-132.747 132.747-132.747 132.747s-151.733-151.734-151.733-151.734c0 0-75.84 75.84-75.84 75.84s151.734 151.787 151.734 151.787c0 0-132.747 132.693-132.747 132.693s75.84 75.84 75.84 75.84c0 0 75.84-75.786 75.84-75.786s75.786 75.84 75.786 75.84c0 0 0.054 0 0.054 0M29.285 1009.34c0 0 190.19-0.161 190.19-0.161s633.805-633.859 633.805-633.859c0 0 75.893 75.84 75.893 75.84s75.84-75.84 75.84-75.84c0 0-132.693-132.747-132.693-132.747s151.68-151.733 151.68-151.733c0 0-75.84-75.84-75.84-75.84s-151.733 151.734-151.733 151.734c0 0-132.747-132.747-132.747-132.747s-75.84 75.84-75.84 75.84c0 0 75.84 75.893 75.84 75.893s-634.234 634.235-634.234 634.235c0 0-0.161 189.385-0.161 189.385s0 0 0 0M804.686 1009.34c0 0 190.029-0.161 190.029-0.161s0.108-188.956 0.108-188.956c0 0-217.383-217.329-217.383-217.329s-189.654 189.599-189.654 189.599c0 0 216.9 216.847 216.9 216.847s0 0 0 0" />
+          </g>
         </svg>
       )
     },
@@ -556,12 +557,10 @@ function App() {
       foot: i18n.overview.metrics.deadFoot,
       iconClass: 'stat-icon-purple',
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="9" cy="12" r="1.5" />
-          <circle cx="15" cy="12" r="1.5" />
-          <path d="M8 20v2h8v-2" />
-          <path d="M12.5 17l-.5-1-.5 1h1z" />
-          <path d="M16 20a6 6 0 0 0 1-4c0-4.42-3.58-8-8-8s-8 3.58-8 8c0 1.48.4 2.86 1.08 4" />
+        <svg viewBox="0 0 1024 1024" fill="currentColor">
+          <g transform="scale(1, -1) translate(0, -1024)">
+            <path d="M875.828 875.844c-90.968 94.156-223.594 148.156-363.844 148.156-140.218 0-272.844-54-363.78-148.126-85-88-129.406-205.656-125.062-331.376l13.218-167.75c12.062-169.5 110.468-187.812 152.188-187.812 15.126 0 31.062 2.188 47.25 6.376 2.188-15.876 2-43.718 1.844-65.376l-0.156-30.126c-0.282-21.876-0.718-55 22.468-78.468 9.594-9.75 27.126-21.344 56-21.344h392.094c28.876 0 46.376 11.594 56 21.312 23.156 23.5 22.75 56.594 22.468 78.5l-0.188 30.062c-0.126 21.688-0.344 49.562 1.876 65.438 16.344-4.218 32.188-6.376 47.25-6.376 41.718 0 140.094 18.312 152.188 187.5l13.126 166.312 0.094 1.75c4.342 125.722-40.066 243.378-125.034 331.348zM919.922 548.188l-13.032-165.688c-5.344-74.688-29.406-112.562-71.438-112.562-9.688 0-20.532 1.782-32.594 5.376-28.812 8.312-53.782 2.75-71.406-15-26.812-27-26.532-70.626-26.094-131l0.156-30.562c0.062-5 0.156-12.376-0.282-17.75h-85.5v100.032h-64.812v-100.034h-85.876v100.032h-64.782v-100.032h-85.532c-0.406 5.376-0.312 12.75-0.25 17.812l0.156 30.594c0.438 60.312 0.718 103.906-26.094 130.906-17.532 17.688-41.906 23.5-71.75 14.906-11.718-3.5-22.562-5.282-32.25-5.282-42.062 0-66.062 37.876-71.438 112.876l-13.062 165.376c-3.312 103.218 33 199.562 102.406 271.376 75.786 78.436 187.162 123.436 305.536 123.436 118.406 0 229.782-45 305.562-123.438 69.408-71.812 105.75-168.156 102.376-271.374zM512.016 404.688c-19.438 0-62.25-93.376-70.062-108.938-7.75-15.562 7.812-38.938 31.156-31.126 23.344 7.75 38.906 27.218 38.906 27.218s15.562-19.468 38.906-27.218c23.312-7.812 38.906 15.562 31.126 31.126-7.814 15.562-50.564 108.938-70.032 108.938zM343.172 657.438c-61.782 6.5-117.156-38.376-123.656-100.188l-8.376-58.844c-6.5-61.844 38.376-117.156 100.156-123.656 61.844-6.5 117.218 38.344 123.688 100.188l8.376 58.844c6.468 61.842-38.344 117.156-100.188 123.656zM804.484 557.25c-6.468 61.812-61.876 106.688-123.656 100.188-61.844-6.5-106.656-61.812-100.188-123.656l8.344-58.844c6.5-61.844 61.876-106.688 123.688-100.188s106.688 61.812 100.188 123.656l-8.376 58.844z" />
+          </g>
         </svg>
       )
     },
@@ -569,11 +568,33 @@ function App() {
       label: i18n.overview.metrics.t4Kills,
       value: compact.format(sum(rows, 't4Kills')),
       foot: i18n.overview.metrics.t4KillsFoot,
-      iconClass: 'stat-icon-blue',
+      iconClass: 'stat-icon-tier',
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          <polyline points="9 11 12 14 15 11" />
+        <svg viewBox="0 0 32 32" className="tier-coin-svg">
+          <defs>
+            <radialGradient id="t4GoldRing" cx="32%" cy="28%" r="72%">
+              <stop offset="0%" stopColor="#fff5b8" />
+              <stop offset="25%" stopColor="#f5c242" />
+              <stop offset="65%" stopColor="#b47814" />
+              <stop offset="100%" stopColor="#553003" />
+            </radialGradient>
+            <radialGradient id="t4CenterDisc" cx="45%" cy="40%" r="65%">
+              <stop offset="0%" stopColor="#733206" />
+              <stop offset="55%" stopColor="#421b03" />
+              <stop offset="100%" stopColor="#180701" />
+            </radialGradient>
+            <linearGradient id="t4Numeral" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#fffae0" />
+              <stop offset="28%" stopColor="#fed658" />
+              <stop offset="70%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#b45309" />
+            </linearGradient>
+          </defs>
+          <circle cx="16" cy="16" r="15" fill="url(#t4GoldRing)" stroke="#452403" strokeWidth="0.7" />
+          <circle cx="16" cy="16" r="13.2" fill="none" stroke="#fff8cc" strokeWidth="0.6" opacity="0.85" />
+          <circle cx="16" cy="16" r="11.8" fill="url(#t4CenterDisc)" stroke="#5a3104" strokeWidth="0.9" />
+          <circle cx="16" cy="16" r="10.5" fill="none" stroke="#f6ca56" strokeWidth="0.4" opacity="0.4" />
+          <text x="16" y="20.8" textAnchor="middle" fill="url(#t4Numeral)" fontSize="11.5" fontWeight="900" fontFamily="'Cinzel', 'Times New Roman', Georgia, serif" letterSpacing="-0.04em" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.9))' }}>IV</text>
         </svg>
       )
     },
@@ -581,10 +602,33 @@ function App() {
       label: i18n.overview.metrics.t5Kills,
       value: compact.format(sum(rows, 't5Kills')),
       foot: i18n.overview.metrics.t5KillsFoot,
-      iconClass: 'stat-icon-amber',
+      iconClass: 'stat-icon-tier',
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        <svg viewBox="0 0 32 32" className="tier-coin-svg">
+          <defs>
+            <radialGradient id="t5GoldRing" cx="32%" cy="28%" r="72%">
+              <stop offset="0%" stopColor="#fff5b8" />
+              <stop offset="25%" stopColor="#f5c242" />
+              <stop offset="65%" stopColor="#b47814" />
+              <stop offset="100%" stopColor="#553003" />
+            </radialGradient>
+            <radialGradient id="t5CenterDisc" cx="45%" cy="40%" r="65%">
+              <stop offset="0%" stopColor="#733206" />
+              <stop offset="55%" stopColor="#421b03" />
+              <stop offset="100%" stopColor="#180701" />
+            </radialGradient>
+            <linearGradient id="t5Numeral" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#fffae0" />
+              <stop offset="28%" stopColor="#fed658" />
+              <stop offset="70%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#b45309" />
+            </linearGradient>
+          </defs>
+          <circle cx="16" cy="16" r="15" fill="url(#t5GoldRing)" stroke="#452403" strokeWidth="0.7" />
+          <circle cx="16" cy="16" r="13.2" fill="none" stroke="#fff8cc" strokeWidth="0.6" opacity="0.85" />
+          <circle cx="16" cy="16" r="11.8" fill="url(#t5CenterDisc)" stroke="#5a3104" strokeWidth="0.9" />
+          <circle cx="16" cy="16" r="10.5" fill="none" stroke="#f6ca56" strokeWidth="0.4" opacity="0.4" />
+          <text x="16" y="21.2" textAnchor="middle" fill="url(#t5Numeral)" fontSize="12.5" fontWeight="900" fontFamily="'Cinzel', 'Times New Roman', Georgia, serif" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.9))' }}>V</text>
         </svg>
       )
     },
