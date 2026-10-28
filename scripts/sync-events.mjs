@@ -211,13 +211,16 @@ export async function fetchAndSyncZenith(requestHeaders = headers) {
       title: t.label,
       startDate: t.startDate,
       endDate: t.endDate,
+      continent: '#2673-2680',
+      continentKingdoms: [2673, 2674, 2675, 2676, 2677, 2678, 2679, 2680],
       skin: {
         name: t.skin?.name || '',
         buff: (t.skin?.buffs || []).map(b => b.comment).join(', ') || '',
         img: t.skin?.img ? `https://app.rokstats.online${t.skin.img}` : ''
       },
       status: new Date(t.endDate).getTime() < Date.now() ? 'ended' : 'active',
-      rankings: kdRankings,
+      rankings: continentRankings.length > 0 ? continentRankings : kdRankings,
+      kdRankings,
       continentRankings
     });
   }
