@@ -216,7 +216,14 @@ body::before {
   }
 }
 
-.hero-top,
+.hero-top {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .hero-foot {
   position: relative;
   z-index: 1;
@@ -6629,7 +6636,7 @@ footer {
   border-radius: 12px;
   padding: 6px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.2);
-  z-index: 1000;
+  z-index: 99999;
   animation: dropdownFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
