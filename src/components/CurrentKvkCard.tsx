@@ -27,13 +27,7 @@ interface CurrentKvkCardProps {
   lang?: 'vi' | 'en';
 }
 
-function formatUtcDisplay(utcStr: string, lang: 'vi' | 'en') {
-  if (lang !== 'vi') return utcStr;
-  return utcStr
-    .replace('Sep', 'Th09')
-    .replace('Oct', 'Th10')
-    .replace('Nov', 'Th11');
-}
+
 
 export const DEFAULT_CHRONICLES: ChronicleStage[] = [
   // 1 to 8: Official ROKStats schedule
@@ -460,10 +454,6 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
                   ›
                 </button>
               </div>
-
-              <div className="chronicles-utc-badge">
-                <span>UTC</span>
-              </div>
             </div>
           </div>
 
@@ -506,7 +496,6 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
                   ) : (
                     <span className="card-sub card-sub-empty">&nbsp;</span>
                   )}
-                  <small className="card-date">{formatUtcDisplay(stage.utcDate, lang)}</small>
                 </div>
               </div>
             ))}
@@ -556,8 +545,6 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
                     />
                   )}
                   {selectedStage.subtitle && <b>{selectedStage.subtitle}</b>}
-                  {selectedStage.subtitle && <span>·</span>}
-                  <span className="modal-date-chip">{selectedStage.utcDate}</span>
                 </div>
                 <span className={`stage-badge-status ${selectedStage.status}`}>
                   {selectedStage.status === 'completed' && (lang === 'vi' ? '✓ Đã hoàn thành' : '✓ Completed')}
