@@ -712,7 +712,7 @@ function App() {
               }}
               title="Admin Portal (R4 / R5 Leadership)"
             >
-              <span>🔒 Admin</span>
+              <span>🔒 Admin Login</span>
             </a>
           </div>
         </div>
@@ -1235,16 +1235,7 @@ function App() {
 
       <footer>
         <span>{i18n.footer.brand}</span>
-        <a
-          href="/admin"
-          className="footer-admin-link"
-          onClick={(e) => {
-            e.preventDefault();
-            setTab('admin');
-          }}
-        >
-          🔒 Admin Portal
-        </a>
+        
         <span>{i18n.footer.note}</span>
       </footer>
     </div>
