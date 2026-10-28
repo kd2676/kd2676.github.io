@@ -6506,26 +6506,31 @@ footer {
 .role-tag {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 4px 12px 4px 7px;
-  border-radius: 7px;
-  font-size: 0.82rem;
+  gap: 10px;
+  padding: 4px 16px 4px 8px;
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   background: rgba(245, 158, 11, 0.12);
   border: 1px solid rgba(245, 158, 11, 0.3);
   color: #facc15;
   box-sizing: border-box;
-  min-height: 32px;
+  min-height: 44px;
   line-height: 1;
 }
 
 .role-tag .role-tag-img {
-  width: 22px;
-  height: 22px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.65));
   flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.role-tag:hover .role-tag-img {
+  transform: scale(1.1);
 }
 
 .btn-del-user {
@@ -6592,9 +6597,11 @@ footer {
   border: 1px solid rgba(245, 158, 11, 0.7);
   color: #fef08a;
   font-weight: 700;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
   letter-spacing: 0.04em;
-  padding: 4px 12px;
+  padding: 4px 18px;
+  min-height: 44px;
+  font-size: 0.9rem;
 }
 
 
@@ -6897,8 +6904,8 @@ footer {
 }
 
 .selector-role-img {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
   flex-shrink: 0;
