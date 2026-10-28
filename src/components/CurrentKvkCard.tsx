@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useRef, useEffect } from 'react';
 
 export interface ChronicleStage {
   id: string;
@@ -297,7 +296,6 @@ export const DEFAULT_CHRONICLES: ChronicleStage[] = [
 ];
 
 export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
-  const [selectedStage, setSelectedStage] = useState<ChronicleStage | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const name = kvk?.name || 'Mighty Assembly';
@@ -339,11 +337,9 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
   };
 
   const coverUrl = kvk?.coverUrl || '/covers/s21mighty_assembly_cover.png';
-  const currentStageIndex = selectedStage ? chronicles.findIndex(c => c.id === selectedStage.id) : -1;
 
   return (
-    <>
-      <article
+    <article
         className="panel current-kvk-card"
         style={{
           backgroundImage: `linear-gradient(90deg, rgba(13, 17, 25, 0.94) 0%, rgba(13, 17, 25, 0.72) 48%, rgba(13, 17, 25, 0.22) 100%), url(${coverUrl})`,
@@ -463,7 +459,6 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
               <div
                 key={stage.id}
                 className={`chronicle-card ${stage.status}`}
-                onClick={() => setSelectedStage(stage)}
                 title={lang === 'vi' ? `Giai đoạn ${idx + 1}: ${stage.name}` : `Stage ${idx + 1}: ${stage.name}`}
               >
                 <div className="card-top-track">
@@ -502,92 +497,5 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
           </div>
         </div>
       </article>
-
-      {/* Chronicle Stage Detail Modal */}
-      {selectedStage && typeof document !== 'undefined' && createPortal(
-        <div className="modal-backdrop" onClick={() => setSelectedStage(null)}>
-          <div
-            className="modal-box chronicle-detail-modal"
-            onClick={e => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="modal-header">
-              <div>
-                <span className="section-kicker">
-                  {lang === 'vi'
-                    ? `BIÊN NIÊN SỬ · GIAI ĐOẠN ${currentStageIndex + 1}/${chronicles.length}`
-                    : `CHRONICLE · STAGE ${currentStageIndex + 1}/${chronicles.length}`}
-                </span>
-                <h3>{selectedStage.name}</h3>
-              </div>
-              <button
-                type="button"
-                className="modal-close"
-                onClick={() => setSelectedStage(null)}
-                aria-label={lang === 'vi' ? 'Đóng' : 'Close'}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="modal-body">
-              {/* Stage Subtitle & Status Badge */}
-              <div className="chronicle-modal-status-bar">
-                <div className="chronicle-modal-meta">
-                  {selectedStage.iconSrc && (
-                    <img
-                      src={selectedStage.iconSrc}
-                      alt={selectedStage.name}
-                      className="modal-stage-icon"
-                      width={28}
-                      height={28}
-                    />
-                  )}
-                  {selectedStage.subtitle && <b>{selectedStage.subtitle}</b>}
-                </div>
-                <span className={`stage-badge-status ${selectedStage.status}`}>
-                  {selectedStage.status === 'completed' && (lang === 'vi' ? '✓ Đã hoàn thành' : '✓ Completed')}
-                  {selectedStage.status === 'active' && (lang === 'vi' ? '⚔ Đang diễn ra' : '⚔ In Progress')}
-                  {selectedStage.status === 'upcoming' && (lang === 'vi' ? '⏳ Sắp mở' : '⏳ Upcoming')}
-                  {selectedStage.status === 'locked' && (lang === 'vi' ? '🔒 Đang khóa' : '🔒 Locked')}
-                </span>
-              </div>
-
-              {/* Stage Quick Switcher (All 26 stages) */}
-              <div className="stage-quick-nav">
-                <span className="nav-label">
-                  {lang === 'vi' ? 'Chuyển nhanh giai đoạn:' : 'Jump to stage:'}
-                </span>
-                <div className="stage-nav-pills scrollable-nav-pills">
-                  {chronicles.map((c, idx) => (
-                    <button
-                      key={c.id}
-                      type="button"
-                      className={`stage-nav-pill ${c.status} ${selectedStage.id === c.id ? 'active' : ''}`}
-                      onClick={() => setSelectedStage(c)}
-                      title={`${idx + 1}. ${c.name}`}
-                    >
-                      {idx + 1}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn-primary"
-                onClick={() => setSelectedStage(null)}
-              >
-                {lang === 'vi' ? 'Đóng' : 'Close'}
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
-    </>
   );
 }

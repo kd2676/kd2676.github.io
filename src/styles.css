@@ -3573,14 +3573,13 @@ footer {
 .chronicle-card {
   background: rgba(18, 24, 38, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  min-width: 135px;
-  max-width: 148px;
-  padding: 10px 10px 12px 10px;
-  cursor: pointer;
+  border-radius: 12px;
+  min-width: 195px;
+  max-width: 215px;
+  padding: 13px 15px 14px 15px;
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 10px;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
   user-select: none;
@@ -3594,7 +3593,7 @@ footer {
 }
 
 .chronicle-card.active {
-  border-color: rgba(16, 185, 129, 0.8);
+  border-color: rgba(16, 185, 129, 0.85);
   background: rgba(19, 50, 50, 0.85);
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.28);
 }
@@ -3605,12 +3604,12 @@ footer {
   align-items: center;
   position: relative;
   width: 100%;
-  height: 22px;
+  height: 32px;
 }
 
 .card-track-line {
   flex: 1;
-  height: 3.5px;
+  height: 4px;
   border-radius: 99px 0 0 99px;
   background: #232d42;
   margin-right: -2px;
@@ -3633,8 +3632,8 @@ footer {
 }
 
 .card-track-circle {
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -3649,22 +3648,22 @@ footer {
 }
 
 .chronicle-card:hover .card-track-circle {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .card-track-circle.green {
   border-color: #10b981;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 
 .card-track-circle.purple {
   border-color: #8b5cf6;
-  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
 }
 
 .card-track-circle.amber {
   border-color: #f59e0b;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
 }
 
 .card-track-circle.grey {
@@ -3679,8 +3678,8 @@ footer {
 }
 
 .track-circle-empty {
-  width: 7px;
-  height: 7px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: transparent;
 }
@@ -3688,37 +3687,29 @@ footer {
 .card-body {
   display: flex;
   flex-direction: column;
-  gap: 2.5px;
+  gap: 3px;
   min-width: 0;
 }
 
 .card-name {
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 800;
   color: #f8fafc;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: -0.01em;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 .card-sub {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.2;
-}
-
-.card-date {
-  font-size: 10px;
-  font-weight: 600;
-  color: #64748b;
-  font-family: 'JetBrains Mono', monospace;
-  margin-top: 2px;
+  line-height: 1.25;
 }
 
 .modal-stage-icon {
