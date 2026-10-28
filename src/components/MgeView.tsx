@@ -141,32 +141,47 @@ export const MgeView: React.FC<MgeViewProps> = ({
   };
 
   const getTroopBadge = (troopType: TroopType) => {
-    switch (troopType) {
-      case 'archer':
-        return (
-          <span className="troop-pill troop-archer" title={lang === 'vi' ? 'Binh chủng: Cung thủ' : 'Troop type: Archer'}>
-            🏹 {lang === 'vi' ? 'Cung thủ' : 'Archer'}
-          </span>
-        );
-      case 'infantry':
-        return (
-          <span className="troop-pill troop-infantry" title={lang === 'vi' ? 'Binh chủng: Bộ binh' : 'Troop type: Infantry'}>
-            🛡️ {lang === 'vi' ? 'Bộ binh' : 'Infantry'}
-          </span>
-        );
-      case 'cavalry':
-        return (
-          <span className="troop-pill troop-cavalry" title={lang === 'vi' ? 'Binh chủng: Kỵ binh' : 'Troop type: Cavalry'}>
-            🐎 {lang === 'vi' ? 'Kỵ binh' : 'Cavalry'}
-          </span>
-        );
-      case 'leadership':
-        return (
-          <span className="troop-pill troop-leadership" title={lang === 'vi' ? 'Binh chủng: Lãnh đạo' : 'Troop type: Leadership'}>
-            👑 {lang === 'vi' ? 'Lãnh đạo' : 'Leadership'}
-          </span>
-        );
-    }
+    const config = {
+      archer: {
+        icon: '/images/troops/archer.png',
+        labelVi: 'Cung thủ',
+        labelEn: 'Archer',
+        className: 'troop-archer'
+      },
+      infantry: {
+        icon: '/images/troops/infantry.png',
+        labelVi: 'Bộ binh',
+        labelEn: 'Infantry',
+        className: 'troop-infantry'
+      },
+      cavalry: {
+        icon: '/images/troops/cavalry.png',
+        labelVi: 'Kỵ binh',
+        labelEn: 'Cavalry',
+        className: 'troop-cavalry'
+      },
+      leadership: {
+        icon: '/images/troops/leadership.png',
+        labelVi: 'Lãnh đạo',
+        labelEn: 'Leadership',
+        className: 'troop-leadership'
+      }
+    }[troopType];
+
+    const label = lang === 'vi' ? config.labelVi : config.labelEn;
+
+    return (
+      <span className={`troop-pill ${config.className}`} title={`${lang === 'vi' ? 'Binh chủng' : 'Troop type'}: ${label}`}>
+        <img
+          src={config.icon}
+          alt={label}
+          className="troop-icon-img"
+          width={15}
+          height={15}
+        />
+        <span>{label}</span>
+      </span>
+    );
   };
 
   const getRankBadge = (rank: number) => {
