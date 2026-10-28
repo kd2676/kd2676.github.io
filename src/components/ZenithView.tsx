@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { GovernorAvatar } from './GovernorAvatar';
 import { CopyIdButton } from './CopyIdButton';
 import type { Lang } from '../i18n';
@@ -52,27 +52,15 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
   i18n,
   fmt
 }) => {
-  const [selectedKingdom, setSelectedKingdom] = useState<number | null>(null);
   const currentEvent = events.find(e => e.id === selectedId) || events[0];
 
-  const continentList = currentEvent?.continentKingdoms || [2673, 2674, 2675, 2676, 2677, 2678, 2679, 2680];
-
-  // Base list is continentRankings (Top 10 of Continent #2673-2680)
-  const baseContinentRankings = (currentEvent?.continentRankings && currentEvent.continentRankings.length > 0)
-    ? currentEvent.continentRankings
-    : (currentEvent?.rankings || []);
-
+  // Base rankings: Top 10 of Continent #2673-2680
   const currentRankings = useMemo(() => {
-    if (!selectedKingdom) {
-      // By default: Top 10 of Continent #2673-2680
-      return baseContinentRankings.slice(0, 10);
-    }
-    // Filtered by specific kingdom (e.g. 2676)
-    if (selectedKingdom === 2676 && currentEvent?.kdRankings && currentEvent.kdRankings.length > 0) {
-      return currentEvent.kdRankings.slice(0, 10);
-    }
-    return baseContinentRankings.filter(r => r.kingdom === selectedKingdom).slice(0, 10);
-  }, [baseContinentRankings, selectedKingdom, currentEvent]);
+    const list = (currentEvent?.continentRankings && currentEvent.continentRankings.length > 0)
+      ? currentEvent.continentRankings
+      : (currentEvent?.rankings || []);
+    return list.slice(0, 10);
+  }, [currentEvent]);
 
   const getRankBadge = (rank: number) => {
     if (rank === 1) return <span className="rank-badge rank-1" title="Top 1">🥇 1</span>;
@@ -80,6 +68,8 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
     if (rank === 3) return <span className="rank-badge rank-3" title="Top 3">🥉 3</span>;
     return <span className="rank-badge rank-other">{rank}</span>;
   };
+
+  const continentLabel = currentEvent?.continent || '#2673–2680';
 
   return (
     <section className="view active zenith-view">
@@ -91,7 +81,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
         </div>
         <div className="event-scope-meta">
           <span className="event-count-badge">{events.length} {lang === 'vi' ? 'mùa gần nhất' : 'recent seasons'}</span>
-          <span className="top10-tag">Top 10 Cụm #2673–2680</span>
+          <span className="top10-tag">Top 10 Cụm {continentLabel}</span>
         </div>
       </div>
 
@@ -119,10 +109,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
                 role="tab"
                 aria-selected={isSelected}
                 className={`event-pill-btn zenith-pill-btn ${isSelected ? 'selected' : ''}`}
-                onClick={() => {
-                  onSelectEvent(ev.id);
-                  setSelectedKingdom(null);
-                }}
+                onClick={() => onSelectEvent(ev.id)}
               >
                 <div className="event-pill-top">
                   <span className="event-pill-title">{ev.title}</span>
@@ -155,7 +142,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
               </span>
             </div>
             <p className="selected-event-dates">
-              <span className="calendar-icon">📅</span> {currentEvent.title} · <strong style={{ color: '#38bdf8' }}>{currentEvent.continent || '#2673–2680'}</strong>
+              <span className="calendar-icon">📅</span> {currentEvent.title}
             </p>
           </div>
 
@@ -182,44 +169,16 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
         </div>
       )}
 
-      {/* Continent Kingdoms Filter Bar (similar to ROKStats) */}
-      <div className="continent-filter-card">
-        <div className="continent-filter-header">
-          <div className="continent-title-wrap">
-            <span className="continent-icon">🌐</span>
-            <strong className="continent-label">{currentEvent?.continent || '#2673–2680'}</strong>
-            <span className="continent-meta-tag">{lang === 'vi' ? 'Cụm 8 Vương quốc' : 'Continent 8 Kingdoms'}</span>
-          </div>
-          <span className="continent-hint-text">
-            {i18n.zenith.clickKingdomHint}
+      {/* Continent Header Bar - Only keep continent as requested */}
+      <div className="continent-bar-compact">
+        <div className="continent-title-wrap">
+          <span className="continent-icon">🌐</span>
+          <span className="continent-label-name">
+            {lang === 'vi' ? 'Cụm Lục Địa' : 'Continent'}: <strong className="continent-highlight">{continentLabel}</strong>
           </span>
+          <span className="continent-badge-tag">{lang === 'vi' ? 'Toàn Cụm' : 'All Continent'}</span>
         </div>
-
-        <div className="continent-chips-row">
-          <button
-            type="button"
-            className={`continent-chip ${selectedKingdom === null ? 'active' : ''}`}
-            onClick={() => setSelectedKingdom(null)}
-          >
-            🌐 {i18n.zenith.allContinent}
-          </button>
-          {continentList.map((kNum) => {
-            const isSelf = kNum === 2676;
-            const isSelected = selectedKingdom === kNum;
-            return (
-              <button
-                key={kNum}
-                type="button"
-                className={`continent-chip ${isSelected ? 'active' : ''} ${isSelf ? 'chip-self' : ''}`}
-                onClick={() => setSelectedKingdom(prev => prev === kNum ? null : kNum)}
-                title={isSelf ? (lang === 'vi' ? 'Kingdom 2676 của chúng ta' : 'Our Kingdom 2676') : `#${kNum}`}
-              >
-                {isSelf ? `🏰 #${kNum}` : `#${kNum}`}
-                {isSelf && <span className="chip-self-badge">KD</span>}
-              </button>
-            );
-          })}
-        </div>
+        <span className="top10-heading">{i18n.zenith.top10Note}</span>
       </div>
 
       {/* Top 10 Rankings Table */}
@@ -228,12 +187,10 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
           <div className="table-header-info">
             <div className="table-header-left">
               <span className="top10-subhead">
-                {selectedKingdom === null
-                  ? (lang === 'vi' ? 'Bảng xếp hạng Top 10 Cụm #2673–2680' : 'Continent #2673–2680 Top 10 Leaderboard')
-                  : (lang === 'vi' ? `Thống đốc Kingdom ${selectedKingdom} trong mùa này (Top 10)` : `Kingdom ${selectedKingdom} Governors (Top 10)`)}
+                {lang === 'vi' ? `Bảng xếp hạng Top 10 Cụm ${continentLabel}` : `Continent ${continentLabel} Top 10 Leaderboard`}
               </span>
             </div>
-            <span className="top10-heading">{i18n.zenith.top10Note}</span>
+            <span className="ranking-capture-tag">Top 10 Live</span>
           </div>
 
           <div className="table-responsive">
@@ -249,8 +206,8 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {currentRankings.slice(0, 10).map((row, idx) => {
-                  const displayRank = selectedKingdom === null ? (row.continentRank || row.rank || (idx + 1)) : (idx + 1);
+                {currentRankings.map((row, idx) => {
+                  const displayRank = row.continentRank || row.rank || (idx + 1);
                   const isHome = row.kingdom === 2676;
                   return (
                     <tr
@@ -269,14 +226,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
                             size={40}
                           />
                           <div className="gov-info">
-                            <div className="gov-name-row">
-                              <span className="gov-name" title={row.name}>{row.name}</span>
-                              {isHome && (
-                                <span className="home-gov-tag" title={lang === 'vi' ? 'Thống đốc Kingdom 2676' : 'KD 2676 Governor'}>
-                                  2676
-                                </span>
-                              )}
-                            </div>
+                            <span className="gov-name" title={row.name}>{row.name}</span>
                             <CopyIdButton id={row.governorId} lang={lang} />
                           </div>
                         </div>
@@ -315,7 +265,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
       ) : (
         <div className="empty-event-card">
           <div className="empty-event-icon">🏆</div>
-          <h4>{lang === 'vi' ? 'Chưa có dữ liệu bảng xếp hạng cho lựa chọn này' : 'No rankings data for this selection'}</h4>
+          <h4>{lang === 'vi' ? 'Chưa có dữ liệu bảng xếp hạng' : 'No rankings data'}</h4>
         </div>
       )}
     </section>
