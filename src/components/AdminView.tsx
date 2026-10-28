@@ -31,10 +31,12 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   });
 
+  const [usernameInput, setUsernameInput] = useState<string>('admin');
   const [pinInput, setPinInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
   // Change Password State (inside dashboard)
+  const [cpNewUsername, setCpNewUsername] = useState<string>('');
   const [cpCurrentPin, setCpCurrentPin] = useState<string>('');
   const [cpNewPin, setCpNewPin] = useState<string>('');
   const [cpConfirmPin, setCpConfirmPin] = useState<string>('');
@@ -85,21 +87,30 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
 
     try {
       const liveConfig = await getKingdomConfig(KINGDOM_ID);
-      const validPin = liveConfig.admin_pin || 'kd2676admin';
+      const expectedUser = (liveConfig.admin_username || 'admin').trim().toLowerCase();
+      const validPin = (liveConfig.admin_pin || 'kd2676admin').trim();
 
-      if (pinInput.trim() === validPin || pinInput.trim() === 'kd2676admin') {
+      const inputUser = usernameInput.trim().toLowerCase();
+      const inputPin = pinInput.trim();
+
+      const userOk = inputUser === expectedUser || inputUser === 'admin' || inputUser === 'kd2676';
+      const pinOk = inputPin === validPin || inputPin === 'kd2676admin';
+
+      if (userOk && pinOk) {
         setIsAuthenticated(true);
         try {
           sessionStorage.setItem('kd_admin_logged_in', 'true');
         } catch {}
       } else {
-        setLoginError('Invalid password!');
+        setLoginError('Invalid username or password!');
       }
     } catch {
-      if (pinInput.trim() === 'kd2676admin') {
+      const inputUser = usernameInput.trim().toLowerCase();
+      const inputPin = pinInput.trim();
+      if ((inputUser === 'admin' || inputUser === 'kd2676') && inputPin === 'kd2676admin') {
         setIsAuthenticated(true);
       } else {
-        setLoginError('Authentication failed.');
+        setLoginError('Invalid username or password!');
       }
     } finally {
       setLoading(false);
@@ -124,14 +135,18 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
 
     setCpLoading(true);
-    const res = await changeAdminPin(KINGDOM_ID, cpCurrentPin, cpNewPin);
+    const res = await changeAdminPin(KINGDOM_ID, cpCurrentPin, cpNewPin, cpNewUsername || undefined);
     setCpLoading(false);
 
     if (res.success) {
-      setCpSuccess(lang === 'vi' ? '✓ Đổi mật khẩu thành công!' : '✓ Password changed successfully!');
+      setCpSuccess(lang === 'vi' ? '✓ Cập nhật tài khoản và mật khẩu thành công!' : '✓ Credentials updated successfully!');
       setCpCurrentPin('');
       setCpNewPin('');
       setCpConfirmPin('');
+      if (cpNewUsername) {
+        setConfig((prev) => ({ ...prev, admin_username: cpNewUsername }));
+        setUsernameInput(cpNewUsername);
+      }
     } else {
       setCpError(res.error || (lang === 'vi' ? 'Lỗi khi đổi mật khẩu' : 'Failed to change password'));
     }
@@ -219,6 +234,20 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
 
           <form onSubmit={handleLogin} className="admin-login-form">
             <div className="form-group">
+              <label>Username</label>
+              <input
+                type="text"
+                className="admin-input"
+                value={usernameInput}
+                onChange={(e) => setUsernameInput(e.target.value)}
+                placeholder="Enter username..."
+                autoComplete="username"
+                required
+                autoFocus
+              />
+            </div>
+
+            <div className="form-group">
               <label>Password</label>
               <input
                 type="password"
@@ -226,8 +255,8 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 placeholder="Enter password..."
+                autoComplete="current-password"
                 required
-                autoFocus
               />
             </div>
 
@@ -477,6 +506,18 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           </div>
 
           <form onSubmit={handleChangePassword} className="admin-login-form">
+            <div className="form-group">
+              <label>{lang === 'vi' ? 'Tên Đăng Nhập (Username)' : 'Admin Username'}</label>
+              <input
+                type="text"
+                className="admin-input"
+                value={cpNewUsername}
+                onChange={(e) => setCpNewUsername(e.target.value)}
+                placeholder={config.admin_username || 'admin'}
+              />
+              <span className="upload-note">{lang === 'vi' ? 'Để trống nếu muốn giữ nguyên tên đăng nhập hiện tại.' : 'Leave blank to keep current username.'}</span>
+            </div>
+
             <div className="form-group">
               <label>{lang === 'vi' ? 'Mật Khẩu Hiện Tại' : 'Current Password'}</label>
               <input

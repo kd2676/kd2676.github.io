@@ -7,6 +7,7 @@ export interface KingdomConfig {
   logo_url: string;
   discord_url: string;
   contact_info: string;
+  admin_username?: string;
   admin_pin?: string;
 }
 
@@ -34,6 +35,7 @@ export const DEFAULT_KINGDOM_CONFIG: KingdomConfig = {
   logo_url: '/logo.png',
   discord_url: 'https://discord.gg/',
   contact_info: 'R4 / R5 Recruitment Team',
+  admin_username: 'admin',
   admin_pin: 'kd2676admin',
 };
 
@@ -120,6 +122,7 @@ export async function updateKingdomConfig(config: KingdomConfig): Promise<{ succ
         logo_url: config.logo_url,
         discord_url: config.discord_url,
         contact_info: config.contact_info,
+        admin_username: config.admin_username || 'admin',
         admin_pin: config.admin_pin || 'kd2676admin',
         updated_at: new Date().toISOString(),
       }, { onConflict: 'kingdom_id' });
@@ -199,31 +202,38 @@ export async function uploadMedia(file: File, folder: 'posters' | 'logos' = 'pos
 export async function changeAdminPin(
   kingdomId: string,
   oldPin: string,
-  newPin: string
+  newPin: string,
+  newUsername?: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const config = await getKingdomConfig(kingdomId);
     const currentPin = config.admin_pin || 'kd2676admin';
 
     if (oldPin.trim() !== currentPin && oldPin.trim() !== 'kd2676admin') {
-      return { success: false, error: 'Mã PIN hiện tại không chính xác!' };
+      return { success: false, error: 'Mật khẩu hiện tại không chính xác!' };
     }
 
     if (!newPin.trim()) {
-      return { success: false, error: 'Mã PIN mới không được để trống!' };
+      return { success: false, error: 'Mật khẩu mới không được để trống!' };
     }
 
     if (newPin.trim().length < 4) {
-      return { success: false, error: 'Mã PIN mới phải có ít nhất 4 ký tự!' };
+      return { success: false, error: 'Mật khẩu mới phải có ít nhất 4 ký tự!' };
+    }
+
+    const payload: any = {
+      kingdom_id: kingdomId,
+      admin_pin: newPin.trim(),
+      updated_at: new Date().toISOString(),
+    };
+
+    if (newUsername && newUsername.trim()) {
+      payload.admin_username = newUsername.trim();
     }
 
     const { error } = await supabase
       .from('kingdom_config')
-      .upsert({
-        kingdom_id: kingdomId,
-        admin_pin: newPin.trim(),
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'kingdom_id' });
+      .upsert(payload, { onConflict: 'kingdom_id' });
 
     if (error) throw error;
     return { success: true };

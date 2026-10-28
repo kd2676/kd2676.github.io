@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS public.kingdom_config (
     logo_url TEXT DEFAULT '/logo.png',
     discord_url TEXT DEFAULT 'https://discord.gg/',
     contact_info TEXT DEFAULT 'R4/R5 Recruitment Team',
-    admin_pin TEXT DEFAULT 'kd2676admin', -- Mã PIN đăng nhập /admin
+    admin_username TEXT DEFAULT 'admin', -- Tài khoản đăng nhập
+    admin_pin TEXT DEFAULT 'kd2676admin', -- Mật khẩu đăng nhập
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -36,7 +37,7 @@ CREATE TABLE IF NOT EXISTS public.recruitment (
 );
 
 -- 3. DỮ LIỆU KHỞI TẠO CHO KINGDOM 2676
-INSERT INTO public.kingdom_config (kingdom_id, name, tagline, logo_url, discord_url, contact_info, admin_pin)
+INSERT INTO public.kingdom_config (kingdom_id, name, tagline, logo_url, discord_url, contact_info, admin_username, admin_pin)
 VALUES (
     '2676',
     'Kingdom 2676',
@@ -44,6 +45,7 @@ VALUES (
     '/logo.png',
     'https://discord.gg/',
     'R4 / R5 Kingdom 2676',
+    'admin',
     'kd2676admin'
 )
 ON CONFLICT (kingdom_id) DO UPDATE 
