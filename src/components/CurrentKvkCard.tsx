@@ -607,14 +607,6 @@ export function CurrentKvkCard({ kvk, lang = 'vi' }: CurrentKvkCardProps) {
                 </span>
               </div>
 
-              {/* Stage Objective */}
-              <div className="modal-info-card objective-card">
-                <div className="card-heading-icon">
-                  <span className="icon">🎯</span>
-                  <b>{lang === 'vi' ? 'Mục tiêu giai đoạn' : 'Stage Objective'}</b>
-                </div>
-                <p>{lang === 'vi' ? selectedStage.desc.vi : selectedStage.desc.en}</p>
-              </div>
 
               {/* Stage Rewards */}
               <div className="modal-info-card reward-card">
