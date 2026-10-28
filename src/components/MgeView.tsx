@@ -140,46 +140,50 @@ export const MgeView: React.FC<MgeViewProps> = ({
     }
   };
 
-  const getTroopBadge = (troopType: TroopType) => {
+  const getTroopBadge = (troopType: TroopType, size: 'small' | 'large' = 'small') => {
     const config = {
       archer: {
-        icon: '/images/troops/archer.png',
-        labelVi: 'Cung thủ',
+        icon: `${import.meta.env.BASE_URL}images/troops/archer.png`,
+        labelVi: 'Cung thủ (Archer)',
         labelEn: 'Archer',
         className: 'troop-archer'
       },
       infantry: {
-        icon: '/images/troops/infantry.png',
-        labelVi: 'Bộ binh',
+        icon: `${import.meta.env.BASE_URL}images/troops/infantry.png`,
+        labelVi: 'Bộ binh (Infantry)',
         labelEn: 'Infantry',
         className: 'troop-infantry'
       },
       cavalry: {
-        icon: '/images/troops/cavalry.png',
-        labelVi: 'Kỵ binh',
+        icon: `${import.meta.env.BASE_URL}images/troops/cavalry.png`,
+        labelVi: 'Kỵ binh (Cavalry)',
         labelEn: 'Cavalry',
         className: 'troop-cavalry'
       },
       leadership: {
-        icon: '/images/troops/leadership.png',
-        labelVi: 'Lãnh đạo',
+        icon: `${import.meta.env.BASE_URL}images/troops/leadership.png`,
+        labelVi: 'Lãnh đạo (Leadership)',
         labelEn: 'Leadership',
         className: 'troop-leadership'
       }
     }[troopType];
 
     const label = lang === 'vi' ? config.labelVi : config.labelEn;
+    const px = size === 'large' ? 40 : 34;
 
     return (
-      <span className={`troop-pill ${config.className}`} title={`${lang === 'vi' ? 'Binh chủng' : 'Troop type'}: ${label}`}>
+      <span
+        className={`troop-icon-badge ${config.className} size-${size}`}
+        title={`${lang === 'vi' ? 'Binh chủng' : 'Troop type'}: ${label}`}
+        aria-label={label}
+      >
         <img
           src={config.icon}
           alt={label}
           className="troop-icon-img"
-          width={15}
-          height={15}
+          width={px}
+          height={px}
         />
-        <span>{label}</span>
       </span>
     );
   };
@@ -235,13 +239,17 @@ export const MgeView: React.FC<MgeViewProps> = ({
                 className={`event-pill-btn ${isSelected ? 'selected' : ''}`}
                 onClick={() => onSelectEvent(ev.id)}
               >
-                <div className="event-pill-top">
-                  <span className="event-pill-title">{ev.title}</span>
-                  {idx === 0 && <span className="newest-tag">{lang === 'vi' ? 'MỚI' : 'LATEST'}</span>}
+                <div className="event-pill-content">
+                  <div className="event-pill-top">
+                    <span className="event-pill-title">{ev.title}</span>
+                    {idx === 0 && <span className="newest-tag">{lang === 'vi' ? 'MỚI' : 'LATEST'}</span>}
+                  </div>
+                  <div className="event-pill-bottom">
+                    {getStatusBadge(ev.status)}
+                  </div>
                 </div>
-                <div className="event-pill-bottom">
-                  {getStatusBadge(ev.status)}
-                  {getTroopBadge(troopType)}
+                <div className="event-pill-troop-col">
+                  {getTroopBadge(troopType, 'small')}
                 </div>
               </button>
             );
@@ -256,7 +264,7 @@ export const MgeView: React.FC<MgeViewProps> = ({
             <div className="banner-title-row">
               <h3 className="selected-event-title">{currentEvent.title}</h3>
               {getStatusBadge(currentEvent.status)}
-              {getTroopBadge(detectMgeTroopType(currentEvent.commanders, currentEvent.troopType))}
+              {getTroopBadge(detectMgeTroopType(currentEvent.commanders, currentEvent.troopType), 'large')}
             </div>
             <p className="selected-event-dates">
               <span className="calendar-icon">📅</span> {currentEvent.dates}
