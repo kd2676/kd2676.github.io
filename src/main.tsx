@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useMemo, useState } from 'react';
+import { StrictMode, useEffect, useMemo, useState, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { translations, type Lang } from './i18n.ts';
 import { GuildLogo } from './components/GuildLogo';
@@ -158,6 +158,19 @@ function App() {
     try { localStorage.setItem('kd_lang', newLang); } catch {}
   };
 
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target as Node)) {
+        setLangDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const i18n = translations[lang];
 
   const fmt = useMemo(() => new Intl.NumberFormat(lang === 'vi' ? 'vi-VN' : 'en-US'), [lang]);
@@ -273,7 +286,6 @@ function App() {
   const [query, setQuery] = useState('');
   const [allianceQuery, setAllianceQuery] = useState('');
   const [sort, setSort] = useState<keyof Governor>('power');
-  const [syncing, setSyncing] = useState(false);
   const [toast, setToast] = useState<{ type: 'info' | 'ok' | 'error'; message: string } | null>(null);
     const [kingdomConfig, setKingdomConfig] = useState<KingdomConfig | null>(null);
   const [recruitmentData, setRecruitmentData] = useState<RecruitmentData | null>(null);
@@ -329,27 +341,7 @@ function App() {
     }
   };
 
-  const triggerSync = async () => {
-    if (syncing) return;
-    setSyncing(true);
 
-    setToast({
-      type: 'info',
-      message: lang === 'vi' ? 'Đang làm mới dữ liệu mới nhất...' : 'Refreshing latest data...'
-    });
-    try {
-      await refreshData();
-      setToast({
-        type: 'ok',
-        message: lang === 'vi' ? 'Đã làm mới dữ liệu thành công!' : 'Data refreshed successfully!'
-      });
-    } catch (err) {
-      setToast({ type: 'error', message: (err as Error).message });
-    } finally {
-      setSyncing(false);
-      setTimeout(() => setToast(prev => prev?.type !== 'info' ? prev : null), 4000);
-    }
-  };
 
   useEffect(() => {
     void refreshData();
@@ -670,36 +662,58 @@ function App() {
             <span>{i18n.brandSubtitle}</span>
           </div>
           <div className="hero-top-actions">
-            <div className="lang-switcher" role="group" aria-label="Language selection">
+            <div className="lang-dropdown-container" ref={langDropdownRef}>
               <button
                 type="button"
-                className={`lang-btn ${lang === 'vi' ? 'active' : ''}`}
-                onClick={() => changeLang('vi')}
-                title="Tiếng Việt"
+                className="lang-dropdown-trigger"
+                onClick={() => setLangDropdownOpen((prev) => !prev)}
+                aria-expanded={langDropdownOpen}
+                title={lang === 'vi' ? 'Chọn ngôn ngữ' : 'Select language'}
               >
-                <FlagVN width={16} height={11} />
-                <span>VI</span>
+                {lang === 'vi' ? (
+                  <>
+                    <FlagVN width={16} height={11} />
+                    <span>Tiếng Việt</span>
+                  </>
+                ) : (
+                  <>
+                    <FlagGB width={16} height={11} />
+                    <span>English</span>
+                  </>
+                )}
+                <span className={`dropdown-caret ${langDropdownOpen ? 'open' : ''}`}>▾</span>
               </button>
-              <button
-                type="button"
-                className={`lang-btn ${lang === 'en' ? 'active' : ''}`}
-                onClick={() => changeLang('en')}
-                title="English"
-              >
-                <FlagGB width={16} height={11} />
-                <span>EN</span>
-              </button>
+
+              {langDropdownOpen && (
+                <div className="lang-dropdown-menu">
+                  <button
+                    type="button"
+                    className={`lang-option ${lang === 'vi' ? 'active' : ''}`}
+                    onClick={() => {
+                      changeLang('vi');
+                      setLangDropdownOpen(false);
+                    }}
+                  >
+                    <FlagVN width={16} height={11} />
+                    <span className="lang-option-text">Tiếng Việt (VI)</span>
+                    {lang === 'vi' && <span className="lang-check">✓</span>}
+                  </button>
+                  <button
+                    type="button"
+                    className={`lang-option ${lang === 'en' ? 'active' : ''}`}
+                    onClick={() => {
+                      changeLang('en');
+                      setLangDropdownOpen(false);
+                    }}
+                  >
+                    <FlagGB width={16} height={11} />
+                    <span className="lang-option-text">English (EN)</span>
+                    {lang === 'en' && <span className="lang-check">✓</span>}
+                  </button>
+                </div>
+              )}
             </div>
-            <button
-              className={`header-sync-btn ${syncing ? 'syncing' : ''}`}
-              onClick={triggerSync}
-              disabled={syncing}
-              title={i18n.syncBtn}
-              type="button"
-            >
-              <span className={`sync-icon ${syncing ? 'spinning' : ''}`}>↻</span>
-              <span>{syncing ? i18n.syncing : i18n.syncBtn}</span>
-            </button>
+
             <a className="source-link" href="https://app.rokstats.online/kingdom/2676" target="_blank" rel="noreferrer">
               {i18n.sourceLink}
             </a>
