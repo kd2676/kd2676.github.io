@@ -16,6 +16,7 @@ import {
   createAdminUser,
   deleteAdminUser,
   updateUserPassword,
+  OFFICER_ROLES,
 } from '../lib/kingdomApi';
 
 interface AdminViewProps {
@@ -609,14 +610,18 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               </div>
 
               <div className="form-group flex-1">
-                <label>{lang === 'vi' ? 'Vai Trò / Chức Vụ' : 'Role / Title'}</label>
-                <input
-                  type="text"
-                  className="admin-input"
+                <label>{lang === 'vi' ? 'Vai Trò / Chức Vụ (Chọn từ danh sách)' : 'Role / Title (Select from list)'}</label>
+                <select
+                  className="admin-input admin-select"
                   value={newUserRole}
                   onChange={(e) => setNewUserRole(e.target.value)}
-                  placeholder="Ví dụ: R4 Officer, R5 King, Lead..."
-                />
+                >
+                  {OFFICER_ROLES.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {lang === 'vi' ? r.labelVi : r.labelEn}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group form-submit-wrap">
@@ -655,7 +660,9 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                         </div>
                       </td>
                       <td>
-                        <span className="role-tag">{u.role}</span>
+                        <span className={`role-tag ${u.role === 'Admin' ? 'role-admin' : ''}`}>
+                          {u.role === 'Admin' ? '👑 Admin' : u.role}
+                        </span>
                       </td>
                       <td>
                         {u.username.toLowerCase() !== 'admin' ? (
@@ -668,7 +675,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                             🗑️ {lang === 'vi' ? 'Xóa' : 'Delete'}
                           </button>
                         ) : (
-                          <span className="root-admin-badge">{lang === 'vi' ? 'Gốc (Bảo vệ)' : 'Root (Protected)'}</span>
+                          <span className="root-admin-badge">{lang === 'vi' ? '👑 Admin Duy Nhất' : '👑 System Admin'}</span>
                         )}
                       </td>
                     </tr>

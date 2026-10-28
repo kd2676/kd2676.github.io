@@ -299,7 +299,7 @@ export async function authenticateAdmin(
         user: {
           id: 'primary-admin',
           username: cleanUser,
-          role: 'R5 Leader',
+          role: 'Admin',
         },
       };
     }
@@ -307,6 +307,15 @@ export async function authenticateAdmin(
 
   return { success: false, error: 'Tài khoản hoặc mật khẩu không chính xác!' };
 }
+
+// Danh sách các vai trò R4/R5 được phép chọn (Admin là độc quyền duy nhất cho tài khoản admin)
+export const OFFICER_ROLES = [
+  { id: 'R4 Officer', labelVi: '🛡️ R4 Officer (Cán bộ R4)', labelEn: '🛡️ R4 Officer' },
+  { id: 'R5 Leader', labelVi: '👑 R5 Leader (Lãnh đạo R5)', labelEn: '👑 R5 Leader' },
+  { id: 'KvK Commander', labelVi: '⚔️ KvK Commander (Chỉ huy KvK)', labelEn: '⚔️ KvK Commander' },
+  { id: 'Recruitment Lead', labelVi: '📢 Recruitment Lead (Tuyển dụng & Di cư)', labelEn: '📢 Recruitment Lead' },
+  { id: 'Diplomat', labelVi: '🕊️ Diplomat (Ngoại giao)', labelEn: '🕊️ Diplomat' },
+] as const;
 
 // Lấy danh sách tài khoản admin
 export async function getAdminUsers(): Promise<AdminUser[]> {
@@ -318,13 +327,26 @@ export async function getAdminUsers(): Promise<AdminUser[]> {
 
     if (error || !data || data.length === 0) {
       return [
-        { id: '1', username: 'admin', role: 'R5 Leader', created_at: new Date().toISOString() },
+        { id: '1', username: 'admin', role: 'Admin', created_at: new Date().toISOString() },
       ];
     }
-    return data;
+
+    // Đảm bảo tài khoản admin gốc luôn mang role 'Admin' duy nhất
+    const list = data.map((u) => {
+      if (u.username.toLowerCase() === 'admin') {
+        if (u.role !== 'Admin') {
+          // Tự động cập nhật database sang 'Admin' nếu trước đó là 'R5 Leader'
+          supabase.from('admin_users').update({ role: 'Admin' }).eq('id', u.id).then();
+        }
+        return { ...u, role: 'Admin' };
+      }
+      return u;
+    });
+
+    return list;
   } catch {
     return [
-      { id: '1', username: 'admin', role: 'R5 Leader', created_at: new Date().toISOString() },
+      { id: '1', username: 'admin', role: 'Admin', created_at: new Date().toISOString() },
     ];
   }
 }
@@ -335,11 +357,22 @@ export async function createAdminUser(
   role: string = 'R4 Officer'
 ): Promise<{ success: boolean; error?: string }> {
   const cleanUser = username.trim().toLowerCase();
+  const cleanRole = role.trim();
+
   if (!cleanUser) {
     return { success: false, error: 'Tên tài khoản không được để trống!' };
   }
   if (cleanUser.length < 3) {
     return { success: false, error: 'Tên tài khoản phải có ít nhất 3 ký tự!' };
+  }
+  if (cleanUser === 'admin') {
+    return { success: false, error: 'Tên tài khoản "admin" đã tồn tại!' };
+  }
+  if (cleanRole.toLowerCase() === 'admin') {
+    return {
+      success: false,
+      error: 'Vai trò "Admin" là độc quyền duy nhất cho tài khoản admin gốc, không thể gán cho tài khoản khác!',
+    };
   }
 
   try {
@@ -347,7 +380,7 @@ export async function createAdminUser(
       {
         username: cleanUser,
         password: 'kd2676', // Mật khẩu mặc định đúng yêu cầu
-        role: role.trim() || 'R4 Officer',
+        role: cleanRole || 'R4 Officer',
       },
     ]);
 

@@ -115,8 +115,8 @@ DROP POLICY IF EXISTS "Allow public access admin_users" ON public.admin_users;
 CREATE POLICY "Allow public access admin_users" ON public.admin_users FOR ALL USING (true) WITH CHECK (true);
 
 -- Khởi tạo tài khoản admin mặc định
+-- Khởi tạo tài khoản admin duy nhất với vai trò độc quyền 'Admin'
 INSERT INTO public.admin_users (username, password, role)
 VALUES 
-    ('admin', 'kd2676admin', 'R5 Leader'),
-    ('r4', 'kd2676', 'R4 Officer')
-ON CONFLICT (username) DO NOTHING;
+    ('admin', 'kd2676admin', 'Admin')
+ON CONFLICT (username) DO UPDATE SET role = 'Admin';

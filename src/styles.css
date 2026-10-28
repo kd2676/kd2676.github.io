@@ -6541,3 +6541,37 @@ footer {
   line-height: 1.5;
   margin-top: 4px;
 }
+
+
+/* =========================================================
+   CUSTOM SELECT DROPDOWN FOR ROLES & ADMIN ROLE BADGE
+   ========================================================= */
+
+.admin-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #0b0f19;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+  padding-right: 38px;
+  cursor: pointer;
+  color: #f1f5f9;
+}
+
+.admin-select option {
+  background-color: #0b111e;
+  color: #f1f5f9;
+  padding: 10px 14px;
+}
+
+.role-tag.role-admin {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(245, 158, 11, 0.25) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.7);
+  color: #fef08a;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+}
