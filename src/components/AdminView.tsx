@@ -19,11 +19,9 @@ interface AdminViewProps {
   onLogoUpdated?: (newLogoUrl: string) => void;
 }
 
-export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProps) {
-  const [selectedKd, setSelectedKd] = useState<string>('2676');
-  const [newKdInput, setNewKdInput] = useState<string>('');
-  const [showAddKd, setShowAddKd] = useState<boolean>(false);
+const KINGDOM_ID = '2676';
 
+export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProps) {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     try {
@@ -36,7 +34,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   const [pinInput, setPinInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
-  // Change PIN State (inside dashboard)
+  // Change Password State (inside dashboard)
   const [cpCurrentPin, setCpCurrentPin] = useState<string>('');
   const [cpNewPin, setCpNewPin] = useState<string>('');
   const [cpConfirmPin, setCpConfirmPin] = useState<string>('');
@@ -58,13 +56,13 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   const [uploadingLogo, setUploadingLogo] = useState<boolean>(false);
   const [uploadingPoster, setUploadingPoster] = useState<boolean>(false);
 
-  // Fetch data when authenticated or selectedKd changes
+  // Fetch data when authenticated
   useEffect(() => {
     if (!isAuthenticated) return;
     let isMounted = true;
     setLoading(true);
 
-    Promise.all([getKingdomConfig(selectedKd), getRecruitment(selectedKd)])
+    Promise.all([getKingdomConfig(KINGDOM_ID), getRecruitment(KINGDOM_ID)])
       .then(([cfg, rec]) => {
         if (!isMounted) return;
         setConfig(cfg);
@@ -78,7 +76,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     return () => {
       isMounted = false;
     };
-  }, [isAuthenticated, selectedKd]);
+  }, [isAuthenticated]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +84,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     setLoading(true);
 
     try {
-      const liveConfig = await getKingdomConfig(selectedKd);
+      const liveConfig = await getKingdomConfig(KINGDOM_ID);
       const validPin = liveConfig.admin_pin || 'kd2676admin';
 
       if (pinInput.trim() === validPin || pinInput.trim() === 'kd2676admin') {
@@ -115,46 +113,28 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     } catch {}
   };
 
-  const handleChangePinOnLogin = async (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setCpError('');
     setCpSuccess('');
 
     if (cpNewPin !== cpConfirmPin) {
-      setCpError(lang === 'vi' ? 'Mã PIN mới và xác nhận mã PIN không trùng khớp!' : 'New PINs do not match!');
+      setCpError(lang === 'vi' ? 'Mật khẩu mới và xác nhận mật khẩu không trùng khớp!' : 'New passwords do not match!');
       return;
     }
 
     setCpLoading(true);
-    const res = await changeAdminPin(selectedKd, cpCurrentPin, cpNewPin);
+    const res = await changeAdminPin(KINGDOM_ID, cpCurrentPin, cpNewPin);
     setCpLoading(false);
 
     if (res.success) {
-      setCpSuccess(lang === 'vi' ? '✓ Đổi mật khẩu thành công! Hãy chuyển sang tab Đăng Nhập để vào trang quản trị.' : '✓ Password changed successfully! You can now sign in.');
+      setCpSuccess(lang === 'vi' ? '✓ Đổi mật khẩu thành công!' : '✓ Password changed successfully!');
       setCpCurrentPin('');
       setCpNewPin('');
       setCpConfirmPin('');
     } else {
       setCpError(res.error || (lang === 'vi' ? 'Lỗi khi đổi mật khẩu' : 'Failed to change password'));
     }
-  };
-
-  const handleAddKingdom = () => {
-    const clean = newKdInput.trim();
-    if (!clean) return;
-    setSelectedKd(clean);
-    setConfig({
-      ...DEFAULT_KINGDOM_CONFIG,
-      kingdom_id: clean,
-      name: `Kingdom ${clean}`,
-    });
-    setRecruitment({
-      ...DEFAULT_RECRUITMENT,
-      kingdom_id: clean,
-      title: `Chiêu Mộ Chiến Binh · Kingdom ${clean}`,
-    });
-    setNewKdInput('');
-    setShowAddKd(false);
   };
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,7 +206,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   };
 
   // =========================================================================
-  // MÀN HÌNH ĐĂNG NHẬP BIỆT LẬP (ĐÚNG YÊU CẦU: CHỈ HIỆN PHẦN ĐĂNG NHẬP KINGDOM 2676 PORTAL)
+  // MÀN HÌNH ĐĂNG NHẬP BIỆT LẬP (CHỈ CẦN NHẬP PASSWORD)
   // =========================================================================
   if (!isAuthenticated) {
     return (
@@ -239,18 +219,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
 
           <form onSubmit={handleLogin} className="admin-login-form">
             <div className="form-group">
-              <label>Select Kingdom</label>
-              <input
-                type="text"
-                className="admin-input"
-                value={selectedKd}
-                onChange={(e) => setSelectedKd(e.target.value)}
-                placeholder="2676"
-                required
-              />
-            </div>
-
-            <div className="form-group">
               <label>Password</label>
               <input
                 type="password"
@@ -259,6 +227,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                 onChange={(e) => setPinInput(e.target.value)}
                 placeholder="Enter password..."
                 required
+                autoFocus
               />
             </div>
 
@@ -282,7 +251,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   }
 
   // =========================================================================
-  // BẢNG ĐIỀU KHIỂN QUẢN TRỊ KHI ĐÃ ĐĂNG NHẬP
+  // BẢNG ĐIỀU KHIỂN QUẢN TRỊ KHI ĐÃ ĐĂNG NHẬP (CHỈ DÀNH CHO KINGDOM 2676)
   // =========================================================================
   return (
     <div className="admin-portal-dashboard">
@@ -293,7 +262,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
             <img src={config.logo_url || '/logo.png'} alt="Logo" className="admin-topbar-logo" />
             <div>
               <span className="admin-badge">KINGDOM 2676 PORTAL</span>
-              <h2>{lang === 'vi' ? 'Bảng Quản Trị Vương Quốc' : 'Kingdom Admin Dashboard'}</h2>
+              <h2>{lang === 'vi' ? 'Bảng Quản Trị Kingdom 2676' : 'Kingdom 2676 Admin Dashboard'}</h2>
             </div>
           </div>
         </div>
@@ -313,54 +282,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           {saveMessage.text}
         </div>
       )}
-
-      {/* CHỌN KINGDOM (HỖ TRỢ ĐA VƯƠNG QUỐC TRÊN CÙNG 1 DATABASE) */}
-      <div className="admin-card multi-kingdom-card">
-        <div className="multi-kd-header">
-          <div>
-            <h3>👑 {lang === 'vi' ? 'Đang quản lý Vương Quốc:' : 'Managing Kingdom:'} <em>#{selectedKd}</em></h3>
-            <p className="admin-hint">
-              {lang === 'vi'
-                ? 'Hệ thống dùng chung 1 database Supabase, phân chia theo Kingdom ID để mở rộng nhiều KD mà không cần tạo thêm bảng.'
-                : 'Using single Supabase database partitioned by kingdom_id.'}
-            </p>
-          </div>
-          <div className="multi-kd-btns">
-            {['2676', '2677', '2678'].map((kd) => (
-              <button
-                key={kd}
-                type="button"
-                className={`kd-choice-btn ${selectedKd === kd ? 'active' : ''}`}
-                onClick={() => setSelectedKd(kd)}
-              >
-                KD #{kd}
-              </button>
-            ))}
-            <button
-              type="button"
-              className="kd-choice-btn add"
-              onClick={() => setShowAddKd(!showAddKd)}
-            >
-              + {lang === 'vi' ? 'Thêm KD khác' : 'Add Kingdom'}
-            </button>
-          </div>
-        </div>
-
-        {showAddKd && (
-          <div className="add-kd-inline-form">
-            <input
-              type="text"
-              placeholder="Nhập Kingdom ID mới (VD: 2680)..."
-              value={newKdInput}
-              onChange={(e) => setNewKdInput(e.target.value)}
-              className="admin-input-small"
-            />
-            <button type="button" className="btn-primary-small" onClick={handleAddKingdom}>
-              {lang === 'vi' ? 'Xác nhận tạo' : 'Create'}
-            </button>
-          </div>
-        )}
-      </div>
 
       {/* TAB ĐIỀU HƯỚNG TRONG BẢNG QUẢN TRỊ */}
       <div className="admin-dashboard-tabs">
@@ -383,7 +304,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           className={`admin-dash-tab ${dashboardTab === 'password' ? 'active' : ''}`}
           onClick={() => setDashboardTab('password')}
         >
-          🔑 {lang === 'vi' ? 'Đổi Mật Khẩu Admin' : 'Change Password'}
+          🔑 {lang === 'vi' ? 'Đổi Mật Khẩu' : 'Change Password'}
         </button>
       </div>
 
@@ -426,7 +347,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           </div>
 
           <div className="form-group">
-            <label>{lang === 'vi' ? 'Đường Dẫn Discord Tuyển Dụng (Hiện ở đầu trang)' : 'Discord Invite Link'}</label>
+            <label>{lang === 'vi' ? 'Đường Dẫn Discord Tuyển Dụng' : 'Discord Invite Link'}</label>
             <input
               type="text"
               className="admin-input"
@@ -551,11 +472,11 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
       {dashboardTab === 'password' && (
         <div className="admin-card">
           <div className="admin-card-header">
-            <h3>🔑 {lang === 'vi' ? 'Đổi Mật Khẩu Admin (# ' + selectedKd + ')' : 'Change Admin Password'}</h3>
+            <h3>🔑 {lang === 'vi' ? 'Đổi Mật Khẩu Admin Kingdom 2676' : 'Change Kingdom 2676 Password'}</h3>
             <span className="section-pill">Security</span>
           </div>
 
-          <form onSubmit={handleChangePinOnLogin} className="admin-login-form">
+          <form onSubmit={handleChangePassword} className="admin-login-form">
             <div className="form-group">
               <label>{lang === 'vi' ? 'Mật Khẩu Hiện Tại' : 'Current Password'}</label>
               <input
