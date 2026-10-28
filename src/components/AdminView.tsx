@@ -448,10 +448,9 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           <span className="logged-in-user-tag">
             {effectiveRole === 'R5 Leader' && <img src="/r5.png" alt="R5" className="topbar-rank-icon" />}
             {effectiveRole === 'R4 Officer' && <img src="/r4.png" alt="R4" className="topbar-rank-icon" />}
-            {effectiveRole === 'Admin' && <span className="topbar-admin-crown">👑</span>}
             <strong>{currentUser}</strong>
             <span className={`user-role-mini-pill ${effectiveRole === 'R5 Leader' ? 'pill-r5' : effectiveRole === 'R4 Officer' ? 'pill-r4' : 'pill-admin'}`}>
-              {effectiveRole}
+              {effectiveRole === 'R5 Leader' ? 'Leader' : effectiveRole === 'R4 Officer' ? 'Officer' : 'Admin'}
             </span>
           </span>
           <button type="button" className="btn-danger" onClick={handleLogout}>
@@ -715,7 +714,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                         alt={newUserRole}
                         className="selector-role-img"
                       />
-                      <span>{newUserRole}</span>
+                      <span>{newUserRole === 'R5 Leader' ? 'Leader' : 'Officer'}</span>
                     </div>
                     <span className={`dropdown-caret ${roleDropdownOpen ? 'open' : ''}`}>▾</span>
                   </button>
@@ -731,7 +730,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                         }}
                       >
                         <img src="/r4.png" alt="R4" className="selector-role-img" />
-                        <span>R4 Officer</span>
+                        <span>Officer</span>
                         {newUserRole === 'R4 Officer' && <span className="opt-check">✓</span>}
                       </button>
                       {!isR4 && (
@@ -744,7 +743,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                           }}
                         >
                           <img src="/r5.png" alt="R5" className="selector-role-img" />
-                          <span>R5 Leader</span>
+                          <span>Leader</span>
                           {newUserRole === 'R5 Leader' && <span className="opt-check">✓</span>}
                         </button>
                       )}
@@ -792,13 +791,19 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                       <td>
                         <div className="role-cell-wrap">
                           {u.role === 'R5 Leader' && (
-                            <img src="/r5.png" alt="R5 Leader" title="R5 Leader" className="rok-rank-badge-lg" />
+                            <>
+                              <img src="/r5.png" alt="R5 Leader" title="R5 Leader" className="rok-rank-badge-lg" />
+                              <span className="role-tag role-r5">Leader</span>
+                            </>
                           )}
                           {u.role === 'R4 Officer' && (
-                            <img src="/r4.png" alt="R4 Officer" title="R4 Officer" className="rok-rank-badge-lg" />
+                            <>
+                              <img src="/r4.png" alt="R4 Officer" title="R4 Officer" className="rok-rank-badge-lg" />
+                              <span className="role-tag role-r4">Officer</span>
+                            </>
                           )}
                           {u.role === 'Admin' && (
-                            <span className="role-tag role-admin">👑 Admin</span>
+                            <span className="role-tag role-admin">Admin</span>
                           )}
                         </div>
                       </td>
