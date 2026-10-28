@@ -139,18 +139,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
 
   // RoKStats Live Sync State
   const [syncLoading, setSyncLoading] = useState<boolean>(false);
-  const [showTokenModal, setShowTokenModal] = useState<boolean>(false);
-  const [tokenInput, setTokenInput] = useState<string>(() => {
-    try {
-      return (
-        localStorage.getItem('kd_gh_token') ||
-        (import.meta.env.VITE_GH_TOKEN as string | undefined) ||
-        ''
-      );
-    } catch {
-      return '';
-    }
-  });
 
   // Form State
   const [config, setConfig] = useState<KingdomConfig>(DEFAULT_KINGDOM_CONFIG);
@@ -386,13 +374,16 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
 
   const handleSyncRoKStats = async () => {
     if (syncLoading) return;
-    const token =
-      localStorage.getItem('kd_gh_token')?.trim() ||
-      (import.meta.env.VITE_GH_TOKEN as string | undefined)?.trim() ||
-      '';
+    const token = (import.meta.env.VITE_GH_TOKEN as string | undefined)?.trim();
 
     if (!token) {
-      setShowTokenModal(true);
+      setSaveMessage({
+        type: 'error',
+        text:
+          lang === 'vi'
+            ? 'Chưa cấu hình secret VITE_GH_TOKEN trong GitHub Secrets!'
+            : 'VITE_GH_TOKEN secret is not configured in GitHub Secrets!',
+      });
       return;
     }
 
@@ -420,15 +411,11 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
       );
 
       if (!dispatchRes.ok) {
-        if (dispatchRes.status === 401 || dispatchRes.status === 403) {
-          setShowTokenModal(true);
-          throw new Error(
-            lang === 'vi'
-              ? 'GitHub Token không hợp lệ hoặc không có quyền dispatch workflow (HTTP 401/403).'
-              : 'Invalid GitHub Token or insufficient permissions (HTTP 401/403).'
-          );
-        }
-        throw new Error(`GitHub API Error: ${dispatchRes.status}`);
+        throw new Error(
+          lang === 'vi'
+            ? `GitHub API Error (${dispatchRes.status}): Không thể kích hoạt đồng bộ.`
+            : `GitHub API Error (${dispatchRes.status}): Failed to dispatch workflow.`
+        );
       }
 
       setSaveMessage({
@@ -606,14 +593,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                 ? (lang === 'vi' ? 'Đang đồng bộ...' : 'Syncing...')
                 : (lang === 'vi' ? 'Đồng Bộ RoKStats' : 'Sync RoKStats')}
             </span>
-          </button>
-          <button
-            type="button"
-            className="btn-token-config"
-            onClick={() => setShowTokenModal(true)}
-            title={lang === 'vi' ? 'Cấu hình GitHub Token' : 'Configure GitHub Token'}
-          >
-            🔑
           </button>
           <span className="logged-in-user-tag">
             <strong>{currentUser}</strong>
@@ -1079,90 +1058,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               ? (lang === 'vi' ? '⏳ Đang lưu dữ liệu lên Supabase...' : 'Saving to Supabase...')
               : (lang === 'vi' ? '💾 Lưu Tất Cả Thay Đổi Lên Supabase' : 'Save All Changes to Supabase')}
           </button>
-        </div>
-      )}
-
-      {/* MODAL CẤU HÌNH GITHUB TOKEN ĐỒNG BỘ */}
-      {showTokenModal && (
-        <div className="admin-modal-overlay" onClick={() => setShowTokenModal(false)}>
-          <div className="admin-modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="admin-modal-header">
-              <h3>🔑 {lang === 'vi' ? 'Cấu Hình GitHub Token Đồng Bộ' : 'Configure GitHub Sync Token'}</h3>
-              <button
-                type="button"
-                className="admin-modal-close"
-                onClick={() => setShowTokenModal(false)}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="admin-modal-body">
-              <p className="admin-modal-desc">
-                {lang === 'vi'
-                  ? 'Nút "Đồng Bộ RoKStats" sẽ gửi lệnh trực tiếp lên GitHub Actions để cào dữ liệu mới nhất. Token chỉ được lưu an toàn trong trình duyệt của bạn.'
-                  : 'The "Sync RoKStats" button dispatches a workflow to GitHub Actions to pull fresh game data. The token is stored safely in your browser.'}
-              </p>
-              <div className="form-group">
-                <label>GitHub Personal Access Token (PAT):</label>
-                <input
-                  type="password"
-                  className="admin-input"
-                  value={tokenInput}
-                  onChange={(e) => setTokenInput(e.target.value)}
-                  placeholder="ghp_... hoặc github_pat_..."
-                  autoFocus
-                />
-              </div>
-              <p className="admin-hint">
-                {lang === 'vi'
-                  ? '💡 Token cần quyền "Actions: Read & Write" trên repo kd2676.github.io.'
-                  : '💡 Token needs "Actions: Read & Write" permission on kd2676.github.io repo.'}
-              </p>
-            </div>
-            <div className="admin-modal-footer">
-              {tokenInput && (
-                <button
-                  type="button"
-                  className="btn-danger-outline"
-                  onClick={() => {
-                    setTokenInput('');
-                    try {
-                      localStorage.removeItem('kd_gh_token');
-                    } catch {}
-                    setShowTokenModal(false);
-                    setSaveMessage({
-                      type: 'ok',
-                      text: lang === 'vi' ? 'Đã xóa token khỏi trình duyệt.' : 'Token removed from browser.',
-                    });
-                  }}
-                >
-                  {lang === 'vi' ? 'Xóa Token' : 'Clear Token'}
-                </button>
-              )}
-              <button
-                type="button"
-                className="btn-modal-cancel"
-                onClick={() => setShowTokenModal(false)}
-              >
-                {lang === 'vi' ? 'Đóng' : 'Close'}
-              </button>
-              <button
-                type="button"
-                className="btn-modal-save"
-                onClick={() => {
-                  const cleaned = tokenInput.trim();
-                  if (!cleaned) return;
-                  try {
-                    localStorage.setItem('kd_gh_token', cleaned);
-                  } catch {}
-                  setShowTokenModal(false);
-                  void handleSyncRoKStats();
-                }}
-              >
-                {lang === 'vi' ? 'Lưu & Bắt Đầu Đồng Bộ' : 'Save & Start Sync'}
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>

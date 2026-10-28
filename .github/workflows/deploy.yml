@@ -2,8 +2,8 @@ name: Auto Sync & Deploy Web
 
 on:
   schedule:
-    # Tự động đồng bộ mỗi 2 tiếng một lần (chọn phút 17 để tránh nghẽn hàng đợi của GitHub ở phút :00)
-    - cron: '17 */2 * * *'
+    # Tự động đồng bộ mỗi 2 tiếng một lần (giờ UTC)
+    - cron: '0 */2 * * *'
   workflow_dispatch: # Cho phép bấm nút "Run workflow" thủ công bất cứ lúc nào trên GitHub
   push:
     branches:
