@@ -481,7 +481,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           className={`admin-dash-tab ${dashboardTab === 'config' ? 'active' : ''}`}
           onClick={() => setDashboardTab('config')}
         >
-          🛡️ {lang === 'vi' ? 'Thông Tin Vương Quốc & Logo' : 'Kingdom Info & Logo'}
+          🏰 {lang === 'vi' ? 'Thông Tin Vương Quốc & Logo' : 'Kingdom Info & Logo'}
         </button>
         <button
           type="button"
@@ -590,7 +590,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
       {dashboardTab === 'config' && (
         <div className="admin-card">
           <div className="admin-card-header">
-            <h3>🛡️ {lang === 'vi' ? 'Thông Tin Vương Quốc & Logo' : 'Kingdom Info & Logo'}</h3>
+            <h3>🏰 {lang === 'vi' ? 'Thông Tin Vương Quốc & Logo' : 'Kingdom Info & Logo'}</h3>
             <span className="section-pill">Config</span>
           </div>
 
