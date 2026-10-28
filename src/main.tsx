@@ -703,6 +703,17 @@ function App() {
             <a className="source-link" href="https://app.rokstats.online/kingdom/2676" target="_blank" rel="noreferrer">
               {i18n.sourceLink}
             </a>
+            <a
+              href="/admin"
+              className="header-admin-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                setTab('admin');
+              }}
+              title="Admin Portal (R4 / R5 Leadership)"
+            >
+              <span>🔒 Admin</span>
+            </a>
           </div>
         </div>
 
@@ -1224,6 +1235,16 @@ function App() {
 
       <footer>
         <span>{i18n.footer.brand}</span>
+        <a
+          href="/admin"
+          className="footer-admin-link"
+          onClick={(e) => {
+            e.preventDefault();
+            setTab('admin');
+          }}
+        >
+          🔒 Admin Portal
+        </a>
         <span>{i18n.footer.note}</span>
       </footer>
     </div>

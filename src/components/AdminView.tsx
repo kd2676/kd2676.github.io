@@ -3,6 +3,7 @@ import type { Lang } from '../i18n';
 import {
   type KingdomConfig,
   type RecruitmentData,
+  type AdminUser,
   DEFAULT_KINGDOM_CONFIG,
   DEFAULT_RECRUITMENT,
   getKingdomConfig,
@@ -10,7 +11,11 @@ import {
   updateKingdomConfig,
   updateRecruitment,
   uploadMedia,
-  changeAdminPin,
+  authenticateAdmin,
+  getAdminUsers,
+  createAdminUser,
+  deleteAdminUser,
+  updateUserPassword,
 } from '../lib/kingdomApi';
 
 interface AdminViewProps {
@@ -31,21 +36,35 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   });
 
+  const [currentUser, setCurrentUser] = useState<string>(() => {
+    try {
+      return sessionStorage.getItem('kd_admin_user') || 'admin';
+    } catch {
+      return 'admin';
+    }
+  });
+
   const [usernameInput, setUsernameInput] = useState<string>('admin');
   const [pinInput, setPinInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
-  // Change Password State (inside dashboard)
-  const [cpNewUsername, setCpNewUsername] = useState<string>('');
-  const [cpCurrentPin, setCpCurrentPin] = useState<string>('');
-  const [cpNewPin, setCpNewPin] = useState<string>('');
-  const [cpConfirmPin, setCpConfirmPin] = useState<string>('');
+  // Dashboard Active Tab: 'recruitment' | 'config' | 'users' | 'password'
+  const [dashboardTab, setDashboardTab] = useState<'recruitment' | 'config' | 'users' | 'password'>('recruitment');
+
+  // User Management State
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [newUserName, setNewUserName] = useState<string>('');
+  const [newUserRole, setNewUserRole] = useState<string>('R4 Officer');
+  const [userActionMsg, setUserActionMsg] = useState<{ type: 'ok' | 'error'; text: string } | null>(null);
+  const [userCreating, setUserCreating] = useState<boolean>(false);
+
+  // Change Password State
+  const [cpCurrentPass, setCpCurrentPass] = useState<string>('');
+  const [cpNewPass, setCpNewPass] = useState<string>('');
+  const [cpConfirmPass, setCpConfirmPass] = useState<string>('');
   const [cpError, setCpError] = useState<string>('');
   const [cpSuccess, setCpSuccess] = useState<string>('');
   const [cpLoading, setCpLoading] = useState<boolean>(false);
-
-  // Dashboard Active Tab: 'recruitment' | 'config' | 'password'
-  const [dashboardTab, setDashboardTab] = useState<'recruitment' | 'config' | 'password'>('recruitment');
 
   // Form State
   const [config, setConfig] = useState<KingdomConfig>(DEFAULT_KINGDOM_CONFIG);
@@ -64,11 +83,16 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     let isMounted = true;
     setLoading(true);
 
-    Promise.all([getKingdomConfig(KINGDOM_ID), getRecruitment(KINGDOM_ID)])
-      .then(([cfg, rec]) => {
+    Promise.all([
+      getKingdomConfig(KINGDOM_ID),
+      getRecruitment(KINGDOM_ID),
+      getAdminUsers(),
+    ])
+      .then(([cfg, rec, users]) => {
         if (!isMounted) return;
         setConfig(cfg);
         setRecruitment(rec);
+        if (users) setAdminUsers(users);
       })
       .catch(() => {})
       .finally(() => {
@@ -86,32 +110,20 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     setLoading(true);
 
     try {
-      const liveConfig = await getKingdomConfig(KINGDOM_ID);
-      const expectedUser = (liveConfig.admin_username || 'admin').trim().toLowerCase();
-      const validPin = (liveConfig.admin_pin || 'kd2676admin').trim();
+      const res = await authenticateAdmin(usernameInput, pinInput);
 
-      const inputUser = usernameInput.trim().toLowerCase();
-      const inputPin = pinInput.trim();
-
-      const userOk = inputUser === expectedUser || inputUser === 'admin' || inputUser === 'kd2676';
-      const pinOk = inputPin === validPin || inputPin === 'kd2676admin';
-
-      if (userOk && pinOk) {
+      if (res.success && res.user) {
         setIsAuthenticated(true);
+        setCurrentUser(res.user.username);
         try {
           sessionStorage.setItem('kd_admin_logged_in', 'true');
+          sessionStorage.setItem('kd_admin_user', res.user.username);
         } catch {}
       } else {
-        setLoginError('Invalid username or password!');
+        setLoginError(res.error || 'Invalid username or password!');
       }
     } catch {
-      const inputUser = usernameInput.trim().toLowerCase();
-      const inputPin = pinInput.trim();
-      if ((inputUser === 'admin' || inputUser === 'kd2676') && inputPin === 'kd2676admin') {
-        setIsAuthenticated(true);
-      } else {
-        setLoginError('Invalid username or password!');
-      }
+      setLoginError('Authentication failed.');
     } finally {
       setLoading(false);
     }
@@ -121,7 +133,55 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     setIsAuthenticated(false);
     try {
       sessionStorage.removeItem('kd_admin_logged_in');
+      sessionStorage.removeItem('kd_admin_user');
     } catch {}
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUserActionMsg(null);
+    setUserCreating(true);
+
+    const res = await createAdminUser(newUserName, newUserRole);
+    setUserCreating(false);
+
+    if (res.success) {
+      setUserActionMsg({
+        type: 'ok',
+        text: lang === 'vi'
+          ? `✓ Đã tạo tài khoản "${newUserName}" thành công với mật khẩu mặc định là "kd2676"!`
+          : `✓ User "${newUserName}" created successfully with default password "kd2676"!`,
+      });
+      setNewUserName('');
+      const updated = await getAdminUsers();
+      setAdminUsers(updated);
+    } else {
+      setUserActionMsg({
+        type: 'error',
+        text: res.error || (lang === 'vi' ? 'Lỗi khi tạo tài khoản' : 'Failed to create user'),
+      });
+    }
+  };
+
+  const handleDeleteUser = async (id: string, uname: string) => {
+    if (!window.confirm(lang === 'vi' ? `Bạn có chắc muốn xóa tài khoản "${uname}"?` : `Are you sure you want to delete user "${uname}"?`)) {
+      return;
+    }
+
+    const res = await deleteAdminUser(id, uname);
+    if (res.success) {
+      setUserActionMsg({
+        type: 'ok',
+        text: lang === 'vi' ? `✓ Đã xóa tài khoản "${uname}"` : `✓ Deleted user "${uname}"`,
+      });
+      const updated = await getAdminUsers();
+      setAdminUsers(updated);
+    } else {
+      setUserActionMsg({
+        type: 'error',
+        text: res.error || 'Failed to delete user',
+      });
+    }
   };
 
   const handleChangePassword = async (e: React.FormEvent) => {
@@ -129,24 +189,24 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     setCpError('');
     setCpSuccess('');
 
-    if (cpNewPin !== cpConfirmPin) {
+    if (cpNewPass !== cpConfirmPass) {
       setCpError(lang === 'vi' ? 'Mật khẩu mới và xác nhận mật khẩu không trùng khớp!' : 'New passwords do not match!');
       return;
     }
 
     setCpLoading(true);
-    const res = await changeAdminPin(KINGDOM_ID, cpCurrentPin, cpNewPin, cpNewUsername || undefined);
+    const res = await updateUserPassword(currentUser, cpCurrentPass, cpNewPass);
     setCpLoading(false);
 
     if (res.success) {
-      setCpSuccess(lang === 'vi' ? '✓ Cập nhật tài khoản và mật khẩu thành công!' : '✓ Credentials updated successfully!');
-      setCpCurrentPin('');
-      setCpNewPin('');
-      setCpConfirmPin('');
-      if (cpNewUsername) {
-        setConfig((prev) => ({ ...prev, admin_username: cpNewUsername }));
-        setUsernameInput(cpNewUsername);
-      }
+      setCpSuccess(
+        lang === 'vi'
+          ? `✓ Đổi mật khẩu cho tài khoản "${currentUser}" thành công!`
+          : `✓ Password for "${currentUser}" updated successfully!`
+      );
+      setCpCurrentPass('');
+      setCpNewPass('');
+      setCpConfirmPass('');
     } else {
       setCpError(res.error || (lang === 'vi' ? 'Lỗi khi đổi mật khẩu' : 'Failed to change password'));
     }
@@ -221,7 +281,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   };
 
   // =========================================================================
-  // MÀN HÌNH ĐĂNG NHẬP BIỆT LẬP (CHỈ CẦN NHẬP PASSWORD)
+  // MÀN HÌNH ĐĂNG NHẬP BIỆT LẬP (USERNAME & PASSWORD)
   // =========================================================================
   if (!isAuthenticated) {
     return (
@@ -280,7 +340,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   }
 
   // =========================================================================
-  // BẢNG ĐIỀU KHIỂN QUẢN TRỊ KHI ĐÃ ĐĂNG NHẬP (CHỈ DÀNH CHO KINGDOM 2676)
+  // BẢNG ĐIỀU KHIỂN QUẢN TRỊ KHI ĐÃ ĐĂNG NHẬP
   // =========================================================================
   return (
     <div className="admin-portal-dashboard">
@@ -296,6 +356,9 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           </div>
         </div>
         <div className="admin-topbar-actions">
+          <span className="logged-in-user-tag">
+            👤 <strong>{currentUser}</strong>
+          </span>
           <button type="button" className="btn-secondary" onClick={onNavigateHome}>
             👁️ {lang === 'vi' ? 'Xem Dashboard Ngoài' : 'View Public Dashboard'}
           </button>
@@ -330,6 +393,13 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
         </button>
         <button
           type="button"
+          className={`admin-dash-tab ${dashboardTab === 'users' ? 'active' : ''}`}
+          onClick={() => setDashboardTab('users')}
+        >
+          👥 {lang === 'vi' ? 'Tài Khoản R4/R5' : 'User Management'}
+        </button>
+        <button
+          type="button"
           className={`admin-dash-tab ${dashboardTab === 'password' ? 'active' : ''}`}
           onClick={() => setDashboardTab('password')}
         >
@@ -337,7 +407,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
         </button>
       </div>
 
-      {/* NỘI DUNG THEO TAB */}
+      {/* 1. TAB RECRUITMENT */}
       {dashboardTab === 'recruitment' && (
         <div className="admin-card">
           <div className="admin-card-header">
@@ -424,6 +494,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
         </div>
       )}
 
+      {/* 2. TAB CONFIG */}
       {dashboardTab === 'config' && (
         <div className="admin-card">
           <div className="admin-card-header">
@@ -498,33 +569,133 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
         </div>
       )}
 
+      {/* 3. TAB USER MANAGEMENT (TẠO USER VỚI MẬT KHẨU MẶC ĐỊNH KD2676) */}
+      {dashboardTab === 'users' && (
+        <div className="admin-card user-management-card">
+          <div className="admin-card-header">
+            <h3>👥 {lang === 'vi' ? 'Quản Lý Tài Khoản Ban Chỉ Huy (R4 / R5)' : 'R4 / R5 User Management'}</h3>
+            <span className="section-pill">Users</span>
+          </div>
+
+          {userActionMsg && (
+            <div className={`admin-alert ${userActionMsg.type}`}>
+              {userActionMsg.type === 'ok' ? '✓ ' : '⚠️ '}
+              {userActionMsg.text}
+            </div>
+          )}
+
+          {/* FORM TẠO USER MỚI */}
+          <div className="create-user-section">
+            <h4 className="sub-title">
+              {lang === 'vi' ? '+ Thêm Tài Khoản Admin Mới' : '+ Add New Admin User'}
+            </h4>
+            <p className="admin-hint">
+              {lang === 'vi'
+                ? '💡 Mật khẩu mặc định khi tạo mới là "kd2676". Thành viên mới có thể đăng nhập bình thường và tự đổi mật khẩu trong tab Đổi Mật Khẩu.'
+                : '💡 Default password is set to "kd2676". The user can log in and change their password anytime.'}
+            </p>
+
+            <form onSubmit={handleCreateUser} className="create-user-inline-form">
+              <div className="form-group flex-1">
+                <label>{lang === 'vi' ? 'Tên Tài Khoản (Username)' : 'Username'}</label>
+                <input
+                  type="text"
+                  className="admin-input"
+                  value={newUserName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                  placeholder="Ví dụ: r4_john, combat_lead..."
+                  required
+                />
+              </div>
+
+              <div className="form-group flex-1">
+                <label>{lang === 'vi' ? 'Vai Trò / Chức Vụ' : 'Role / Title'}</label>
+                <input
+                  type="text"
+                  className="admin-input"
+                  value={newUserRole}
+                  onChange={(e) => setNewUserRole(e.target.value)}
+                  placeholder="Ví dụ: R4 Officer, R5 King, Lead..."
+                />
+              </div>
+
+              <div className="form-group form-submit-wrap">
+                <label>&nbsp;</label>
+                <button type="submit" className="admin-save-btn" disabled={userCreating}>
+                  {userCreating ? '⏳ Đang tạo...' : '+ Tạo Tài Khoản'}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* DANH SÁCH USER HIỆN CÓ */}
+          <div className="existing-users-section">
+            <h4 className="sub-title">
+              {lang === 'vi' ? 'Danh Sách Tài Khoản Đang Hoạt Động' : 'Active Admin Accounts'}
+            </h4>
+            <div className="users-table-wrap">
+              <table className="users-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>{lang === 'vi' ? 'Vai Trò' : 'Role'}</th>
+                    <th>{lang === 'vi' ? 'Thao Tác' : 'Action'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminUsers.map((u) => (
+                    <tr key={u.id}>
+                      <td>
+                        <div className="user-name-cell">
+                          <span className="user-avatar-dot">👤</span>
+                          <strong>{u.username}</strong>
+                          {u.username === currentUser && (
+                            <span className="you-pill">{lang === 'vi' ? 'Bạn' : 'You'}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <span className="role-tag">{u.role}</span>
+                      </td>
+                      <td>
+                        {u.username.toLowerCase() !== 'admin' ? (
+                          <button
+                            type="button"
+                            className="btn-del-user"
+                            onClick={() => handleDeleteUser(u.id, u.username)}
+                            title="Xóa tài khoản này"
+                          >
+                            🗑️ {lang === 'vi' ? 'Xóa' : 'Delete'}
+                          </button>
+                        ) : (
+                          <span className="root-admin-badge">{lang === 'vi' ? 'Gốc (Bảo vệ)' : 'Root (Protected)'}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. TAB CHANGE PASSWORD */}
       {dashboardTab === 'password' && (
         <div className="admin-card">
           <div className="admin-card-header">
-            <h3>🔑 {lang === 'vi' ? 'Đổi Mật Khẩu Admin Kingdom 2676' : 'Change Kingdom 2676 Password'}</h3>
+            <h3>🔑 {lang === 'vi' ? `Đổi Mật Khẩu Tài Khoản (${currentUser})` : `Change Password (${currentUser})`}</h3>
             <span className="section-pill">Security</span>
           </div>
 
           <form onSubmit={handleChangePassword} className="admin-login-form">
             <div className="form-group">
-              <label>{lang === 'vi' ? 'Tên Đăng Nhập (Username)' : 'Admin Username'}</label>
-              <input
-                type="text"
-                className="admin-input"
-                value={cpNewUsername}
-                onChange={(e) => setCpNewUsername(e.target.value)}
-                placeholder={config.admin_username || 'admin'}
-              />
-              <span className="upload-note">{lang === 'vi' ? 'Để trống nếu muốn giữ nguyên tên đăng nhập hiện tại.' : 'Leave blank to keep current username.'}</span>
-            </div>
-
-            <div className="form-group">
               <label>{lang === 'vi' ? 'Mật Khẩu Hiện Tại' : 'Current Password'}</label>
               <input
                 type="password"
                 className="admin-input"
-                value={cpCurrentPin}
-                onChange={(e) => setCpCurrentPin(e.target.value)}
+                value={cpCurrentPass}
+                onChange={(e) => setCpCurrentPass(e.target.value)}
                 placeholder={lang === 'vi' ? 'Nhập mật khẩu hiện tại...' : 'Enter current password...'}
                 required
               />
@@ -535,8 +706,8 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               <input
                 type="password"
                 className="admin-input"
-                value={cpNewPin}
-                onChange={(e) => setCpNewPin(e.target.value)}
+                value={cpNewPass}
+                onChange={(e) => setCpNewPass(e.target.value)}
                 placeholder={lang === 'vi' ? 'Nhập mật khẩu mới (ít nhất 4 ký tự)...' : 'Enter new password...'}
                 required
               />
@@ -547,8 +718,8 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               <input
                 type="password"
                 className="admin-input"
-                value={cpConfirmPin}
-                onChange={(e) => setCpConfirmPin(e.target.value)}
+                value={cpConfirmPass}
+                onChange={(e) => setCpConfirmPass(e.target.value)}
                 placeholder={lang === 'vi' ? 'Nhập lại mật khẩu mới...' : 'Confirm new password...'}
                 required
               />
@@ -565,7 +736,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
       )}
 
       {/* THANH LƯU CỐ ĐỊNH PHÍA DƯỚI (KHI Ở TAB RECRUITMENT HOẶC CONFIG) */}
-      {dashboardTab !== 'password' && (
+      {(dashboardTab === 'recruitment' || dashboardTab === 'config') && (
         <div className="admin-bottom-actions">
           <button
             type="button"

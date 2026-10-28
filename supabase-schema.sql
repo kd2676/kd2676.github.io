@@ -97,3 +97,26 @@ CREATE POLICY "Allow public upload storage kingdom-media" ON storage.objects FOR
 
 DROP POLICY IF EXISTS "Allow public update storage kingdom-media" ON storage.objects;
 CREATE POLICY "Allow public update storage kingdom-media" ON storage.objects FOR UPDATE USING (bucket_id = 'kingdom-media');
+
+
+-- 6. BẢNG QUẢN LÝ TÀI KHOẢN ADMIN (R4/R5 LEADERSHIP)
+CREATE TABLE IF NOT EXISTS public.admin_users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL DEFAULT 'kd2676',
+    role TEXT DEFAULT 'R4/R5 Officer',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public access admin_users" ON public.admin_users;
+CREATE POLICY "Allow public access admin_users" ON public.admin_users FOR ALL USING (true) WITH CHECK (true);
+
+-- Khởi tạo tài khoản admin mặc định
+INSERT INTO public.admin_users (username, password, role)
+VALUES 
+    ('admin', 'kd2676admin', 'R5 Leader'),
+    ('r4', 'kd2676', 'R4 Officer')
+ON CONFLICT (username) DO NOTHING;

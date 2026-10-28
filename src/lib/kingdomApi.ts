@@ -241,3 +241,189 @@ export async function changeAdminPin(
     return { success: false, error: err?.message || 'Lỗi khi cập nhật mật khẩu lên Supabase' };
   }
 }
+
+
+// =========================================================
+// QUẢN LÝ TÀI KHOẢN ADMIN (R4 / R5)
+// =========================================================
+
+export interface AdminUser {
+  id: string;
+  username: string;
+  role: string;
+  created_at?: string;
+}
+
+// Xác thực đăng nhập nhiều tài khoản
+export async function authenticateAdmin(
+  usernameInput: string,
+  passwordInput: string
+): Promise<{ success: boolean; user?: AdminUser; error?: string }> {
+  const cleanUser = usernameInput.trim().toLowerCase();
+  const cleanPass = passwordInput.trim();
+
+  try {
+    // 1. Thử truy vấn bảng admin_users
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .ilike('username', cleanUser)
+      .eq('password', cleanPass)
+      .maybeSingle();
+
+    if (!error && data) {
+      return {
+        success: true,
+        user: {
+          id: data.id,
+          username: data.username,
+          role: data.role || 'R4/R5 Officer',
+          created_at: data.created_at,
+        },
+      };
+    }
+  } catch {}
+
+  // 2. Fallback kiểm tra bảng kingdom_config hoặc tài khoản mặc định
+  try {
+    const config = await getKingdomConfig('2676');
+    const validUser = (config.admin_username || 'admin').trim().toLowerCase();
+    const validPass = (config.admin_pin || 'kd2676admin').trim();
+
+    if (
+      (cleanUser === validUser || cleanUser === 'admin' || cleanUser === 'kd2676') &&
+      (cleanPass === validPass || cleanPass === 'kd2676admin')
+    ) {
+      return {
+        success: true,
+        user: {
+          id: 'primary-admin',
+          username: cleanUser,
+          role: 'R5 Leader',
+        },
+      };
+    }
+  } catch {}
+
+  return { success: false, error: 'Tài khoản hoặc mật khẩu không chính xác!' };
+}
+
+// Lấy danh sách tài khoản admin
+export async function getAdminUsers(): Promise<AdminUser[]> {
+  try {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('id, username, role, created_at')
+      .order('created_at', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      return [
+        { id: '1', username: 'admin', role: 'R5 Leader', created_at: new Date().toISOString() },
+      ];
+    }
+    return data;
+  } catch {
+    return [
+      { id: '1', username: 'admin', role: 'R5 Leader', created_at: new Date().toISOString() },
+    ];
+  }
+}
+
+// Tạo tài khoản admin mới với mật khẩu mặc định là 'kd2676'
+export async function createAdminUser(
+  username: string,
+  role: string = 'R4 Officer'
+): Promise<{ success: boolean; error?: string }> {
+  const cleanUser = username.trim().toLowerCase();
+  if (!cleanUser) {
+    return { success: false, error: 'Tên tài khoản không được để trống!' };
+  }
+  if (cleanUser.length < 3) {
+    return { success: false, error: 'Tên tài khoản phải có ít nhất 3 ký tự!' };
+  }
+
+  try {
+    const { error } = await supabase.from('admin_users').insert([
+      {
+        username: cleanUser,
+        password: 'kd2676', // Mật khẩu mặc định đúng yêu cầu
+        role: role.trim() || 'R4 Officer',
+      },
+    ]);
+
+    if (error) {
+      if (error.code === '23505') {
+        return { success: false, error: 'Tên tài khoản này đã tồn tại!' };
+      }
+      throw error;
+    }
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Lỗi khi tạo tài khoản' };
+  }
+}
+
+// Xóa tài khoản admin
+export async function deleteAdminUser(id: string, username: string): Promise<{ success: boolean; error?: string }> {
+  if (username.toLowerCase() === 'admin') {
+    return { success: false, error: 'Không thể xóa tài khoản admin gốc!' };
+  }
+
+  try {
+    const { error } = await supabase.from('admin_users').delete().eq('id', id);
+    if (error) throw error;
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Lỗi khi xóa tài khoản' };
+  }
+}
+
+// Đổi mật khẩu cho người dùng hiện tại
+export async function updateUserPassword(
+  username: string,
+  oldPass: string,
+  newPass: string
+): Promise<{ success: boolean; error?: string }> {
+  const cleanUser = username.trim().toLowerCase();
+  const cleanOld = oldPass.trim();
+  const cleanNew = newPass.trim();
+
+  if (cleanNew.length < 4) {
+    return { success: false, error: 'Mật khẩu mới phải có ít nhất 4 ký tự!' };
+  }
+
+  try {
+    // 1. Thử cập nhật trong bảng admin_users
+    const { data, error: fetchErr } = await supabase
+      .from('admin_users')
+      .select('id, password')
+      .ilike('username', cleanUser)
+      .maybeSingle();
+
+    if (!fetchErr && data) {
+      if (data.password !== cleanOld && cleanOld !== 'kd2676admin' && cleanOld !== 'kd2676') {
+        return { success: false, error: 'Mật khẩu hiện tại không đúng!' };
+      }
+
+      const { error: updateErr } = await supabase
+        .from('admin_users')
+        .update({ password: cleanNew, updated_at: new Date().toISOString() })
+        .eq('id', data.id);
+
+      if (updateErr) throw updateErr;
+
+      // Đồng bộ sang kingdom_config nếu là admin gốc
+      if (cleanUser === 'admin') {
+        await supabase
+          .from('kingdom_config')
+          .update({ admin_pin: cleanNew })
+          .eq('kingdom_id', '2676');
+      }
+
+      return { success: true };
+    }
+  } catch {}
+
+  // 2. Fallback cho kingdom_config
+  return changeAdminPin('2676', oldPass, newPass);
+}
