@@ -227,3 +227,4 @@ export function RecruitmentView({ lang, recruitment, config, loading }: Recruitm
     </section>
   );
 }
+

@@ -629,6 +629,31 @@ function App() {
 
   const updatedAt = dataset?.exportedAt;
 
+  if (tab === 'admin') {
+    return (
+      <div className="shell admin-shell">
+        <AdminView
+          lang={lang}
+          onNavigateHome={() => setTab('overview')}
+          onLogoUpdated={(newLogo) => {
+            setKingdomConfig((prev) =>
+              prev
+                ? { ...prev, logo_url: newLogo }
+                : {
+                    kingdom_id: '2676',
+                    name: 'Kingdom 2676',
+                    tagline: 'Zipporania · Continent of Egria · Chatsworth',
+                    logo_url: newLogo,
+                    discord_url: 'https://discord.gg/',
+                    contact_info: 'R4/R5 Recruitment Team',
+                  }
+            );
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="shell">
       {toast && (
@@ -1145,22 +1170,7 @@ function App() {
           />
         )}
 
-        {tab === 'admin' && (
-          <AdminView
-            lang={lang}
-            onNavigateHome={() => setTab('overview')}
-            onLogoUpdated={(newLogo) => {
-              setKingdomConfig(prev => prev ? { ...prev, logo_url: newLogo } : {
-                kingdom_id: '2676',
-                name: 'Kingdom 2676',
-                tagline: 'Zipporania · Continent of Egria · Chatsworth',
-                logo_url: newLogo,
-                discord_url: 'https://discord.gg/',
-                contact_info: 'R4/R5 Recruitment Team'
-              });
-            }}
-          />
-        )}
+        
         {tab === 'zenith' && (
           zenithData && zenithData.events.length > 0 ? (
             <ZenithView

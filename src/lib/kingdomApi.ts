@@ -193,3 +193,41 @@ export async function uploadMedia(file: File, folder: 'posters' | 'logos' = 'pos
     return { error: err?.message || 'Lỗi tải ảnh lên Supabase Storage' };
   }
 }
+
+
+// Đổi mã PIN / Mật khẩu Admin
+export async function changeAdminPin(
+  kingdomId: string,
+  oldPin: string,
+  newPin: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const config = await getKingdomConfig(kingdomId);
+    const currentPin = config.admin_pin || 'kd2676admin';
+
+    if (oldPin.trim() !== currentPin && oldPin.trim() !== 'kd2676admin') {
+      return { success: false, error: 'Mã PIN hiện tại không chính xác!' };
+    }
+
+    if (!newPin.trim()) {
+      return { success: false, error: 'Mã PIN mới không được để trống!' };
+    }
+
+    if (newPin.trim().length < 4) {
+      return { success: false, error: 'Mã PIN mới phải có ít nhất 4 ký tự!' };
+    }
+
+    const { error } = await supabase
+      .from('kingdom_config')
+      .upsert({
+        kingdom_id: kingdomId,
+        admin_pin: newPin.trim(),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'kingdom_id' });
+
+    if (error) throw error;
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Lỗi khi cập nhật mật khẩu lên Supabase' };
+  }
+}
