@@ -137,6 +137,21 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   const [cpSuccess, setCpSuccess] = useState<string>('');
   const [cpLoading, setCpLoading] = useState<boolean>(false);
 
+  // RoKStats Live Sync State
+  const [syncLoading, setSyncLoading] = useState<boolean>(false);
+  const [showTokenModal, setShowTokenModal] = useState<boolean>(false);
+  const [tokenInput, setTokenInput] = useState<string>(() => {
+    try {
+      return (
+        localStorage.getItem('kd_gh_token') ||
+        (import.meta.env.VITE_GH_TOKEN as string | undefined) ||
+        ''
+      );
+    } catch {
+      return '';
+    }
+  });
+
   // Form State
   const [config, setConfig] = useState<KingdomConfig>(DEFAULT_KINGDOM_CONFIG);
   const [recruitment, setRecruitment] = useState<RecruitmentData>(DEFAULT_RECRUITMENT);
@@ -369,6 +384,139 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   };
 
+  const handleSyncRoKStats = async () => {
+    if (syncLoading) return;
+    const token =
+      localStorage.getItem('kd_gh_token')?.trim() ||
+      (import.meta.env.VITE_GH_TOKEN as string | undefined)?.trim() ||
+      '';
+
+    if (!token) {
+      setShowTokenModal(true);
+      return;
+    }
+
+    setSyncLoading(true);
+    setSaveMessage({
+      type: 'ok',
+      text:
+        lang === 'vi'
+          ? '🚀 Đang gửi lệnh kích hoạt đồng bộ lên GitHub Actions...'
+          : '🚀 Dispatching sync workflow to GitHub Actions...',
+    });
+
+    try {
+      const dispatchRes = await fetch(
+        'https://api.github.com/repos/kd2676/kd2676.github.io/actions/workflows/deploy.yml/dispatches',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+            'User-Agent': 'Kingdom-2676-App',
+          },
+          body: JSON.stringify({ ref: 'main' }),
+        }
+      );
+
+      if (!dispatchRes.ok) {
+        if (dispatchRes.status === 401 || dispatchRes.status === 403) {
+          setShowTokenModal(true);
+          throw new Error(
+            lang === 'vi'
+              ? 'GitHub Token không hợp lệ hoặc không có quyền dispatch workflow (HTTP 401/403).'
+              : 'Invalid GitHub Token or insufficient permissions (HTTP 401/403).'
+          );
+        }
+        throw new Error(`GitHub API Error: ${dispatchRes.status}`);
+      }
+
+      setSaveMessage({
+        type: 'ok',
+        text:
+          lang === 'vi'
+            ? '⏳ GitHub Actions đang chạy ngầm lấy dữ liệu từ RoKStats và cập nhật trang web... (ước tính 30-45s)'
+            : '⏳ GitHub Actions is running to sync RoKStats data and deploy... (~30-45s)',
+      });
+
+      const startTime = Date.now();
+      let completed = false;
+      let runSuccess = false;
+
+      while (Date.now() - startTime < 120_000) {
+        await new Promise((r) => setTimeout(r, 4000));
+        try {
+          const runsRes = await fetch(
+            'https://api.github.com/repos/kd2676/kd2676.github.io/actions/runs?per_page=1',
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'User-Agent': 'Kingdom-2676-App',
+              },
+            }
+          );
+          if (runsRes.ok) {
+            const runsData = (await runsRes.json()) as {
+              workflow_runs?: Array<{
+                id: number;
+                status: string;
+                conclusion: string | null;
+                created_at: string;
+              }>;
+            };
+            const latestRun = runsData.workflow_runs?.[0];
+            if (latestRun) {
+              const runCreatedAt = new Date(latestRun.created_at).getTime();
+              if (runCreatedAt >= startTime - 15000) {
+                if (latestRun.status === 'completed') {
+                  completed = true;
+                  runSuccess = latestRun.conclusion === 'success';
+                  break;
+                }
+              }
+            }
+          }
+        } catch {
+          // ignore transient poll error
+        }
+      }
+
+      if (completed && runSuccess) {
+        setSaveMessage({
+          type: 'ok',
+          text:
+            lang === 'vi'
+              ? '✅ Đồng bộ RoKStats thành công! Dữ liệu mới nhất đã được cập nhật lên trang web.'
+              : '✅ RoKStats sync completed successfully! Live data refreshed on website.',
+        });
+      } else if (completed && !runSuccess) {
+        setSaveMessage({
+          type: 'error',
+          text:
+            lang === 'vi'
+              ? '❌ Quá trình đồng bộ trên GitHub Actions bị lỗi.'
+              : '❌ GitHub Action failed during sync.',
+        });
+      } else {
+        setSaveMessage({
+          type: 'ok',
+          text:
+            lang === 'vi'
+              ? '✓ Lệnh đồng bộ đã gửi thành công. GitHub Actions đang hoàn tất quá trình xuất bản...'
+              : '✓ Sync dispatched successfully. GitHub is completing the build...',
+        });
+      }
+    } catch (err: any) {
+      setSaveMessage({
+        type: 'error',
+        text: err?.message || (lang === 'vi' ? 'Không thể kích hoạt đồng bộ' : 'Failed to trigger sync'),
+      });
+    } finally {
+      setSyncLoading(false);
+    }
+  };
+
   // =========================================================================
   // MÀN HÌNH ĐĂNG NHẬP BIỆT LẬP (USERNAME & PASSWORD)
   // =========================================================================
@@ -445,6 +593,28 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           </div>
         </div>
         <div className="admin-topbar-actions">
+          <button
+            type="button"
+            className={`btn-admin-sync ${syncLoading ? 'syncing' : ''}`}
+            onClick={handleSyncRoKStats}
+            disabled={syncLoading}
+            title={lang === 'vi' ? 'Kích hoạt lấy dữ liệu mới nhất từ RoKStats' : 'Trigger live sync from RoKStats'}
+          >
+            <span className={`sync-spin-icon ${syncLoading ? 'spinning' : ''}`}>↻</span>
+            <span>
+              {syncLoading
+                ? (lang === 'vi' ? 'Đang đồng bộ...' : 'Syncing...')
+                : (lang === 'vi' ? 'Đồng Bộ RoKStats' : 'Sync RoKStats')}
+            </span>
+          </button>
+          <button
+            type="button"
+            className="btn-token-config"
+            onClick={() => setShowTokenModal(true)}
+            title={lang === 'vi' ? 'Cấu hình GitHub Token' : 'Configure GitHub Token'}
+          >
+            🔑
+          </button>
           <span className="logged-in-user-tag">
             <strong>{currentUser}</strong>
             <span className={`user-role-mini-pill ${effectiveRole === 'R5 Leader' ? 'pill-r5' : effectiveRole === 'R4 Officer' ? 'pill-r4' : 'pill-admin'}`}>
@@ -909,6 +1079,90 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               ? (lang === 'vi' ? '⏳ Đang lưu dữ liệu lên Supabase...' : 'Saving to Supabase...')
               : (lang === 'vi' ? '💾 Lưu Tất Cả Thay Đổi Lên Supabase' : 'Save All Changes to Supabase')}
           </button>
+        </div>
+      )}
+
+      {/* MODAL CẤU HÌNH GITHUB TOKEN ĐỒNG BỘ */}
+      {showTokenModal && (
+        <div className="admin-modal-overlay" onClick={() => setShowTokenModal(false)}>
+          <div className="admin-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>🔑 {lang === 'vi' ? 'Cấu Hình GitHub Token Đồng Bộ' : 'Configure GitHub Sync Token'}</h3>
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={() => setShowTokenModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="admin-modal-body">
+              <p className="admin-modal-desc">
+                {lang === 'vi'
+                  ? 'Nút "Đồng Bộ RoKStats" sẽ gửi lệnh trực tiếp lên GitHub Actions để cào dữ liệu mới nhất. Token chỉ được lưu an toàn trong trình duyệt của bạn.'
+                  : 'The "Sync RoKStats" button dispatches a workflow to GitHub Actions to pull fresh game data. The token is stored safely in your browser.'}
+              </p>
+              <div className="form-group">
+                <label>GitHub Personal Access Token (PAT):</label>
+                <input
+                  type="password"
+                  className="admin-input"
+                  value={tokenInput}
+                  onChange={(e) => setTokenInput(e.target.value)}
+                  placeholder="ghp_... hoặc github_pat_..."
+                  autoFocus
+                />
+              </div>
+              <p className="admin-hint">
+                {lang === 'vi'
+                  ? '💡 Token cần quyền "Actions: Read & Write" trên repo kd2676.github.io.'
+                  : '💡 Token needs "Actions: Read & Write" permission on kd2676.github.io repo.'}
+              </p>
+            </div>
+            <div className="admin-modal-footer">
+              {tokenInput && (
+                <button
+                  type="button"
+                  className="btn-danger-outline"
+                  onClick={() => {
+                    setTokenInput('');
+                    try {
+                      localStorage.removeItem('kd_gh_token');
+                    } catch {}
+                    setShowTokenModal(false);
+                    setSaveMessage({
+                      type: 'ok',
+                      text: lang === 'vi' ? 'Đã xóa token khỏi trình duyệt.' : 'Token removed from browser.',
+                    });
+                  }}
+                >
+                  {lang === 'vi' ? 'Xóa Token' : 'Clear Token'}
+                </button>
+              )}
+              <button
+                type="button"
+                className="btn-modal-cancel"
+                onClick={() => setShowTokenModal(false)}
+              >
+                {lang === 'vi' ? 'Đóng' : 'Close'}
+              </button>
+              <button
+                type="button"
+                className="btn-modal-save"
+                onClick={() => {
+                  const cleaned = tokenInput.trim();
+                  if (!cleaned) return;
+                  try {
+                    localStorage.setItem('kd_gh_token', cleaned);
+                  } catch {}
+                  setShowTokenModal(false);
+                  void handleSyncRoKStats();
+                }}
+              >
+                {lang === 'vi' ? 'Lưu & Bắt Đầu Đồng Bộ' : 'Save & Start Sync'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
