@@ -351,7 +351,8 @@ export async function getAdminUsers(): Promise<AdminUser[]> {
 // Tạo tài khoản admin mới với mật khẩu mặc định là 'kd2676'
 export async function createAdminUser(
   username: string,
-  role: string = 'R4 Officer'
+  role: string = 'R4 Officer',
+  operatorRole?: string
 ): Promise<{ success: boolean; error?: string }> {
   const cleanUser = username.trim().toLowerCase();
   const cleanRole = role.trim();
@@ -369,6 +370,14 @@ export async function createAdminUser(
     return {
       success: false,
       error: 'Vai trò "Admin" là độc quyền duy nhất cho tài khoản admin gốc, không thể gán cho tài khoản khác!',
+    };
+  }
+
+  // Cán bộ R4 không được tạo tài khoản R5 Leader
+  if (operatorRole === 'R4 Officer' && cleanRole === 'R5 Leader') {
+    return {
+      success: false,
+      error: 'Cán bộ R4 chỉ có thể tạo tài khoản vai trò R4 Officer!',
     };
   }
 
@@ -393,10 +402,20 @@ export async function createAdminUser(
   }
 }
 
-// Xóa tài khoản admin
-export async function deleteAdminUser(id: string, username: string): Promise<{ success: boolean; error?: string }> {
+// Xóa tài khoản admin (R4 không được xóa R5)
+export async function deleteAdminUser(
+  id: string,
+  username: string,
+  operatorRole?: string,
+  targetRole?: string
+): Promise<{ success: boolean; error?: string }> {
   if (username.toLowerCase() === 'admin') {
     return { success: false, error: 'Không thể xóa tài khoản admin gốc!' };
+  }
+
+  // R4 không có quyền xóa R5 Leader hoặc Admin
+  if (operatorRole === 'R4 Officer' && (targetRole === 'R5 Leader' || targetRole === 'Admin')) {
+    return { success: false, error: 'Cán bộ R4 không có quyền xóa tài khoản R5 Leader!' };
   }
 
   try {

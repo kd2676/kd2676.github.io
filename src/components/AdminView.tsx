@@ -45,6 +45,14 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   });
 
+  const [currentUserRole, setCurrentUserRole] = useState<string>(() => {
+    try {
+      return sessionStorage.getItem('kd_admin_role') || (currentUser === 'admin' ? 'Admin' : 'R4 Officer');
+    } catch {
+      return currentUser === 'admin' ? 'Admin' : 'R4 Officer';
+    }
+  });
+
   const [usernameInput, setUsernameInput] = useState<string>('');
   const [pinInput, setPinInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
@@ -116,10 +124,12 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
       if (res.success && res.user) {
         setIsAuthenticated(true);
         setCurrentUser(res.user.username);
+        setCurrentUserRole(res.user.role);
         setPinInput('');
         try {
           sessionStorage.setItem('kd_admin_logged_in', 'true');
           sessionStorage.setItem('kd_admin_user', res.user.username);
+          sessionStorage.setItem('kd_admin_role', res.user.role);
         } catch {}
       } else {
         setLoginError(res.error || 'Invalid username or password!');
@@ -139,15 +149,22 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     try {
       sessionStorage.removeItem('kd_admin_logged_in');
       sessionStorage.removeItem('kd_admin_user');
+      sessionStorage.removeItem('kd_admin_role');
     } catch {}
   };
+
+  const currentAccount = adminUsers.find(
+    (u) => u.username.toLowerCase() === currentUser.toLowerCase()
+  );
+  const effectiveRole = currentAccount?.role || (currentUser.toLowerCase() === 'admin' ? 'Admin' : currentUserRole);
+  const isR4 = effectiveRole === 'R4 Officer';
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     setUserActionMsg(null);
     setUserCreating(true);
 
-    const res = await createAdminUser(newUserName, newUserRole);
+    const res = await createAdminUser(newUserName, newUserRole, effectiveRole);
     setUserCreating(false);
 
     if (res.success) {
@@ -168,12 +185,17 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   };
 
-  const handleDeleteUser = async (id: string, uname: string) => {
+  const handleDeleteUser = async (id: string, uname: string, targetRole?: string) => {
+    if (isR4 && (targetRole === 'R5 Leader' || targetRole === 'Admin')) {
+      alert(lang === 'vi' ? 'Cán bộ R4 không có quyền xóa tài khoản R5 Leader!' : 'R4 Officers cannot delete R5 Leader accounts!');
+      return;
+    }
+
     if (!window.confirm(lang === 'vi' ? `Bạn có chắc muốn xóa tài khoản "${uname}"?` : `Are you sure you want to delete user "${uname}"?`)) {
       return;
     }
 
-    const res = await deleteAdminUser(id, uname);
+    const res = await deleteAdminUser(id, uname, effectiveRole, targetRole);
     if (res.success) {
       setUserActionMsg({
         type: 'ok',
@@ -620,7 +642,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                   value={newUserRole}
                   onChange={(e) => setNewUserRole(e.target.value)}
                 >
-                  {OFFICER_ROLES.map((r) => (
+                  {(isR4 ? OFFICER_ROLES.filter((r) => r.id === 'R4 Officer') : OFFICER_ROLES).map((r) => (
                     <option key={r.id} value={r.id}>
                       {lang === 'vi' ? r.labelVi : r.labelEn}
                     </option>
@@ -669,17 +691,23 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                         </span>
                       </td>
                       <td>
-                        {u.username.toLowerCase() !== 'admin' ? (
+                        {u.username.toLowerCase() === 'admin' ? (
+                          <span className="root-admin-badge">{lang === 'vi' ? '👑 Admin Duy Nhất' : '👑 System Admin'}</span>
+                        ) : u.username.toLowerCase() === currentUser.toLowerCase() ? (
+                          <span className="self-account-badge">{lang === 'vi' ? 'Đang dùng' : 'Current Account'}</span>
+                        ) : isR4 && (u.role === 'R5 Leader' || u.role === 'Admin') ? (
+                          <span className="no-perm-badge" title={lang === 'vi' ? 'R4 không có quyền xóa R5 Leader' : 'R4 cannot delete R5 Leader'}>
+                            🔒 {lang === 'vi' ? 'Cần quyền R5' : 'R5+ Only'}
+                          </span>
+                        ) : (
                           <button
                             type="button"
                             className="btn-del-user"
-                            onClick={() => handleDeleteUser(u.id, u.username)}
+                            onClick={() => handleDeleteUser(u.id, u.username, u.role)}
                             title="Xóa tài khoản này"
                           >
                             🗑️ {lang === 'vi' ? 'Xóa' : 'Delete'}
                           </button>
-                        ) : (
-                          <span className="root-admin-badge">{lang === 'vi' ? '👑 Admin Duy Nhất' : '👑 System Admin'}</span>
                         )}
                       </td>
                     </tr>

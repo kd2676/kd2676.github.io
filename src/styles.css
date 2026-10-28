@@ -6687,3 +6687,33 @@ footer {
   font-weight: 700;
   color: #38bdf8;
 }
+
+
+/* =========================================================
+   PERMISSION BADGES IN ADMIN USER TABLE
+   ========================================================= */
+
+.no-perm-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fbbf24;
+  padding: 4px 10px;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 6px;
+  border: 1px dashed rgba(245, 158, 11, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.self-account-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #38bdf8;
+  padding: 4px 9px;
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  display: inline-flex;
+  align-items: center;
+}
