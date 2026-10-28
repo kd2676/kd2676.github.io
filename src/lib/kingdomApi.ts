@@ -373,11 +373,11 @@ export async function createAdminUser(
     };
   }
 
-  // Cán bộ R4 không được tạo tài khoản R5 Leader
-  if (operatorRole === 'R4 Officer' && cleanRole === 'R5 Leader') {
+  // Cán bộ R4 không có quyền tạo tài khoản admin
+  if (operatorRole === 'R4 Officer') {
     return {
       success: false,
-      error: 'Cán bộ R4 chỉ có thể tạo tài khoản vai trò R4 Officer!',
+      error: 'Cán bộ R4 không có quyền tạo tài khoản admin!',
     };
   }
 
@@ -413,9 +413,14 @@ export async function deleteAdminUser(
     return { success: false, error: 'Không thể xóa tài khoản admin gốc!' };
   }
 
-  // R4 không có quyền xóa R5 Leader hoặc Admin
-  if (operatorRole === 'R4 Officer' && (targetRole === 'R5 Leader' || targetRole === 'Admin')) {
-    return { success: false, error: 'Cán bộ R4 không có quyền xóa tài khoản R5 Leader!' };
+  // R4 không có quyền xóa bất kỳ tài khoản nào
+  if (operatorRole === 'R4 Officer') {
+    return { success: false, error: 'Cán bộ R4 không có quyền xóa tài khoản!' };
+  }
+
+  // R5 không thể xóa R5 Leader khác hoặc Admin
+  if (operatorRole === 'R5 Leader' && (targetRole === 'R5 Leader' || targetRole === 'Admin')) {
+    return { success: false, error: 'R5 Leader chỉ có thể xóa tài khoản R4 Officer!' };
   }
 
   try {

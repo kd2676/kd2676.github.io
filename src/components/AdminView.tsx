@@ -611,7 +611,8 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
             </div>
           )}
 
-          {/* FORM TẠO USER MỚI */}
+          {/* FORM TẠO USER MỚI (CHỈ R5 LEADER VÀ ADMIN MỚI THẤY) */}
+          {!isR4 && (
           <div className="create-user-section">
             <h4 className="sub-title">
               {lang === 'vi' ? '+ Thêm Tài Khoản Admin Mới' : '+ Add New Admin User'}
@@ -658,6 +659,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               </div>
             </form>
           </div>
+          )}
 
           {/* DANH SÁCH USER HIỆN CÓ */}
           <div className="existing-users-section">
@@ -691,24 +693,29 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                         </span>
                       </td>
                       <td>
-                        {u.username.toLowerCase() === 'admin' ? (
-                          <span className="root-admin-badge">{lang === 'vi' ? '👑 Admin Duy Nhất' : '👑 System Admin'}</span>
-                        ) : u.username.toLowerCase() === currentUser.toLowerCase() ? (
-                          <span className="self-account-badge">{lang === 'vi' ? 'Đang dùng' : 'Current Account'}</span>
-                        ) : isR4 && (u.role === 'R5 Leader' || u.role === 'Admin') ? (
-                          <span className="no-perm-badge" title={lang === 'vi' ? 'R4 không có quyền xóa R5 Leader' : 'R4 cannot delete R5 Leader'}>
-                            🔒 {lang === 'vi' ? 'Cần quyền R5' : 'R5+ Only'}
-                          </span>
-                        ) : (
-                          <button
-                            type="button"
-                            className="btn-del-user"
-                            onClick={() => handleDeleteUser(u.id, u.username, u.role)}
-                            title="Xóa tài khoản này"
-                          >
-                            🗑️ {lang === 'vi' ? 'Xóa' : 'Delete'}
-                          </button>
-                        )}
+                        {(() => {
+                          const isTargetRoot = u.username.toLowerCase() === 'admin';
+                          const isSelf = u.username.toLowerCase() === currentUser.toLowerCase();
+                          const canDelete =
+                            !isTargetRoot &&
+                            !isSelf &&
+                            !isR4 &&
+                            (effectiveRole === 'Admin' || (effectiveRole === 'R5 Leader' && u.role === 'R4 Officer'));
+
+                          if (canDelete) {
+                            return (
+                              <button
+                                type="button"
+                                className="btn-del-user"
+                                onClick={() => handleDeleteUser(u.id, u.username, u.role)}
+                                title={lang === 'vi' ? 'Xóa tài khoản này' : 'Delete'}
+                              >
+                                🗑️ {lang === 'vi' ? 'Xóa' : 'Delete'}
+                              </button>
+                            );
+                          }
+                          return <span className="no-action-dash">—</span>;
+                        })()}
                       </td>
                     </tr>
                   ))}
