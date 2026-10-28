@@ -3286,38 +3286,131 @@ footer {
 
 .rok-line {
   position: relative;
-  height: 4.5px;
+  height: 5px;
   width: 100%;
-  background: #1c273e;
   border-radius: 3px;
-  overflow: hidden;
   display: flex;
 }
 
 .rok-line.top-line {
+  background: transparent;
   gap: 2px;
+  overflow: visible;
+  z-index: 20;
+}
+
+.rok-line.bottom-line {
+  background: #1c273e;
+  overflow: hidden;
+  height: 5px;
 }
 
 .rok-segment.orange {
   height: 100%;
   background: #ea580c;
   border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.rok-segment.orange:hover {
+  filter: brightness(1.25);
 }
 
 .rok-segment.purple {
   height: 100%;
-  background: #a855f7;
+  background: #9333ea;
   border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+  transition: filter 0.2s ease;
 }
 
-.rok-line.bottom-line {
-  background: #1c273e;
+.rok-segment.purple:hover {
+  filter: brightness(1.25);
 }
 
 .rok-segment.blue {
   height: 100%;
   background: #0284c7;
   border-radius: 2px;
+}
+
+/* Battle & Immigration Phase Tooltips */
+.phase-tooltip-trigger {
+  position: relative;
+}
+
+.phase-tooltip {
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(13, 18, 30, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  padding: 6px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+}
+
+.phase-tooltip-trigger:hover .phase-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.phase-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(13, 18, 30, 0.96) transparent transparent transparent;
+}
+
+/* Purple phase is at the far right edge: anchor right so tooltip stays on screen */
+.rok-segment.purple .phase-tooltip {
+  left: auto;
+  right: 0;
+  transform: translateY(4px);
+}
+
+.rok-segment.purple:hover .phase-tooltip {
+  transform: translateY(0);
+}
+
+.rok-segment.purple .phase-tooltip::after {
+  left: auto;
+  right: 8px;
+  transform: none;
+}
+
+.tooltip-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.2;
+}
+
+.tooltip-dates {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.2;
 }
 
 .rok-dates-row {
@@ -3477,107 +3570,164 @@ footer {
   line-height: 1;
 }
 
+.chronicle-card {
+  background: rgba(18, 24, 38, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  min-width: 135px;
+  max-width: 148px;
+  padding: 10px 10px 12px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  user-select: none;
+}
+
 .chronicle-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(56, 189, 248, 0.6);
-  background: linear-gradient(180deg, #203050 0%, #16243c 100%);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.25);
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(28, 36, 56, 0.88);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 .chronicle-card.active {
-  border-color: rgba(16, 185, 129, 0.85);
-  background: linear-gradient(180deg, #133232 0%, #0d2226 100%);
-  box-shadow: 0 0 22px rgba(16, 185, 129, 0.32), inset 0 0 0 1px rgba(16, 185, 129, 0.4);
+  border-color: rgba(16, 185, 129, 0.8);
+  background: rgba(19, 50, 50, 0.85);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.28);
 }
 
+/* Card Top Track with Connected Circular Emblem */
 .card-top-track {
+  display: flex;
+  align-items: center;
   position: relative;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  overflow: hidden;
+  width: 100%;
+  height: 22px;
 }
 
-.card-track-fill {
-  height: 100%;
-  border-radius: 99px;
+.card-track-line {
+  flex: 1;
+  height: 3.5px;
+  border-radius: 99px 0 0 99px;
+  background: #232d42;
+  margin-right: -2px;
 }
 
-.card-track-fill.completed {
+.card-track-line.green {
+  background: #10b981;
+}
+
+.card-track-line.purple {
+  background: #8b5cf6;
+}
+
+.card-track-line.amber {
   background: #f59e0b;
 }
 
-.card-track-fill.active {
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
+.card-track-line.grey {
+  background: #232d42;
 }
 
-.card-track-fill.upcoming {
-  background: rgba(245, 158, 11, 0.45);
+.card-track-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+  border: 2px solid #334155;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card-track-fill.locked {
+.chronicle-card:hover .card-track-circle {
+  transform: scale(1.1);
+}
+
+.card-track-circle.green {
+  border-color: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.card-track-circle.purple {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}
+
+.card-track-circle.amber {
+  border-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+.card-track-circle.grey {
+  border-color: #334155;
+}
+
+.track-circle-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.track-circle-empty {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: transparent;
 }
 
 .card-body {
-  padding: 11px 13px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-  flex: 1;
-}
-
-.card-text {
   display: flex;
   flex-direction: column;
+  gap: 2.5px;
   min-width: 0;
-  gap: 3px;
-  flex: 1;
 }
 
 .card-name {
-  font: 800 13px 'Manrope', sans-serif;
-  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  color: #f8fafc;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 
 .card-sub {
-  font: 600 11.5px 'Manrope', sans-serif;
-  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 2px;
+  line-height: 1.2;
 }
 
 .card-date {
-  font: 700 11px 'JetBrains Mono', monospace;
-  color: #93c5fd;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  padding: 2.5px 7px;
-  border-radius: 4px;
-  margin-top: 6px;
-  display: inline-block;
-  align-self: flex-start;
-  letter-spacing: 0.02em;
-}
-
-.card-icon-wrap {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
   margin-top: 2px;
 }
 
-.chronicle-crest-icon {
-  font-size: 19px;
-  line-height: 1;
+.modal-stage-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
 
