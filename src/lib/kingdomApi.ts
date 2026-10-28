@@ -41,7 +41,7 @@ export const DEFAULT_KINGDOM_CONFIG: KingdomConfig = {
 
 export const DEFAULT_RECRUITMENT: RecruitmentData = {
   kingdom_id: '2676',
-  title: 'Chiêu Mộ Chiến Binh Mùa Giải Mới · Kingdom 2676',
+  title: 'New Season Warriors Recruitment · Kingdom 2676',
   status: 'open',
   poster_url: '',
   discord_url: 'https://discord.gg/',

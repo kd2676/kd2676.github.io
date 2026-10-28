@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.kingdom_config (
 CREATE TABLE IF NOT EXISTS public.recruitment (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     kingdom_id TEXT NOT NULL, -- Dùng chung bảng, phân biệt qua kingdom_id
-    title TEXT NOT NULL DEFAULT 'Chiêu Mộ Chiến Binh · Season of Conquest',
+    title TEXT NOT NULL DEFAULT 'New Season Warriors Recruitment · Kingdom 2676',
     status TEXT NOT NULL DEFAULT 'open', -- 'open' (Đang mở) hoặc 'closed' (Tạm đóng)
     poster_url TEXT DEFAULT '',
     discord_url TEXT DEFAULT '',
@@ -55,7 +55,7 @@ SET tagline = EXCLUDED.tagline,
 INSERT INTO public.recruitment (kingdom_id, title, status, poster_url, min_power, min_kp, min_dead, discord_url, content)
 VALUES (
     '2676',
-    'Chiêu Mộ Chiến Binh Mùa Giải Mới · Kingdom 2676',
+    'New Season Warriors Recruitment · Kingdom 2676',
     'open',
     '',
     '60,000,000',
