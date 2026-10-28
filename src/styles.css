@@ -6312,3 +6312,45 @@ footer {
   align-items: center;
   gap: 14px;
 }
+
+
+/* =========================================================
+   RECRUITMENT VIEW: DISCORD FIRST & FULL POSTER SHOWCASE
+   ========================================================= */
+
+.discord-cta-card.prominent {
+  width: 100%;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, rgba(88, 101, 242, 0.25) 0%, rgba(19, 26, 42, 0.85) 100%);
+  border: 1px solid rgba(88, 101, 242, 0.6);
+  box-shadow: 0 8px 32px rgba(88, 101, 242, 0.22);
+  padding: 22px 28px;
+}
+
+.recruitment-poster-card.full-showcase {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  border: 1.5px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+.poster-wrapper.full-poster-wrapper {
+  min-height: 480px;
+  background: #060911;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recruitment-poster-img.full-img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.poster-placeholder.wide {
+  padding: 70px 24px;
+  gap: 16px;
+}

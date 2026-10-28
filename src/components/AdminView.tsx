@@ -194,50 +194,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   };
 
-  const handleAddPerk = () => {
-    setRecruitment((prev) => ({
-      ...prev,
-      perks: [...prev.perks, ''],
-    }));
-  };
-
-  const handleRemovePerk = (index: number) => {
-    setRecruitment((prev) => ({
-      ...prev,
-      perks: prev.perks.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handlePerkChange = (index: number, val: string) => {
-    setRecruitment((prev) => {
-      const next = [...prev.perks];
-      next[index] = val;
-      return { ...prev, perks: next };
-    });
-  };
-
-  const handleAddReq = () => {
-    setRecruitment((prev) => ({
-      ...prev,
-      requirements: [...prev.requirements, ''],
-    }));
-  };
-
-  const handleRemoveReq = (index: number) => {
-    setRecruitment((prev) => ({
-      ...prev,
-      requirements: prev.requirements.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleReqChange = (index: number, val: string) => {
-    setRecruitment((prev) => {
-      const next = [...prev.requirements];
-      next[index] = val;
-      return { ...prev, requirements: next };
-    });
-  };
-
   const handleSaveAll = async () => {
     setSaving(true);
     setSaveMessage(null);
@@ -528,7 +484,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
       {dashboardTab === 'recruitment' && (
         <div className="admin-card">
           <div className="admin-card-header">
-            <h3>📢 {lang === 'vi' ? 'Bài Viết Tuyển Dụng & Poster' : 'Recruitment & Poster'}</h3>
+            <h3>📢 {lang === 'vi' ? 'Cài Đặt Tuyển Dụng, Discord & Poster' : 'Recruitment, Discord & Poster'}</h3>
             <span className="section-pill">Recruitment</span>
           </div>
 
@@ -553,12 +509,23 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           </div>
 
           <div className="form-group">
-            <label>{lang === 'vi' ? 'Tiêu Đề Bài Tuyển Dụng' : 'Recruitment Title'}</label>
+            <label>{lang === 'vi' ? 'Tiêu Đề Trang Tuyển Dụng' : 'Recruitment Title'}</label>
             <input
               type="text"
               className="admin-input"
               value={recruitment.title}
               onChange={(e) => setRecruitment({ ...recruitment, title: e.target.value })}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>{lang === 'vi' ? 'Đường Dẫn Discord Tuyển Dụng (Hiện ở đầu trang)' : 'Discord Invite Link'}</label>
+            <input
+              type="text"
+              className="admin-input"
+              value={recruitment.discord_url}
+              onChange={(e) => setRecruitment({ ...recruitment, discord_url: e.target.value })}
+              placeholder="https://discord.gg/..."
             />
           </div>
 
@@ -596,118 +563,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                 />
               </div>
             </div>
-          </div>
-
-          {/* 4 TIÊU CHUẨN */}
-          <div className="criteria-inputs-grid">
-            <div className="form-group">
-              <label>{lang === 'vi' ? 'Power Tối Thiểu' : 'Min Power'}</label>
-              <input
-                type="text"
-                className="admin-input"
-                value={recruitment.min_power}
-                onChange={(e) => setRecruitment({ ...recruitment, min_power: e.target.value })}
-                placeholder="60,000,000"
-              />
-            </div>
-            <div className="form-group">
-              <label>{lang === 'vi' ? 'Kill Points Tối Thiểu' : 'Min KP'}</label>
-              <input
-                type="text"
-                className="admin-input"
-                value={recruitment.min_kp}
-                onChange={(e) => setRecruitment({ ...recruitment, min_kp: e.target.value })}
-                placeholder="300,000,000"
-              />
-            </div>
-            <div className="form-group">
-              <label>{lang === 'vi' ? 'Dead Tối Thiểu' : 'Min Dead'}</label>
-              <input
-                type="text"
-                className="admin-input"
-                value={recruitment.min_dead}
-                onChange={(e) => setRecruitment({ ...recruitment, min_dead: e.target.value })}
-                placeholder="3,000,000"
-              />
-            </div>
-            <div className="form-group">
-              <label>{lang === 'vi' ? 'Ngôn Ngữ Ưu Tiên' : 'Language'}</label>
-              <input
-                type="text"
-                className="admin-input"
-                value={recruitment.preferred_language}
-                onChange={(e) => setRecruitment({ ...recruitment, preferred_language: e.target.value })}
-                placeholder="Tiếng Việt / English"
-              />
-            </div>
-          </div>
-
-          {/* NỘI DUNG BÀI VIẾT */}
-          <div className="form-group">
-            <label>{lang === 'vi' ? 'Nội Dung Chi Tiết Bài Viết Chiêu Mộ' : 'Announcement Article Body'}</label>
-            <textarea
-              className="admin-textarea"
-              rows={6}
-              value={recruitment.content}
-              onChange={(e) => setRecruitment({ ...recruitment, content: e.target.value })}
-              placeholder="Viết bài kêu gọi, giới thiệu về văn hóa vương quốc..."
-            />
-          </div>
-
-          {/* QUYỀN LỢI (PERKS) */}
-          <div className="form-group">
-            <div className="split-label">
-              <label>{lang === 'vi' ? 'Quyền Lợi Vương Quốc' : 'Kingdom Perks'}</label>
-              <button type="button" className="btn-add-item" onClick={handleAddPerk}>
-                + {lang === 'vi' ? 'Thêm dòng' : 'Add perk'}
-              </button>
-            </div>
-            {recruitment.perks.map((item, idx) => (
-              <div key={idx} className="item-row">
-                <input
-                  type="text"
-                  className="admin-input-row"
-                  value={item}
-                  onChange={(e) => handlePerkChange(idx, e.target.value)}
-                  placeholder="Ví dụ: Phân chia MGE minh bạch..."
-                />
-                <button
-                  type="button"
-                  className="btn-del-item"
-                  onClick={() => handleRemovePerk(idx)}
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* YÊU CẦU & KỶ LUẬT (REQUIREMENTS) */}
-          <div className="form-group">
-            <div className="split-label">
-              <label>{lang === 'vi' ? 'Yêu Cầu & Kỷ Luật Chiến Đấu' : 'Rules & Requirements'}</label>
-              <button type="button" className="btn-add-item" onClick={handleAddReq}>
-                + {lang === 'vi' ? 'Thêm dòng' : 'Add requirement'}
-              </button>
-            </div>
-            {recruitment.requirements.map((item, idx) => (
-              <div key={idx} className="item-row">
-                <input
-                  type="text"
-                  className="admin-input-row"
-                  value={item}
-                  onChange={(e) => handleReqChange(idx, e.target.value)}
-                  placeholder="Ví dụ: Tham gia đầy đủ các trận then chốt..."
-                />
-                <button
-                  type="button"
-                  className="btn-del-item"
-                  onClick={() => handleRemoveReq(idx)}
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
           </div>
         </div>
       )}
