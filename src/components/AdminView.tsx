@@ -33,12 +33,10 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   });
 
-  // Login Card Tabs: 'login' | 'change-pin'
-  const [loginMode, setLoginMode] = useState<'login' | 'change-pin'>('login');
   const [pinInput, setPinInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
-  // Change PIN State (on Login screen)
+  // Change PIN State (inside dashboard)
   const [cpCurrentPin, setCpCurrentPin] = useState<string>('');
   const [cpNewPin, setCpNewPin] = useState<string>('');
   const [cpConfirmPin, setCpConfirmPin] = useState<string>('');
@@ -97,13 +95,13 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           sessionStorage.setItem('kd_admin_logged_in', 'true');
         } catch {}
       } else {
-        setLoginError(lang === 'vi' ? 'Mã PIN bảo vệ không chính xác!' : 'Invalid admin PIN!');
+        setLoginError('Invalid password!');
       }
     } catch {
       if (pinInput.trim() === 'kd2676admin') {
         setIsAuthenticated(true);
       } else {
-        setLoginError(lang === 'vi' ? 'Không thể xác thực mã PIN.' : 'Authentication failed.');
+        setLoginError('Authentication failed.');
       }
     } finally {
       setLoading(false);
@@ -236,138 +234,47 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
         <div className="admin-login-card">
           <div className="portal-brand-top">
             <img src="/logo.png" alt="Kingdom 2676" className="admin-portal-logo" />
-            <div className="admin-login-badge">
-              <span className="lock-icon">🔒</span> RESTRICTED ACCESS
-            </div>
             <h2>Kingdom 2676 Portal</h2>
-            <p className="admin-login-sub">
-              {lang === 'vi'
-                ? 'Cổng xác thực Ban Chỉ huy & R4/R5 Vương Quốc'
-                : 'Authorized Leadership Access · R4 / R5 Only'}
-            </p>
           </div>
 
-          {/* TAB CHUYỂN ĐỔI: ĐĂNG NHẬP / ĐỔI MẬT KHẨU */}
-          <div className="portal-subtabs-nav">
-            <button
-              type="button"
-              className={`portal-subtab-btn ${loginMode === 'login' ? 'active' : ''}`}
-              onClick={() => { setLoginMode('login'); setLoginError(''); }}
-            >
-              🔐 {lang === 'vi' ? 'Đăng Nhập' : 'Sign In'}
+          <form onSubmit={handleLogin} className="admin-login-form">
+            <div className="form-group">
+              <label>Select Kingdom</label>
+              <input
+                type="text"
+                className="admin-input"
+                value={selectedKd}
+                onChange={(e) => setSelectedKd(e.target.value)}
+                placeholder="2676"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                className="admin-input"
+                value={pinInput}
+                onChange={(e) => setPinInput(e.target.value)}
+                placeholder="Enter password..."
+                required
+              />
+            </div>
+
+            {loginError && <div className="admin-form-error">{loginError}</div>}
+
+            <button type="submit" className="admin-submit-btn" disabled={loading}>
+              {loading ? 'Verifying...' : 'Sign In'}
             </button>
-            <button
-              type="button"
-              className={`portal-subtab-btn ${loginMode === 'change-pin' ? 'active' : ''}`}
-              onClick={() => { setLoginMode('change-pin'); setCpError(''); setCpSuccess(''); }}
-            >
-              🔑 {lang === 'vi' ? 'Đổi Mật Khẩu' : 'Change Password'}
-            </button>
-          </div>
-
-          {/* FORM 1: ĐĂNG NHẬP */}
-          {loginMode === 'login' ? (
-            <form onSubmit={handleLogin} className="admin-login-form">
-              <div className="form-group">
-                <label>{lang === 'vi' ? 'Chọn Vương Quốc (Kingdom ID)' : 'Select Kingdom'}</label>
-                <input
-                  type="text"
-                  className="admin-input"
-                  value={selectedKd}
-                  onChange={(e) => setSelectedKd(e.target.value)}
-                  placeholder="2676"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>{lang === 'vi' ? 'Mã PIN / Mật khẩu Quản trị' : 'Admin Passcode / PIN'}</label>
-                <input
-                  type="password"
-                  className="admin-input"
-                  value={pinInput}
-                  onChange={(e) => setPinInput(e.target.value)}
-                  placeholder={lang === 'vi' ? 'Nhập mã PIN...' : 'Enter PIN...'}
-                  required
-                />
-              </div>
-
-              {loginError && <div className="admin-form-error">{loginError}</div>}
-
-              <button type="submit" className="admin-submit-btn" disabled={loading}>
-                {loading
-                  ? (lang === 'vi' ? 'Đang xác thực...' : 'Verifying...')
-                  : (lang === 'vi' ? 'Đăng Nhập Quản Trị' : 'Sign In as Admin')}
-              </button>
-            </form>
-          ) : (
-            /* FORM 2: ĐỔI MẬT KHẨU TRỰC TIẾP TẠI TRANG ĐĂNG NHẬP */
-            <form onSubmit={handleChangePinOnLogin} className="admin-login-form">
-              <div className="form-group">
-                <label>{lang === 'vi' ? 'Vương Quốc (Kingdom ID)' : 'Kingdom ID'}</label>
-                <input
-                  type="text"
-                  className="admin-input"
-                  value={selectedKd}
-                  onChange={(e) => setSelectedKd(e.target.value)}
-                  placeholder="2676"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>{lang === 'vi' ? 'Mã PIN Hiện Tại' : 'Current Admin PIN'}</label>
-                <input
-                  type="password"
-                  className="admin-input"
-                  value={cpCurrentPin}
-                  onChange={(e) => setCpCurrentPin(e.target.value)}
-                  placeholder={lang === 'vi' ? 'Nhập mã PIN hiện tại...' : 'Enter current PIN...'}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>{lang === 'vi' ? 'Mã PIN Mới' : 'New Admin PIN'}</label>
-                <input
-                  type="password"
-                  className="admin-input"
-                  value={cpNewPin}
-                  onChange={(e) => setCpNewPin(e.target.value)}
-                  placeholder={lang === 'vi' ? 'Nhập mã PIN mới...' : 'Enter new PIN...'}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>{lang === 'vi' ? 'Xác Nhận Mã PIN Mới' : 'Confirm New PIN'}</label>
-                <input
-                  type="password"
-                  className="admin-input"
-                  value={cpConfirmPin}
-                  onChange={(e) => setCpConfirmPin(e.target.value)}
-                  placeholder={lang === 'vi' ? 'Nhập lại mã PIN mới...' : 'Confirm new PIN...'}
-                  required
-                />
-              </div>
-
-              {cpError && <div className="admin-form-error">{cpError}</div>}
-              {cpSuccess && <div className="admin-form-success">{cpSuccess}</div>}
-
-              <button type="submit" className="admin-submit-btn" disabled={cpLoading}>
-                {cpLoading
-                  ? (lang === 'vi' ? 'Đang cập nhật...' : 'Updating...')
-                  : (lang === 'vi' ? 'Cập Nhật Mật Khẩu' : 'Update Password')}
-              </button>
-            </form>
-          )}
+          </form>
 
           <button
             type="button"
             className="admin-back-btn"
             onClick={onNavigateHome}
           >
-            ← {lang === 'vi' ? 'Quay lại Kingdom 2676' : 'Back to Kingdom 2676 Dashboard'}
+            ← Back to Kingdom 2676 Dashboard
           </button>
         </div>
       </div>
@@ -650,37 +557,37 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
 
           <form onSubmit={handleChangePinOnLogin} className="admin-login-form">
             <div className="form-group">
-              <label>{lang === 'vi' ? 'Mã PIN / Mật Khẩu Hiện Tại' : 'Current Admin PIN'}</label>
+              <label>{lang === 'vi' ? 'Mật Khẩu Hiện Tại' : 'Current Password'}</label>
               <input
                 type="password"
                 className="admin-input"
                 value={cpCurrentPin}
                 onChange={(e) => setCpCurrentPin(e.target.value)}
-                placeholder="Nhập mã PIN hiện tại..."
+                placeholder={lang === 'vi' ? 'Nhập mật khẩu hiện tại...' : 'Enter current password...'}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label>{lang === 'vi' ? 'Mã PIN / Mật Khẩu Mới' : 'New Admin PIN'}</label>
+              <label>{lang === 'vi' ? 'Mật Khẩu Mới' : 'New Password'}</label>
               <input
                 type="password"
                 className="admin-input"
                 value={cpNewPin}
                 onChange={(e) => setCpNewPin(e.target.value)}
-                placeholder="Nhập mã PIN mới (ít nhất 4 ký tự)..."
+                placeholder={lang === 'vi' ? 'Nhập mật khẩu mới (ít nhất 4 ký tự)...' : 'Enter new password...'}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label>{lang === 'vi' ? 'Xác Nhận Mã PIN Mới' : 'Confirm New PIN'}</label>
+              <label>{lang === 'vi' ? 'Xác Nhận Mật Khẩu Mới' : 'Confirm New Password'}</label>
               <input
                 type="password"
                 className="admin-input"
                 value={cpConfirmPin}
                 onChange={(e) => setCpConfirmPin(e.target.value)}
-                placeholder="Nhập lại mã PIN mới..."
+                placeholder={lang === 'vi' ? 'Nhập lại mật khẩu mới...' : 'Confirm new password...'}
                 required
               />
             </div>
@@ -689,7 +596,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
             {cpSuccess && <div className="admin-form-success">{cpSuccess}</div>}
 
             <button type="submit" className="admin-save-btn" disabled={cpLoading} style={{ width: 'fit-content', alignSelf: 'flex-start' }}>
-              {cpLoading ? '⏳ Đang đổi mật khẩu...' : '🔑 Cập Nhật Mật Khẩu'}
+              {cpLoading ? (lang === 'vi' ? '⏳ Đang đổi mật khẩu...' : 'Updating...') : (lang === 'vi' ? '🔑 Cập Nhật Mật Khẩu' : 'Update Password')}
             </button>
           </form>
         </div>

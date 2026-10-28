@@ -116,11 +116,6 @@ export function RecruitmentView({ lang, recruitment, config, loading }: Recruitm
               />
               <h3>Kingdom 2676</h3>
               <p>{config?.tagline || 'Zipporania · Continent of Egria · Chatsworth'}</p>
-              <div className="placeholder-motto">
-                {lang === 'vi'
-                  ? '« Đoàn kết tạo nên sức mạnh · Kỷ luật làm nên chiến thắng »'
-                  : '« Unity breeds power · Discipline achieves victory »'}
-              </div>
             </div>
           )}
         </div>
