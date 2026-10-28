@@ -13,7 +13,8 @@
         "Shapur I",
         "Choe Yeong"
       ],
-      "rankings": []
+      "rankings": [],
+      "troopType": "archer"
     },
     {
       "id": "mge_4aba898a434d9d95b55e41134b16cdd5",
@@ -138,7 +139,8 @@
           "avatar": "https://plat-fau-global.lilithgame.com/p/IM/10043/0/12352/2024-10-28/64166365C433E5E634F0E4DEDE8524B4_250x250.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_206.png"
         }
-      ]
+      ],
+      "troopType": "infantry"
     },
     {
       "id": "mge_b0ab2eb6ef3adb4a2f940262a014599e",
@@ -263,7 +265,8 @@
           "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/99997081/2026-08-12/10C66F8D1FB59D39345DF21A219DCC42_250x250.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_26.png"
         }
-      ]
+      ],
+      "troopType": "cavalry"
     },
     {
       "id": "mge_dbd3e96edc6c6fa0c6e4aabea7072ae7",
@@ -388,7 +391,8 @@
           "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/23367866/2026-02-06/E48656FD3C404A4DFD150BBE242B7F53_250x250.jpg",
           "avatarFrame": "https://imimg.lilithcdn.com/roc/img_AvatarFrame_259.png"
         }
-      ]
+      ],
+      "troopType": "leadership"
     },
     {
       "id": "mge_9c2b11f709e7dfa1cff3e99d627d0b73",
@@ -511,7 +515,8 @@
           "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/11405035/2026-07-16/897C5167B2FA69B6F270DD9A887BB9F3_250x250.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_252.png"
         }
-      ]
+      ],
+      "troopType": "leadership"
     },
     {
       "id": "mge_6d06d4b71cc18e31e3d64a4fa872c733",
@@ -636,7 +641,8 @@
           "avatar": "http://imimg.lilithcdn.com/roc/img_player_head08.png",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_ProfileBg220x220_a.png"
         }
-      ]
+      ],
+      "troopType": "infantry"
     },
     {
       "id": "mge_e93d67c0fcbf72ea8703190402f1fe0a",
@@ -761,7 +767,8 @@
           "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/18366/2026-08-11/E1F252A5A0D192D4B1EC83424AD215EC_250x250.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_233.png"
         }
-      ]
+      ],
+      "troopType": "cavalry"
     },
     {
       "id": "mge_01985a2fa67d02d027e2c09b05a23838",
@@ -886,7 +893,8 @@
           "avatar": "https://plat-fau-global.lilithgame.com/p/astc/IM/10043/0/97211442/2026-05-09/11A7E21B44F9CEEDE9C82FE0C441281F_250x250.jpg",
           "avatarFrame": "http://imimg.lilithcdn.com/roc/img_AvatarFrame_105.png"
         }
-      ]
+      ],
+      "troopType": "leadership"
     }
   ]
 }

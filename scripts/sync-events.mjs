@@ -20,6 +20,65 @@ function formatMgeDates(openAt, endAt) {
   return `${months[s.getUTCMonth()]} ${s.getUTCDate()}, ${s.getUTCFullYear()} — ${months[e.getUTCMonth()]} ${e.getUTCDate()}, ${e.getUTCFullYear()}`;
 }
 
+const COMMANDER_TROOP_TYPES = {
+  // Archer
+  'hayam wuruk': 'archer', 'shapur i': 'archer', 'choe yeong': 'archer',
+  'ashurbanipal': 'archer', 'dido': 'archer', 'henry v': 'archer',
+  'amanitore': 'archer', 'nebuchadnezzar ii': 'archer', 'nebuchadnezzar': 'archer',
+  'artemisia i': 'archer', 'artemisia': 'archer', 'tomyris': 'archer',
+  'edward of woodstock': 'archer', 'edward': 'archer', 'yi seong-gye': 'archer', 'ysg': 'archer',
+  'el cid': 'archer', 'zhuge liang': 'archer', 'boudica prime': 'archer', 'hermann prime': 'archer',
+
+  // Infantry
+  'ivar': 'infantry', 'ivar the boneless': 'infantry', 'gorgo': 'infantry',
+  'tokugawa ieyasu': 'infantry', 'tokugawa': 'infantry', 'scipio aemilianus': 'infantry',
+  'scipio africanus prime': 'infantry', 'scipio prime': 'infantry',
+  'zenobia': 'infantry', 'constantine i': 'infantry', 'constantine': 'infantry',
+  'pakal': 'infantry', 'flavius': 'infantry', 'guan yu': 'infantry',
+  'alexander the great': 'infantry', 'alexander': 'infantry', 'richard i': 'infantry',
+  'charles martel': 'infantry', 'leonidas i': 'infantry', 'leonidas': 'infantry',
+  'cheok jun-gyeong': 'infantry', 'tariq': 'infantry', 'sargon': 'infantry',
+  'liu che': 'infantry', 'arthur': 'infantry',
+
+  // Cavalry
+  'david iv': 'cavalry', 'david': 'cavalry', 'attila': 'cavalry', 'subutai': 'cavalry',
+  'chandragupta': 'cavalry', 'takeda shingen': 'cavalry', 'takeda': 'cavalry',
+  'saladin': 'cavalry', 'genghis khan': 'cavalry', 'minamoto no yoshitsune': 'cavalry',
+  'minamoto': 'cavalry', 'cao cao': 'cavalry', 'william i': 'cavalry',
+  'bertrand': 'cavalry', 'nevsky': 'cavalry', 'joan of arc prime': 'cavalry',
+  'joan prime': 'cavalry', 'huo qubing': 'cavalry', 'justinian i': 'cavalry',
+
+  // Leadership
+  'william marshal': 'leadership', 'vercingetorix': 'leadership', 'heraclius': 'leadership',
+  'matthias i': 'leadership', 'theodora': 'leadership', 'wu zetian': 'leadership',
+  'trajan': 'leadership', 'mehmed ii': 'leadership', 'julius caesar': 'leadership',
+  'frederick i': 'leadership', 'charlemagne': 'leadership', 'moctezuma i': 'leadership',
+  'babur': 'leadership', 'pyrrhus': 'leadership', 'themistocles': 'leadership'
+};
+
+function detectTroopType(commanders) {
+  if (!commanders || commanders.length === 0) return null;
+  const counts = { archer: 0, infantry: 0, cavalry: 0, leadership: 0 };
+  for (const c of commanders) {
+    const norm = String(c).toLowerCase().trim();
+    for (const [key, type] of Object.entries(COMMANDER_TROOP_TYPES)) {
+      if (norm.includes(key)) {
+        counts[type]++;
+        break;
+      }
+    }
+  }
+  let maxType = null;
+  let maxCount = 0;
+  for (const [t, cnt] of Object.entries(counts)) {
+    if (cnt > maxCount) {
+      maxCount = cnt;
+      maxType = t;
+    }
+  }
+  return maxType;
+}
+
 function parseScore(val) {
   if (!val) return 0;
   try {
@@ -125,6 +184,7 @@ export async function fetchAndSyncMge(requestHeaders = headers) {
       dates: formatMgeDates(ev.openAt, ev.endAt),
       status,
       commanders,
+      troopType: detectTroopType(commanders) || 'archer',
       rankings
     });
   }

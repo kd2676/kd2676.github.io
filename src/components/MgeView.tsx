@@ -3,6 +3,8 @@ import { GovernorAvatar } from './GovernorAvatar';
 import { CopyIdButton } from './CopyIdButton';
 import type { Lang } from '../i18n';
 
+export type TroopType = 'archer' | 'infantry' | 'cavalry' | 'leadership';
+
 export type MgeRankingRow = {
   rank: number;
   governorId: string;
@@ -23,6 +25,7 @@ export type MgeEvent = {
   dates: string;
   status: 'upcoming' | 'closed' | 'finished' | 'active';
   commanders: string[];
+  troopType?: TroopType;
   rankings: MgeRankingRow[];
 };
 
@@ -33,6 +36,66 @@ interface MgeViewProps {
   lang: Lang;
   i18n: any;
   fmt: Intl.NumberFormat;
+}
+
+export const COMMANDER_TROOP_MAP: Record<string, TroopType> = {
+  // Archer (Cung thủ)
+  'hayam wuruk': 'archer', 'shapur i': 'archer', 'choe yeong': 'archer',
+  'ashurbanipal': 'archer', 'dido': 'archer', 'henry v': 'archer',
+  'amanitore': 'archer', 'nebuchadnezzar ii': 'archer', 'nebuchadnezzar': 'archer',
+  'artemisia i': 'archer', 'artemisia': 'archer', 'tomyris': 'archer',
+  'edward of woodstock': 'archer', 'edward': 'archer', 'yi seong-gye': 'archer', 'ysg': 'archer',
+  'el cid': 'archer', 'zhuge liang': 'archer', 'boudica prime': 'archer', 'hermann prime': 'archer',
+
+  // Infantry (Bộ binh)
+  'ivar': 'infantry', 'ivar the boneless': 'infantry', 'gorgo': 'infantry',
+  'tokugawa ieyasu': 'infantry', 'tokugawa': 'infantry', 'scipio aemilianus': 'infantry',
+  'scipio africanus prime': 'infantry', 'scipio prime': 'infantry',
+  'zenobia': 'infantry', 'constantine i': 'infantry', 'constantine': 'infantry',
+  'pakal': 'infantry', 'flavius': 'infantry', 'guan yu': 'infantry',
+  'alexander the great': 'infantry', 'alexander': 'infantry', 'richard i': 'infantry',
+  'charles martel': 'infantry', 'leonidas i': 'infantry', 'leonidas': 'infantry',
+  'cheok jun-gyeong': 'infantry', 'tariq': 'infantry', 'sargon': 'infantry',
+  'liu che': 'infantry', 'arthur': 'infantry',
+
+  // Cavalry (Kỵ binh)
+  'david iv': 'cavalry', 'david': 'cavalry', 'attila': 'cavalry', 'subutai': 'cavalry',
+  'chandragupta': 'cavalry', 'takeda shingen': 'cavalry', 'takeda': 'cavalry',
+  'saladin': 'cavalry', 'genghis khan': 'cavalry', 'minamoto no yoshitsune': 'cavalry',
+  'minamoto': 'cavalry', 'cao cao': 'cavalry', 'william i': 'cavalry',
+  'bertrand': 'cavalry', 'nevsky': 'cavalry', 'joan of arc prime': 'cavalry',
+  'joan prime': 'cavalry', 'huo qubing': 'cavalry', 'justinian i': 'cavalry',
+
+  // Leadership (Lãnh đạo)
+  'william marshal': 'leadership', 'vercingetorix': 'leadership', 'heraclius': 'leadership',
+  'matthias i': 'leadership', 'theodora': 'leadership', 'wu zetian': 'leadership',
+  'trajan': 'leadership', 'mehmed ii': 'leadership', 'julius caesar': 'leadership',
+  'frederick i': 'leadership', 'charlemagne': 'leadership', 'moctezuma i': 'leadership',
+  'babur': 'leadership', 'pyrrhus': 'leadership', 'themistocles': 'leadership'
+};
+
+export function detectMgeTroopType(commanders?: string[], explicit?: TroopType): TroopType {
+  if (explicit) return explicit;
+  if (!commanders || commanders.length === 0) return 'archer';
+  const counts: Record<TroopType, number> = { archer: 0, infantry: 0, cavalry: 0, leadership: 0 };
+  for (const c of commanders) {
+    const norm = String(c).toLowerCase().trim();
+    for (const [key, type] of Object.entries(COMMANDER_TROOP_MAP)) {
+      if (norm.includes(key)) {
+        counts[type]++;
+        break;
+      }
+    }
+  }
+  let maxType: TroopType = 'archer';
+  let maxCount = 0;
+  for (const [type, count] of Object.entries(counts) as [TroopType, number][]) {
+    if (count > maxCount) {
+      maxCount = count;
+      maxType = type;
+    }
+  }
+  return maxType;
 }
 
 export const MgeView: React.FC<MgeViewProps> = ({
@@ -72,6 +135,35 @@ export const MgeView: React.FC<MgeViewProps> = ({
         return (
           <span className="event-status-badge status-finished">
             {i18n.mge.finished}
+          </span>
+        );
+    }
+  };
+
+  const getTroopBadge = (troopType: TroopType) => {
+    switch (troopType) {
+      case 'archer':
+        return (
+          <span className="troop-pill troop-archer" title={lang === 'vi' ? 'Binh chủng: Cung thủ' : 'Troop type: Archer'}>
+            🏹 {lang === 'vi' ? 'Cung thủ' : 'Archer'}
+          </span>
+        );
+      case 'infantry':
+        return (
+          <span className="troop-pill troop-infantry" title={lang === 'vi' ? 'Binh chủng: Bộ binh' : 'Troop type: Infantry'}>
+            🛡️ {lang === 'vi' ? 'Bộ binh' : 'Infantry'}
+          </span>
+        );
+      case 'cavalry':
+        return (
+          <span className="troop-pill troop-cavalry" title={lang === 'vi' ? 'Binh chủng: Kỵ binh' : 'Troop type: Cavalry'}>
+            🐎 {lang === 'vi' ? 'Kỵ binh' : 'Cavalry'}
+          </span>
+        );
+      case 'leadership':
+        return (
+          <span className="troop-pill troop-leadership" title={lang === 'vi' ? 'Binh chủng: Lãnh đạo' : 'Troop type: Leadership'}>
+            👑 {lang === 'vi' ? 'Lãnh đạo' : 'Leadership'}
           </span>
         );
     }
@@ -118,6 +210,7 @@ export const MgeView: React.FC<MgeViewProps> = ({
         <div className="event-pills-grid" role="tablist" aria-label="MGE Events">
           {events.map((ev, idx) => {
             const isSelected = ev.id === currentEvent?.id;
+            const troopType = detectMgeTroopType(ev.commanders, ev.troopType);
             return (
               <button
                 key={ev.id}
@@ -133,11 +226,7 @@ export const MgeView: React.FC<MgeViewProps> = ({
                 </div>
                 <div className="event-pill-bottom">
                   {getStatusBadge(ev.status)}
-                  {ev.commanders.length > 0 && (
-                    <span className="event-pill-cmd" title={ev.commanders.join(', ')}>
-                      {ev.commanders[0]}
-                    </span>
-                  )}
+                  {getTroopBadge(troopType)}
                 </div>
               </button>
             );
@@ -152,6 +241,7 @@ export const MgeView: React.FC<MgeViewProps> = ({
             <div className="banner-title-row">
               <h3 className="selected-event-title">{currentEvent.title}</h3>
               {getStatusBadge(currentEvent.status)}
+              {getTroopBadge(detectMgeTroopType(currentEvent.commanders, currentEvent.troopType))}
             </div>
             <p className="selected-event-dates">
               <span className="calendar-icon">📅</span> {currentEvent.dates}
@@ -197,7 +287,7 @@ export const MgeView: React.FC<MgeViewProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {currentEvent.rankings.map((row) => (
+                {currentEvent.rankings.slice(0, 10).map((row) => (
                   <tr key={row.governorId || row.rank} className={`rank-row rank-row-${row.rank}`}>
                     <td className="td-rank">
                       {getRankBadge(row.rank)}
@@ -208,7 +298,7 @@ export const MgeView: React.FC<MgeViewProps> = ({
                           src={row.avatar}
                           frame={row.avatarFrame}
                           name={row.name}
-                          size={40}
+                          size={38}
                         />
                         <div className="gov-info">
                           <span className="gov-name" title={row.name}>{row.name}</span>
@@ -231,7 +321,7 @@ export const MgeView: React.FC<MgeViewProps> = ({
                     </td>
                     <td className="td-score">
                       <div className="score-val-wrap">
-                        <span className="score-icon">🏆</span>
+                        <span className="score-icon">⚡</span>
                         <strong className="score-num">{fmt.format(row.score)}</strong>
                       </div>
                     </td>
@@ -244,18 +334,8 @@ export const MgeView: React.FC<MgeViewProps> = ({
       ) : (
         <div className="empty-event-card">
           <div className="empty-event-icon">⏳</div>
-          <h4>{currentEvent?.status === 'upcoming' ? i18n.mge.upcoming : i18n.mge.awaitingCapture}</h4>
+          <h4>{i18n.mge.upcoming}</h4>
           <p>{i18n.mge.upcomingNotice}</p>
-          {currentEvent?.commanders && currentEvent.commanders.length > 0 && (
-            <div className="upcoming-commanders-box">
-              <p className="upcoming-cmd-title">{i18n.mge.commandersTitle}</p>
-              <div className="cmd-tags-list">
-                {currentEvent.commanders.map(c => (
-                  <span key={c} className="commander-tag"><span className="cmd-icon">⚔️</span> {c}</span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
     </section>
