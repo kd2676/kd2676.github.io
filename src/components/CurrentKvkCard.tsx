@@ -206,10 +206,10 @@ export const DEFAULT_CHRONICLES: ChronicleStage[] = [
     id: 'c18',
     name: 'Arrows Nocked',
     subtitle: '',
-    status: 'active',
+    status: 'completed',
     colorTheme: 'grey',
     iconSrc: '',
-    progressPercent: 60,
+    progressPercent: 100,
     utcDate: '🔒 ****',
   },
   {
