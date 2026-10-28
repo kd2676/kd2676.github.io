@@ -312,9 +312,6 @@ export async function authenticateAdmin(
 export const OFFICER_ROLES = [
   { id: 'R4 Officer', labelVi: '🛡️ R4 Officer (Cán bộ R4)', labelEn: '🛡️ R4 Officer' },
   { id: 'R5 Leader', labelVi: '👑 R5 Leader (Lãnh đạo R5)', labelEn: '👑 R5 Leader' },
-  { id: 'KvK Commander', labelVi: '⚔️ KvK Commander (Chỉ huy KvK)', labelEn: '⚔️ KvK Commander' },
-  { id: 'Recruitment Lead', labelVi: '📢 Recruitment Lead (Tuyển dụng & Di cư)', labelEn: '📢 Recruitment Lead' },
-  { id: 'Diplomat', labelVi: '🕊️ Diplomat (Ngoại giao)', labelEn: '🕊️ Diplomat' },
 ] as const;
 
 // Lấy danh sách tài khoản admin
