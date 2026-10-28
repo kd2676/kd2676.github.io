@@ -435,7 +435,13 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
         </div>
         <div className="admin-topbar-actions">
           <span className="logged-in-user-tag">
-            👤 <strong>{currentUser}</strong>
+            {effectiveRole === 'R5 Leader' && <img src="/r5.png" alt="R5" className="topbar-rank-icon" />}
+            {effectiveRole === 'R4 Officer' && <img src="/r4.png" alt="R4" className="topbar-rank-icon" />}
+            {effectiveRole === 'Admin' && <span className="topbar-admin-crown">👑</span>}
+            <strong>{currentUser}</strong>
+            <span className={`user-role-mini-pill ${effectiveRole === 'R5 Leader' ? 'pill-r5' : effectiveRole === 'R4 Officer' ? 'pill-r4' : 'pill-admin'}`}>
+              {effectiveRole}
+            </span>
           </span>
           <button type="button" className="btn-danger" onClick={handleLogout}>
             🚪 {lang === 'vi' ? 'Đăng xuất' : 'Sign Out'}
@@ -736,9 +742,21 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                         </div>
                       </td>
                       <td>
-                        <span className={`role-tag ${u.role === 'Admin' ? 'role-admin' : ''}`}>
-                          {u.role === 'Admin' ? '👑 Admin' : u.role}
-                        </span>
+                        <div className="role-cell-wrap">
+                          {u.role === 'R5 Leader' && <img src="/r5.png" alt="R5" className="rok-rank-icon" />}
+                          {u.role === 'R4 Officer' && <img src="/r4.png" alt="R4" className="rok-rank-icon" />}
+                          <span
+                            className={`role-tag ${
+                              u.role === 'Admin'
+                                ? 'role-admin'
+                                : u.role === 'R5 Leader'
+                                ? 'role-r5'
+                                : 'role-r4'
+                            }`}
+                          >
+                            {u.role === 'Admin' ? '👑 Admin' : u.role}
+                          </span>
+                        </div>
                       </td>
                       <td>
                         {(() => {
