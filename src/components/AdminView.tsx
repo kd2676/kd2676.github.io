@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Lang } from '../i18n';
 import {
   type KingdomConfig,
@@ -16,7 +16,6 @@ import {
   createAdminUser,
   deleteAdminUser,
   updateUserPassword,
-  OFFICER_ROLES,
 } from '../lib/kingdomApi';
 
 interface AdminViewProps {
@@ -117,6 +116,18 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   const [newUserRole, setNewUserRole] = useState<string>('R4 Officer');
   const [userActionMsg, setUserActionMsg] = useState<{ type: 'ok' | 'error'; text: string } | null>(null);
   const [userCreating, setUserCreating] = useState<boolean>(false);
+  const [roleDropdownOpen, setRoleDropdownOpen] = useState<boolean>(false);
+  const roleDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleRoleClickOutside = (e: MouseEvent) => {
+      if (roleDropdownRef.current && !roleDropdownRef.current.contains(e.target as Node)) {
+        setRoleDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleRoleClickOutside);
+    return () => document.removeEventListener('mousedown', handleRoleClickOutside);
+  }, []);
 
   // Change Password State
   const [cpCurrentPass, setCpCurrentPass] = useState<string>('');
@@ -691,18 +702,55 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               </div>
 
               <div className="form-group flex-1">
-                <label>{lang === 'vi' ? 'Vai Trò / Chức Vụ (Chọn từ danh sách)' : 'Role / Title (Select from list)'}</label>
-                <select
-                  className="admin-input admin-select"
-                  value={newUserRole}
-                  onChange={(e) => setNewUserRole(e.target.value)}
-                >
-                  {(isR4 ? OFFICER_ROLES.filter((r) => r.id === 'R4 Officer') : OFFICER_ROLES).map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {lang === 'vi' ? r.labelVi : r.labelEn}
-                    </option>
-                  ))}
-                </select>
+                <label>{lang === 'vi' ? 'Vai Trò / Chức Vụ' : 'Role / Title'}</label>
+                <div className="custom-role-select-wrap" ref={roleDropdownRef}>
+                  <button
+                    type="button"
+                    className="custom-role-trigger"
+                    onClick={() => setRoleDropdownOpen((prev) => !prev)}
+                  >
+                    <div className="role-selected-item">
+                      <img
+                        src={newUserRole === 'R5 Leader' ? '/r5.png' : '/r4.png'}
+                        alt={newUserRole}
+                        className="selector-role-img"
+                      />
+                      <span>{newUserRole}</span>
+                    </div>
+                    <span className={`dropdown-caret ${roleDropdownOpen ? 'open' : ''}`}>▾</span>
+                  </button>
+
+                  {roleDropdownOpen && (
+                    <div className="custom-role-dropdown-menu">
+                      <button
+                        type="button"
+                        className={`role-dropdown-opt ${newUserRole === 'R4 Officer' ? 'active' : ''}`}
+                        onClick={() => {
+                          setNewUserRole('R4 Officer');
+                          setRoleDropdownOpen(false);
+                        }}
+                      >
+                        <img src="/r4.png" alt="R4" className="selector-role-img" />
+                        <span>R4 Officer</span>
+                        {newUserRole === 'R4 Officer' && <span className="opt-check">✓</span>}
+                      </button>
+                      {!isR4 && (
+                        <button
+                          type="button"
+                          className={`role-dropdown-opt ${newUserRole === 'R5 Leader' ? 'active' : ''}`}
+                          onClick={() => {
+                            setNewUserRole('R5 Leader');
+                            setRoleDropdownOpen(false);
+                          }}
+                        >
+                          <img src="/r5.png" alt="R5" className="selector-role-img" />
+                          <span>R5 Leader</span>
+                          {newUserRole === 'R5 Leader' && <span className="opt-check">✓</span>}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="form-group form-submit-wrap">
@@ -743,19 +791,15 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                       </td>
                       <td>
                         <div className="role-cell-wrap">
-                          {u.role === 'R5 Leader' && <img src="/r5.png" alt="R5" className="rok-rank-icon" />}
-                          {u.role === 'R4 Officer' && <img src="/r4.png" alt="R4" className="rok-rank-icon" />}
-                          <span
-                            className={`role-tag ${
-                              u.role === 'Admin'
-                                ? 'role-admin'
-                                : u.role === 'R5 Leader'
-                                ? 'role-r5'
-                                : 'role-r4'
-                            }`}
-                          >
-                            {u.role === 'Admin' ? '👑 Admin' : u.role}
-                          </span>
+                          {u.role === 'R5 Leader' && (
+                            <img src="/r5.png" alt="R5 Leader" title="R5 Leader" className="rok-rank-badge-lg" />
+                          )}
+                          {u.role === 'R4 Officer' && (
+                            <img src="/r4.png" alt="R4 Officer" title="R4 Officer" className="rok-rank-badge-lg" />
+                          )}
+                          {u.role === 'Admin' && (
+                            <span className="role-tag role-admin">👑 Admin</span>
+                          )}
                         </div>
                       </td>
                       <td>
