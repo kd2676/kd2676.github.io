@@ -69,7 +69,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
     return <span className="rank-badge rank-other">{rank}</span>;
   };
 
-  const continentLabel = currentEvent?.continent || '#2673–2680';
+  const clusterLabel = currentEvent?.continent || '#2673–2680';
 
   return (
     <section className="view active zenith-view">
@@ -81,7 +81,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
         </div>
         <div className="event-scope-meta">
           <span className="event-count-badge">{events.length} {lang === 'vi' ? 'mùa gần nhất' : 'recent seasons'}</span>
-          <span className="top10-tag">Top 10 Cụm {continentLabel}</span>
+          <span className="top10-tag">Top 10 {lang === 'vi' ? 'Cụm' : 'Cluster'} {clusterLabel}</span>
         </div>
       </div>
 
@@ -169,14 +169,14 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
         </div>
       )}
 
-      {/* Continent Header Bar - Only keep continent as requested */}
+      {/* Cluster Header Bar */}
       <div className="continent-bar-compact">
         <div className="continent-title-wrap">
           <span className="continent-icon">🌐</span>
           <span className="continent-label-name">
-            {lang === 'vi' ? 'Cụm Lục Địa' : 'Continent'}: <strong className="continent-highlight">{continentLabel}</strong>
+            {lang === 'vi' ? 'Cụm' : 'Cluster'}: <strong className="continent-highlight">{clusterLabel}</strong>
           </span>
-          <span className="continent-badge-tag">{lang === 'vi' ? 'Toàn Cụm' : 'All Continent'}</span>
+          <span className="continent-badge-tag">{lang === 'vi' ? 'Toàn Cụm' : 'All Cluster'}</span>
         </div>
         <span className="top10-heading">{i18n.zenith.top10Note}</span>
       </div>
@@ -187,7 +187,7 @@ export const ZenithView: React.FC<ZenithViewProps> = ({
           <div className="table-header-info">
             <div className="table-header-left">
               <span className="top10-subhead">
-                {lang === 'vi' ? `Bảng xếp hạng Top 10 Cụm ${continentLabel}` : `Continent ${continentLabel} Top 10 Leaderboard`}
+                {lang === 'vi' ? `Bảng xếp hạng Top 10 Cụm ${clusterLabel}` : `Cluster ${clusterLabel} Top 10 Leaderboard`}
               </span>
             </div>
             <span className="ranking-capture-tag">Top 10 Live</span>
