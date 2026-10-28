@@ -446,11 +446,11 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
         </div>
         <div className="admin-topbar-actions">
           <span className="logged-in-user-tag">
-            {effectiveRole === 'R5 Leader' && <img src="/r5.png" alt="R5" className="topbar-rank-icon" />}
-            {effectiveRole === 'R4 Officer' && <img src="/r4.png" alt="R4" className="topbar-rank-icon" />}
             <strong>{currentUser}</strong>
             <span className={`user-role-mini-pill ${effectiveRole === 'R5 Leader' ? 'pill-r5' : effectiveRole === 'R4 Officer' ? 'pill-r4' : 'pill-admin'}`}>
-              {effectiveRole === 'R5 Leader' ? 'Leader' : effectiveRole === 'R4 Officer' ? 'Officer' : 'Admin'}
+              {effectiveRole === 'R5 Leader' && <img src="/r5.png" alt="R5" className="topbar-rank-icon" />}
+              {effectiveRole === 'R4 Officer' && <img src="/r4.png" alt="R4" className="topbar-rank-icon" />}
+              <span>{effectiveRole === 'R5 Leader' ? 'Leader' : effectiveRole === 'R4 Officer' ? 'Officer' : 'Admin'}</span>
             </span>
           </span>
           <button type="button" className="btn-danger" onClick={handleLogout}>
@@ -791,16 +791,16 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                       <td>
                         <div className="role-cell-wrap">
                           {u.role === 'R5 Leader' && (
-                            <>
-                              <img src="/r5.png" alt="R5 Leader" title="R5 Leader" className="rok-rank-badge-lg" />
-                              <span className="role-tag role-r5">Leader</span>
-                            </>
+                            <span className="role-tag role-r5">
+                              <img src="/r5.png" alt="R5" className="role-tag-img" />
+                              <span>Leader</span>
+                            </span>
                           )}
                           {u.role === 'R4 Officer' && (
-                            <>
-                              <img src="/r4.png" alt="R4 Officer" title="R4 Officer" className="rok-rank-badge-lg" />
-                              <span className="role-tag role-r4">Officer</span>
-                            </>
+                            <span className="role-tag role-r4">
+                              <img src="/r4.png" alt="R4" className="role-tag-img" />
+                              <span>Officer</span>
+                            </span>
                           )}
                           {u.role === 'Admin' && (
                             <span className="role-tag role-admin">Admin</span>
