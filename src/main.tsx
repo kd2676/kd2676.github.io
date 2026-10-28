@@ -103,7 +103,7 @@ function getTabFromPath(pathname: string): Tab {
     if (raw === 'governors' || raw === 'governor') return 'governors';
     if (raw === 'mge') return 'mge';
     if (raw === 'zenith' || raw === 'zenith of power' || raw === 'zenith-of-power') return 'zenith';
-        if (raw === 'admin') return 'admin';
+    if (raw === 'admin' || raw.startsWith('admin/') || raw.startsWith('admin')) return 'admin';
     if (raw === 'recruitment' || raw === 'tuyendung' || raw === 'tuyen-dung' || raw === 'tuyển dụng') return 'recruitment';
     if (raw === 'overview') return 'overview';
   } catch {
@@ -224,6 +224,9 @@ function App() {
     if (typeof window !== 'undefined') {
       const targetPath = TAB_PATHS[newTab];
       const currentPath = decodeURIComponent(window.location.pathname);
+      if (newTab === 'admin' && currentPath.startsWith('/admin')) {
+        return;
+      }
       if (currentPath !== targetPath) {
         if (replace) {
           window.history.replaceState({ tab: newTab }, '', targetPath);

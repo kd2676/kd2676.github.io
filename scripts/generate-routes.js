@@ -47,6 +47,11 @@ const routes = [
   'tuyendung',
   'admin',
   'Admin',
+  'admin/recruitment',
+  'admin/config',
+  'admin/info',
+  'admin/users',
+  'admin/password',
 ];
 
 for (const route of routes) {

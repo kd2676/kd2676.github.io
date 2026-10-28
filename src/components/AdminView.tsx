@@ -25,6 +25,26 @@ interface AdminViewProps {
   onLogoUpdated?: (newLogoUrl: string) => void;
 }
 
+type DashboardTab = 'recruitment' | 'config' | 'users' | 'password';
+
+const TAB_TO_PATH: Record<DashboardTab, string> = {
+  recruitment: '/admin/recruitment',
+  config: '/admin/config',
+  users: '/admin/users',
+  password: '/admin/password',
+};
+
+function getDashboardTabFromUrl(): DashboardTab {
+  try {
+    const raw = decodeURIComponent(window.location.pathname).toLowerCase().trim().replace(/\/+$/, '');
+    if (raw.endsWith('/users')) return 'users';
+    if (raw.endsWith('/config') || raw.endsWith('/info') || raw.endsWith('/logo')) return 'config';
+    if (raw.endsWith('/password') || raw.endsWith('/pass')) return 'password';
+    if (raw.endsWith('/recruitment') || raw.endsWith('/poster')) return 'recruitment';
+  } catch {}
+  return 'recruitment';
+}
+
 const KINGDOM_ID = '2676';
 
 export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProps) {
@@ -57,8 +77,39 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
   const [pinInput, setPinInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
-  // Dashboard Active Tab: 'recruitment' | 'config' | 'users' | 'password'
-  const [dashboardTab, setDashboardTab] = useState<'recruitment' | 'config' | 'users' | 'password'>('recruitment');
+  // Dashboard Active Tab: backed by URL (/admin/recruitment, /admin/config, /admin/users, /admin/password)
+  const [dashboardTab, setDashboardTabState] = useState<DashboardTab>(getDashboardTabFromUrl);
+
+  const setDashboardTab = (tabKey: DashboardTab, replace = false) => {
+    setDashboardTabState(tabKey);
+    try {
+      const targetPath = TAB_TO_PATH[tabKey];
+      if (window.location.pathname !== targetPath) {
+        if (replace) {
+          window.history.replaceState({ adminTab: tabKey }, '', targetPath);
+        } else {
+          window.history.pushState({ adminTab: tabKey }, '', targetPath);
+        }
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setDashboardTabState(getDashboardTabFromUrl());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const current = window.location.pathname.replace(/\/+$/, '');
+      if (current === '/admin') {
+        window.history.replaceState({ adminTab: dashboardTab }, '', TAB_TO_PATH[dashboardTab]);
+      }
+    }
+  }, [isAuthenticated, dashboardTab]);
 
   // User Management State
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
@@ -386,9 +437,6 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
           <span className="logged-in-user-tag">
             👤 <strong>{currentUser}</strong>
           </span>
-          <button type="button" className="btn-secondary" onClick={onNavigateHome}>
-            👁️ {lang === 'vi' ? 'Xem Dashboard Ngoài' : 'View Public Dashboard'}
-          </button>
           <button type="button" className="btn-danger" onClick={handleLogout}>
             🚪 {lang === 'vi' ? 'Đăng xuất' : 'Sign Out'}
           </button>
