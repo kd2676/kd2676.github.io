@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import type { KvKItem } from './KvkPerformanceGrid';
 import { CopyIdButton } from './CopyIdButton';
+import { GovernorAvatar } from './GovernorAvatar';
 
 interface KvkDashboardModalProps {
   kvks: KvKItem[];
@@ -498,16 +499,12 @@ export function KvkDashboardModal({
 
                         <td className="td-gov">
                           <div className="kvk-gov-cell">
-                            <div className="kvk-avatar-wrap">
-                              {player.avatar ? (
-                                <img src={player.avatar} alt={player.name} className="kvk-avatar-img" />
-                              ) : (
-                                <div className="kvk-avatar-fallback">{player.name.slice(0, 2).toUpperCase()}</div>
-                              )}
-                              {player.avatarFrame && (
-                                <img src={player.avatarFrame} alt="" className="kvk-avatar-frame" />
-                              )}
-                            </div>
+                            <GovernorAvatar
+                              src={player.avatar}
+                              frame={player.avatarFrame}
+                              name={player.name}
+                              size={38}
+                            />
                             <div className="kvk-gov-info">
                               <span className="kvk-gov-name" title={player.name}>{player.name}</span>
                               <CopyIdButton id={player.playerId} lang={lang} />
