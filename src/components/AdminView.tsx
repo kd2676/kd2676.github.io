@@ -653,7 +653,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                   className="admin-input"
                   value={config.logo_url}
                   onChange={(e) => setConfig({ ...config, logo_url: e.target.value })}
-                  placeholder="/logo.png hoặc https://..."
+                  placeholder={lang === 'vi' ? '/logo.png hoặc https://...' : '/logo.png or https://...'}
                 />
               </div>
             </div>
@@ -696,7 +696,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                   className="admin-input"
                   value={newUserName}
                   onChange={(e) => setNewUserName(e.target.value)}
-                  placeholder="Ví dụ: r4_john, combat_lead..."
+                  placeholder={lang === 'vi' ? 'Ví dụ: r4_john, combat_lead...' : 'e.g. r4_john, combat_lead...'}
                   required
                 />
               </div>
@@ -756,7 +756,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
               <div className="form-group form-submit-wrap">
                 <label>&nbsp;</label>
                 <button type="submit" className="admin-save-btn" disabled={userCreating}>
-                  {userCreating ? '⏳ Đang tạo...' : '+ Tạo Tài Khoản'}
+                  {userCreating ? (lang === 'vi' ? '⏳ Đang tạo...' : '⏳ Creating...') : (lang === 'vi' ? '+ Tạo Tài Khoản' : '+ Create User')}
                 </button>
               </div>
             </form>
