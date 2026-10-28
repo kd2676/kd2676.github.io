@@ -12,6 +12,9 @@ import { FlagVN, FlagGB } from './components/FlagIcons';
 import { CopyIdButton } from './components/CopyIdButton';
 import { MgeView, type MgeEvent } from './components/MgeView';
 import { ZenithView, type ZenithEvent } from './components/ZenithView';
+import { RecruitmentView } from './components/RecruitmentView';
+import { AdminView } from './components/AdminView';
+import { type KingdomConfig, type RecruitmentData, getKingdomConfig, getRecruitment } from './lib/kingdomApi';
 import './styles.css';
 
 type Governor = {
@@ -71,7 +74,7 @@ type KingdomGuild = {
   };
   previousRank?: number;
 };
-type Tab = 'overview' | 'kvk' | 'alliances' | 'governors' | 'mge' | 'zenith';
+type Tab = 'overview' | 'kvk' | 'alliances' | 'governors' | 'mge' | 'zenith' | 'recruitment' | 'admin';
 
 const TAB_PATHS: Record<Tab, string> = {
   overview: '/overview',
@@ -80,6 +83,8 @@ const TAB_PATHS: Record<Tab, string> = {
   governors: '/Governors',
   mge: '/mge',
   zenith: '/zenith',
+  recruitment: '/recruitment',
+  admin: '/admin',
 };
 
 function getTabFromPath(pathname: string): Tab {
@@ -98,6 +103,8 @@ function getTabFromPath(pathname: string): Tab {
     if (raw === 'governors' || raw === 'governor') return 'governors';
     if (raw === 'mge') return 'mge';
     if (raw === 'zenith' || raw === 'zenith of power' || raw === 'zenith-of-power') return 'zenith';
+        if (raw === 'admin') return 'admin';
+    if (raw === 'recruitment' || raw === 'tuyendung' || raw === 'tuyen-dung' || raw === 'tuyển dụng') return 'recruitment';
     if (raw === 'overview') return 'overview';
   } catch {
     // fallback
@@ -241,13 +248,15 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const titles: Record<Tab, string> = {
+        const titles: Record<Tab, string> = {
       overview: 'Kingdom 2676 · Kingdom Statistics',
       kvk: 'Kingdom 2676 · KvK Performance',
       alliances: 'Kingdom 2676 · Alliances',
       governors: 'Kingdom 2676 · Governors',
       mge: 'Kingdom 2676 · The Mightiest Governor (MGE)',
       zenith: 'Kingdom 2676 · Zenith of Power Ranking',
+      recruitment: 'Kingdom 2676 · Tuyển Dụng & Cổng Nhập Cư',
+      admin: 'Kingdom 2676 · Admin Portal',
     };
     document.title = titles[tab] || 'Kingdom 2676 · Kingdom Statistics';
   }, [tab]);
@@ -266,6 +275,9 @@ function App() {
   const [sort, setSort] = useState<keyof Governor>('power');
   const [syncing, setSyncing] = useState(false);
   const [toast, setToast] = useState<{ type: 'info' | 'ok' | 'error'; message: string } | null>(null);
+    const [kingdomConfig, setKingdomConfig] = useState<KingdomConfig | null>(null);
+  const [recruitmentData, setRecruitmentData] = useState<RecruitmentData | null>(null);
+  const [recruitmentLoading, setRecruitmentLoading] = useState(false);
   const [overviewDynastyTab, setOverviewDynastyTab] = useState<'recentKings' | 'topPower'>('recentKings');
 
   const PAGE_SIZE = 20;
@@ -273,6 +285,10 @@ function App() {
   const [govPage, setGovPage] = useState(1);
 
   const refreshData = async () => {
+      setRecruitmentLoading(true);
+      getKingdomConfig('2676').then(cfg => { if (cfg) setKingdomConfig(cfg); }).catch(() => {});
+      getRecruitment('2676').then(rec => { if (rec) setRecruitmentData(rec); }).catch(() => {}).finally(() => setRecruitmentLoading(false));
+
     try {
       const ts = Date.now();
       const headers = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' };
@@ -667,7 +683,7 @@ function App() {
 
         <div className="hero-content">
           <div className="hero-main-info">
-            <img src="/logo.png" alt="KD 2676" className="kd-logo" />
+            <img src={kingdomConfig?.logo_url || "/logo.png"} alt="KD 2676" className="kd-logo" />
             <div>
               <p className="eyebrow">{i18n.reportSubtitle}</p>
               <h1>Kingdom <em>2676</em></h1>
@@ -726,13 +742,14 @@ function App() {
       </header>
 
       <nav className="tabs" aria-label="Tabs">
-        {([
+                {([
           ['overview', i18n.tabs.overview],
           ['kvk', i18n.tabs.kvk],
           ['alliances', i18n.tabs.alliances],
           ['governors', i18n.tabs.governors],
           ['mge', i18n.tabs.mge],
           ['zenith', i18n.tabs.zenith],
+          ['recruitment', i18n.tabs.recruitment],
         ] as const).map(([key, label]) => {
           const path = TAB_PATHS[key];
           return (
@@ -1118,6 +1135,32 @@ function App() {
           )
         )}
 
+        
+        {tab === 'recruitment' && (
+          <RecruitmentView
+            lang={lang}
+            recruitment={recruitmentData}
+            config={kingdomConfig}
+            loading={recruitmentLoading}
+          />
+        )}
+
+        {tab === 'admin' && (
+          <AdminView
+            lang={lang}
+            onNavigateHome={() => setTab('overview')}
+            onLogoUpdated={(newLogo) => {
+              setKingdomConfig(prev => prev ? { ...prev, logo_url: newLogo } : {
+                kingdom_id: '2676',
+                name: 'Kingdom 2676',
+                tagline: 'Zipporania · Continent of Egria · Chatsworth',
+                logo_url: newLogo,
+                discord_url: 'https://discord.gg/',
+                contact_info: 'R4/R5 Recruitment Team'
+              });
+            }}
+          />
+        )}
         {tab === 'zenith' && (
           zenithData && zenithData.events.length > 0 ? (
             <ZenithView

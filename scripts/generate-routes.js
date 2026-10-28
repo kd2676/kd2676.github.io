@@ -42,6 +42,11 @@ const routes = [
   'Zenith',
   'Zenith of Power',
   'Zenith%20of%20Power',
+  'recruitment',
+  'Recruitment',
+  'tuyendung',
+  'admin',
+  'Admin',
 ];
 
 for (const route of routes) {
