@@ -45,7 +45,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
     }
   });
 
-  const [usernameInput, setUsernameInput] = useState<string>('admin');
+  const [usernameInput, setUsernameInput] = useState<string>('');
   const [pinInput, setPinInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
@@ -116,6 +116,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
       if (res.success && res.user) {
         setIsAuthenticated(true);
         setCurrentUser(res.user.username);
+        setPinInput('');
         try {
           sessionStorage.setItem('kd_admin_logged_in', 'true');
           sessionStorage.setItem('kd_admin_user', res.user.username);
@@ -132,6 +133,9 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    setUsernameInput('');
+    setPinInput('');
+    setLoginError('');
     try {
       sessionStorage.removeItem('kd_admin_logged_in');
       sessionStorage.removeItem('kd_admin_user');
@@ -293,7 +297,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
             <h2>Kingdom 2676 Portal</h2>
           </div>
 
-          <form onSubmit={handleLogin} className="admin-login-form">
+          <form onSubmit={handleLogin} className="admin-login-form" autoComplete="off">
             <div className="form-group">
               <label>Username</label>
               <input
@@ -302,7 +306,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                 value={usernameInput}
                 onChange={(e) => setUsernameInput(e.target.value)}
                 placeholder="Enter username..."
-                autoComplete="username"
+                autoComplete="off"
                 required
                 autoFocus
               />
@@ -316,7 +320,7 @@ export function AdminView({ lang, onNavigateHome, onLogoUpdated }: AdminViewProp
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 placeholder="Enter password..."
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
               />
             </div>
