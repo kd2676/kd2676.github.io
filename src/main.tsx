@@ -843,7 +843,18 @@ function App() {
               <span className="section-meta">{i18n.overview.snapshotPrefix} {formatDate(updatedAt)}</span>
             </div>
 
-            <CurrentKvkCard kvk={snapshot?.currentKvk} lang={lang} />
+            <CurrentKvkCard
+              kvk={snapshot?.currentKvk}
+              lang={lang}
+              onOpenDashboard={() => {
+                setSelectedKvkCode(13315);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onNavigateRanking={() => {
+                setTab('kvk');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
 
             <div className="stats-grid">
               {metrics.map(m => (

@@ -7160,3 +7160,449 @@ footer {
   border-color: #ef4444;
   color: #ffffff;
 }
+
+/* ==========================================================================
+   RoKStats 2026 Modern "My KvK" Widget Redesign
+   ========================================================================== */
+
+.my-kvk-section-container {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 1. Header */
+.my-kvk-top-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.my-kvk-badge-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+.my-kvk-top-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.my-kvk-top-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.my-kvk-top-sub {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* 2. Main Card */
+.my-kvk-card {
+  background: #0f141d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.2s ease;
+}
+
+.my-kvk-card:hover {
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+/* Hero Banner */
+.my-kvk-hero-banner {
+  width: 100%;
+  height: 160px;
+  background-size: cover;
+  background-position: center 25%;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 18px 22px;
+}
+
+.my-kvk-banner-overlay {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 2;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.my-kvk-hero-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 20, 29, 0.3) 0%, rgba(15, 20, 29, 0.85) 100%),
+              linear-gradient(90deg, rgba(15, 20, 29, 0.8) 0%, rgba(15, 20, 29, 0.2) 60%);
+  pointer-events: none;
+}
+
+.my-kvk-scenario-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.my-kvk-scenario-code {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-family: 'JetBrains Mono', monospace, sans-serif;
+}
+
+/* Card Content */
+.my-kvk-content {
+  padding: 18px 20px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Camps Meta & Grid */
+.my-kvk-camps-meta {
+  font-size: 0.84rem;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.my-kvk-camps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .my-kvk-camps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.my-kvk-camp-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.my-kvk-camp-pill.camp-fire {
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+.my-kvk-camp-pill.camp-earth {
+  border-color: rgba(217, 119, 6, 0.45);
+}
+
+.my-kvk-camp-pill.camp-wind {
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.my-kvk-camp-pill.camp-wind.is-yours {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.08);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.15);
+}
+
+.my-kvk-camp-pill.camp-water {
+  border-color: rgba(59, 130, 246, 0.45);
+}
+
+.camp-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-fire {
+  background: #ef4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+.dot-earth {
+  background: #d97706;
+  box-shadow: 0 0 6px rgba(217, 119, 6, 0.6);
+}
+
+.dot-wind {
+  background: #a855f7;
+  box-shadow: 0 0 6px rgba(168, 85, 247, 0.6);
+}
+
+.dot-water {
+  background: #3b82f6;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+}
+
+.camp-name {
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.camp-count {
+  color: #94a3b8;
+  font-size: 0.82rem;
+}
+
+.camp-yours-tag {
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 0.82rem;
+  margin-left: auto;
+}
+
+/* War Phase & Progress Tracks */
+.my-kvk-timeline-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.my-kvk-phase-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.phase-title {
+  font-size: 0.92rem;
+  color: #e2e8f0;
+}
+
+.phase-title b {
+  color: #ffffff;
+}
+
+.my-kvk-progress-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.my-kvk-bar-orange {
+  height: 4px;
+  width: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #ea580c 0%, #f97316 100%);
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.4);
+}
+
+.my-kvk-bar-blue-track {
+  height: 4px;
+  width: 100%;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.my-kvk-bar-blue {
+  height: 100%;
+  border-radius: 99px;
+  background: #2563eb;
+  transition: width 0.4s ease;
+}
+
+.my-kvk-timeline-dates {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Action Buttons Grid */
+.my-kvk-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 540px) {
+  .my-kvk-actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.my-kvk-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(18, 24, 38, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.my-kvk-action-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.my-kvk-action-btn.active {
+  background: rgba(14, 165, 233, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.my-kvk-action-btn.full-width {
+  grid-column: 1 / -1;
+}
+
+.my-kvk-action-btn .btn-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.my-kvk-action-btn .accordion-caret {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+/* Expandable Chronicles Drawer */
+.my-kvk-chronicles-drawer {
+  background: rgba(11, 15, 23, 0.8);
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 14px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+/* Footer Timestamp */
+.my-kvk-footer {
+  display: flex;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.my-kvk-checked {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* War Map Modal Styles */
+.war-map-camps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.map-camp-item {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.map-camp-item.is-yours {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.map-camp-badge {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.map-camp-badge.wind { color: #c084fc; }
+.map-camp-badge.fire { color: #f87171; }
+.map-camp-badge.earth { color: #fbbf24; }
+.map-camp-badge.water { color: #60a5fa; }
+
+.map-camp-detail {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.war-map-external-link {
+  margin-top: 14px;
+  text-align: center;
+}
+
+/* Scan Manager Modal Styles */
+.scan-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.scan-status-pill.online {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.scan-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scan-info-list li {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+}
+
+.scan-info-list li strong {
+  color: #94a3b8;
+}
