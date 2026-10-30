@@ -24,7 +24,6 @@ export interface CurrentKvkInfo {
 interface CurrentKvkCardProps {
   kvk?: CurrentKvkInfo;
   lang?: 'vi' | 'en';
-  onOpenDashboard?: () => void;
   onNavigateRanking?: () => void;
 }
 
@@ -294,7 +293,6 @@ export const DEFAULT_CHRONICLES: ChronicleStage[] = [
 export function CurrentKvkCard({
   kvk,
   lang = 'vi',
-  onOpenDashboard,
   onNavigateRanking,
 }: CurrentKvkCardProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -434,27 +432,13 @@ export function CurrentKvkCard({
             </div>
           </div>
 
-          {/* Action Buttons Grid (2 columns) */}
-          <div className="my-kvk-actions-grid">
+          {/* Action Button: Kingdom ranking */}
+          <div className="my-kvk-actions-grid single-btn">
             <button
               type="button"
-              className="my-kvk-action-btn primary"
-              onClick={onOpenDashboard}
-              title={lang === 'vi' ? 'Xem bảng thống kê KvK chi tiết' : 'Open KvK Dashboard'}
-            >
-              <svg className="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="20" x2="18" y2="10" />
-                <line x1="12" y1="20" x2="12" y2="4" />
-                <line x1="6" y1="20" x2="6" y2="14" />
-              </svg>
-              <span>KvK dashboard</span>
-            </button>
-
-            <button
-              type="button"
-              className="my-kvk-action-btn"
+              className="my-kvk-action-btn primary full-width"
               onClick={onNavigateRanking}
-              title={lang === 'vi' ? 'Xem bảng xếp hạng vương quốc' : 'Kingdom ranking'}
+              title={lang === 'vi' ? 'Xem bảng xếp hạng thống đốc Vương quốc 2676 mùa này' : 'Kingdom ranking'}
             >
               <svg className="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 3l9 7H3z" />

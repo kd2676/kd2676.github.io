@@ -847,10 +847,6 @@ function App() {
             <CurrentKvkCard
               kvk={snapshot?.currentKvk}
               lang={lang}
-              onOpenDashboard={() => {
-                setKvkModalSection('overview');
-                setSelectedKvkCode(13315);
-              }}
               onNavigateRanking={() => {
                 setKvkModalSection('ranking');
                 setSelectedKvkCode(13315);
