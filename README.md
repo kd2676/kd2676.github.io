@@ -1,6 +1,13 @@
 # Kingdom 2676 dashboard
 
-React + Vite + TypeScript dashboard. The Windows updater opens ROKStats in a private browser profile, exports **All Governors - KD #2676** as CSV, and refreshes the local site every hour (configurable). No Discord password is stored in Vite or sent to visitors.
+React + Vite + TypeScript dashboard for Kingdom 2676. The project reads live data from ROKStats and builds a static dashboard for browsing governor, guild, and kingdom information.
+
+## Prerequisites
+
+- Node.js 20+ (the repo is configured for Vite + TypeScript)
+- npm
+- A local browser profile with a valid ROKStats session cookie
+- A `.env` file based on `.env.example`
 
 ## First run on Windows
 
@@ -9,29 +16,66 @@ Use PowerShell in this folder:
 ```powershell
 npm install
 Copy-Item .env.example .env
-npm run login
-npm run build
-npm start
 ```
 
-During `npm run login`, sign in to ROKStats via Discord in the browser window and select kingdom 2676. After the heading **All Governors - KD #2676** appears, return to PowerShell and press Enter. The login profile remains under `.private/rokstats-profile` and is excluded from Git.
+Then edit `.env` and fill in:
 
-On this Windows setup, both the visible login and scheduled updater use Edge. `.env` is local and ignored by Git. If Edge cannot run headless on another computer, set `BROWSER_CHANNEL=` and install Playwright Chromium with `npx playwright install chromium`; `LOGIN_BROWSER_CHANNEL` can remain `msedge`. `PLAYWRIGHT_BROWSERS_PATH` is only needed if the browser installer and app run with different Windows profiles or environments.
+```env
+ROKSTATS_KINGDOM=2676
+ROKSTATS_SESSION=s%3A...
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_...
+```
 
-Open **http://127.0.0.1:2676** while `npm start` is running. The server syncs immediately, then repeats at `SYNC_INTERVAL_MINUTES`. The page checks for new data every five minutes. `npm run sync` triggers one manual export. If the session expires, repeat `npm run login` and restart the server. Close the server before launching `npm run login`, because both use the same browser profile.
+To get a valid `ROKSTATS_SESSION` value, run:
 
-To start the server automatically when you log in to Windows, run `powershell -File scripts/install-autostart.ps1` once. To remove that startup task, run `powershell -File scripts/uninstall-autostart.ps1`. The PC must be on and logged in for the task to run.
+```powershell
+npm run get-cookie
+```
 
-`npm run dev` starts the Vite development UI; run `npm start` separately for its live API. `npm run build` prepares the production UI. The local server serves it and keeps its data current while the PC and server are running.
+This uses Playwright to open the persistent Edge profile and print the `connect.sid` cookie. Paste the value into `ROKSTATS_SESSION` in `.env`.
 
-The previously published `chatgpt.site` address is a separate static deployment. Running the updater on this PC does **not** push data to that deployment. Publishing a new version is required there. The static build includes the latest `public/governors.json` at build time. Do not put Discord credentials or session files in `.env`, `public/`, `dist/`, or Git.
+After the environment is set up, run:
 
-## Data coverage
+```powershell
+npm run sync
+npm run build
+npm run dev
+```
 
-Governor list, alliance totals, Power, KP, T4/T5, and deaths are calculated from the CSV. Historical KvK entries remain the snapshot captured on 25/10/2026. The page shows the export time, not an assertion of real-time game data. ROKStats controls when it scans and updates its own records.
+- `npm run sync` fetches the latest kingdom data from the ROKStats API and saves JSON files into `public/` and `data/`.
+- `npm run build` compiles the TypeScript app and generates the static `dist/` output.
+- `npm run dev` starts the Vite development server for local UI work.
 
-## Updating and publishing
+## Available scripts
 
-- Local dashboard: after changing the React UI, run `npm run build` in `D:\kingdom-2676`. The running local server serves the new `dist` files. After changing `server/` code, restart the `Kingdom2676Dashboard` Windows task.
-- Data: while Windows is logged in, the server exports ROKStats every `SYNC_INTERVAL_MINUTES` (currently 60). The page checks its local API every five minutes. The Windows task starts at logon and retries every five minutes if it has stopped.
-- Hosted dashboard: `npm run build` does not publish to `chatgpt.site`. Ask Codex to deploy the current `D:\kingdom-2676` source to the existing Kingdom 2676 Site. Deployment needs a fresh Sites repository credential and a new saved version. The hosted site remains online when this PC is off, but its data remains the last published snapshot.
+From `package.json`:
+
+```json
+"scripts": {
+  "dev": "vite --host 127.0.0.1",
+  "build": "tsc -b && vite build && node scripts/generate-routes.js",
+  "preview": "vite preview --host 127.0.0.1",
+  "sync": "tsx scripts/sync.ts",
+  "get-cookie": "tsx scripts/get-cookie.ts"
+}
+```
+
+There is no `npm start` or `npm run login` script in this repository. The current project uses `npm run get-cookie`, `npm run sync`, `npm run build`, and `npm run dev`.
+
+## Notes
+
+- The app is a static frontend; it does not include a custom Node server startup script.
+- Data refresh depends on a valid `ROKSTATS_SESSION` cookie.
+- `public/` contains the generated static data files used by the dashboard.
+- `scripts/` contains utilities for cookie extraction, sync, and static route generation.
+
+## Publishing
+
+This repo is used as a GitHub Pages/static site build. After making UI changes, run:
+
+```powershell
+npm run build
+```
+
+Then publish the generated output from the static hosting target used by the project.
