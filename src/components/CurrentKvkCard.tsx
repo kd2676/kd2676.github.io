@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 
 export interface ChronicleStage {
   id: string;
@@ -212,10 +212,10 @@ export const DEFAULT_CHRONICLES: ChronicleStage[] = [
     id: 'c19',
     name: 'Lvl 8 Passes (Unsealed)',
     subtitle: 'Wolves & Lambs',
-    status: 'active',
+    status: 'upcoming',
     colorTheme: 'amber',
     iconSrc: '/images/chronicles/passes.png',
-    progressPercent: 50,
+    progressPercent: 0,
     utcDate: 'Oct 30, 00:00:00',
   },
   {
@@ -328,17 +328,6 @@ export function CurrentKvkCard({
       scrollContainerRef.current.scrollBy({ left: 320, behavior: 'smooth' });
     }
   };
-
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      const activeEl = scrollContainerRef.current.querySelector('.chronicle-card.active') as HTMLElement;
-      if (activeEl) {
-        const container = scrollContainerRef.current;
-        const targetScroll = activeEl.offsetLeft - container.clientWidth / 2 + activeEl.clientWidth / 2;
-        container.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
-      }
-    }
-  }, []);
 
   return (
     <div className="my-kvk-section-container">
