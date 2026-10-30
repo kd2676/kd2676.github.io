@@ -8,6 +8,7 @@ interface KvkDashboardModalProps {
   kvks: KvKItem[];
   selectedCode: number;
   lang?: 'vi' | 'en';
+  initialSection?: 'overview' | 'ranking';
   onClose: () => void;
   onSelectKvk?: (code: number) => void;
 }
@@ -82,6 +83,7 @@ export function KvkDashboardModal({
   kvks,
   selectedCode,
   lang = 'vi',
+  initialSection = 'overview',
   onClose,
 }: KvkDashboardModalProps) {
   const currentKvk = kvks.find(k => k.code === selectedCode) || kvks[0];
@@ -90,6 +92,19 @@ export function KvkDashboardModal({
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [page, setPage] = useState(1);
   const pageSize = 50;
+
+  // Scroll to leaderboard section if opened with initialSection='ranking'
+  useEffect(() => {
+    if (initialSection === 'ranking') {
+      const timer = setTimeout(() => {
+        const el = document.getElementById('kvk-leaderboard-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [initialSection, selectedCode]);
 
   // Lock body and html scroll while modal is active
   useEffect(() => {
@@ -352,16 +367,21 @@ export function KvkDashboardModal({
         </div>
 
         {/* Section: Governor Leaderboard for Kingdom 2676 */}
-        <div className="kvk-dash-leaderboard-section">
+        <div className="kvk-dash-leaderboard-section" id="kvk-leaderboard-section">
           <div className="kvk-leaderboard-header">
             <div>
-              <h2 className="kvk-leaderboard-title">
-                KvK Dashboard ({filteredPlayers.length})
-              </h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <h2 className="kvk-leaderboard-title">
+                  Kingdom 2676 Players Performance
+                </h2>
+                <span style={{ fontSize: '0.78rem', padding: '2px 8px', borderRadius: '4px', background: 'rgba(245, 158, 11, 0.15)', border: '1px solid rgba(245, 158, 11, 0.4)', color: '#fbbf24', fontWeight: 700 }}>
+                  KvK {currentKvk.formattedCode}
+                </span>
+              </div>
               <p className="kvk-leaderboard-subtitle">
                 {lang === 'vi'
-                  ? `Dữ liệu đóng góp chiến đấu của các thống đốc Vương quốc 2676 trong mùa KvK ${currentKvk.formattedCode}`
-                  : `Combat performance of Kingdom 2676 governors during KvK season ${currentKvk.formattedCode}`}
+                  ? `Hiển thị ${filteredPlayers.length} thống đốc · Bảng xếp hạng chiến đấu Vương quốc 2676 mùa ${currentKvk.formattedCode}`
+                  : `Showing ${filteredPlayers.length} governors · Kingdom 2676 Combat Performance for ${currentKvk.formattedCode}`}
               </p>
             </div>
 

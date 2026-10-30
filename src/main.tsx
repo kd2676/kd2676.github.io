@@ -281,6 +281,7 @@ function App() {
   const [kingdomGuilds, setKingdomGuilds] = useState<KingdomGuild[]>([]);
   const [kvkList, setKvkList] = useState<KvKItem[]>([]);
   const [selectedKvkCode, setSelectedKvkCode] = useState<number | null>(null);
+  const [kvkModalSection, setKvkModalSection] = useState<'overview' | 'ranking'>('overview');
   const [mgeData, setMgeData] = useState<{ updatedAt?: string; events: MgeEvent[] } | null>(null);
   const [zenithData, setZenithData] = useState<{ updatedAt?: string; events: ZenithEvent[] } | null>(null);
   const [selectedMgeId, setSelectedMgeId] = useState<string>('');
@@ -847,12 +848,12 @@ function App() {
               kvk={snapshot?.currentKvk}
               lang={lang}
               onOpenDashboard={() => {
+                setKvkModalSection('overview');
                 setSelectedKvkCode(13315);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               onNavigateRanking={() => {
-                setTab('kvk');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setKvkModalSection('ranking');
+                setSelectedKvkCode(13315);
               }}
             />
 
@@ -1242,8 +1243,10 @@ function App() {
           kvks={kvkList}
           selectedCode={selectedKvkCode}
           lang={lang}
+          initialSection={kvkModalSection}
           onClose={() => {
             setSelectedKvkCode(null);
+            setKvkModalSection('overview');
             const url = new URL(window.location.href);
             url.searchParams.delete('kvk');
             let targetPath = url.pathname;
