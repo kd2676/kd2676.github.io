@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 
 export interface ChronicleStage {
   id: string;
@@ -298,9 +298,7 @@ export function CurrentKvkCard({
   onNavigateRanking,
 }: CurrentKvkCardProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [showChronicles, setShowChronicles] = useState<boolean>(false);
-  const [showWarMap, setShowWarMap] = useState<boolean>(false);
-  const [showScanManager, setShowScanManager] = useState<boolean>(false);
+  
 
   const name = kvk?.name || 'Mighty Assembly';
   const code = kvk?.code || 'C13315';
@@ -334,7 +332,7 @@ export function CurrentKvkCard({
   };
 
   useEffect(() => {
-    if (showChronicles && scrollContainerRef.current) {
+    if (scrollContainerRef.current) {
       const activeEl = scrollContainerRef.current.querySelector('.chronicle-card.active') as HTMLElement;
       if (activeEl) {
         const container = scrollContainerRef.current;
@@ -342,7 +340,7 @@ export function CurrentKvkCard({
         container.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
       }
     }
-  }, [showChronicles]);
+  }, []);
 
   return (
     <div className="my-kvk-section-container">
@@ -463,122 +461,76 @@ export function CurrentKvkCard({
               </svg>
               <span>Kingdom ranking</span>
             </button>
-
-            <button
-              type="button"
-              className={`my-kvk-action-btn ${showChronicles ? 'active' : ''}`}
-              onClick={() => setShowChronicles((prev) => !prev)}
-              title={lang === 'vi' ? 'Xem 26 giai đoạn biên niên sử' : 'Chronicles'}
-            >
-              <svg className="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-              </svg>
-              <span>Chronicles</span>
-              <span className="accordion-caret">{showChronicles ? '▲' : '▼'}</span>
-            </button>
-
-            <button
-              type="button"
-              className="my-kvk-action-btn"
-              onClick={() => setShowWarMap(true)}
-              title={lang === 'vi' ? 'Xem bản đồ chiến sự' : 'War map'}
-            >
-              <svg className="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
-                <line x1="8" y1="2" x2="8" y2="18" />
-                <line x1="16" y1="6" x2="16" y2="22" />
-              </svg>
-              <span>War map</span>
-            </button>
-
-            <button
-              type="button"
-              className="my-kvk-action-btn full-width"
-              onClick={() => setShowScanManager(true)}
-              title={lang === 'vi' ? 'Trình quản lý quét dữ liệu' : 'Scan manager'}
-            >
-              <svg className="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
-                <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
-                <circle cx="12" cy="12" r="2" />
-                <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
-                <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
-              </svg>
-              <span>Scan manager</span>
-            </button>
           </div>
 
-          {/* Expandable Chronicles Section */}
-          {showChronicles && (
-            <div className="my-kvk-chronicles-drawer">
-              <div className="chronicles-header">
-                <div className="chronicles-title-wrap">
-                  <h4>{lang === 'vi' ? 'Biên Niên Sử · 26 Giai Đoạn' : 'Chronicles · 26 Stages'}</h4>
-                </div>
-                <div className="chronicles-scroll-arrows">
-                  <button
-                    type="button"
-                    className="chronicles-arrow-btn"
-                    onClick={scrollLeft}
-                    title="Scroll left"
-                    aria-label="Scroll left"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    className="chronicles-arrow-btn"
-                    onClick={scrollRight}
-                    title="Scroll right"
-                    aria-label="Scroll right"
-                  >
-                    ›
-                  </button>
-                </div>
+          {/* Chronicles Section (Always visible) */}
+          <div className="my-kvk-chronicles-drawer">
+            <div className="chronicles-header">
+              <div className="chronicles-title-wrap">
+                <h4>{lang === 'vi' ? 'Biên Niên Sử · 26 Giai Đoạn' : 'Chronicles · 26 Stages'}</h4>
               </div>
+              <div className="chronicles-scroll-arrows">
+                <button
+                  type="button"
+                  className="chronicles-arrow-btn"
+                  onClick={scrollLeft}
+                  title="Scroll left"
+                  aria-label="Scroll left"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="chronicles-arrow-btn"
+                  onClick={scrollRight}
+                  title="Scroll right"
+                  aria-label="Scroll right"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
 
-              <div className="chronicles-grid" ref={scrollContainerRef}>
-                {chronicles.map((stage, idx) => (
-                  <div
-                    key={stage.id}
-                    className={`chronicle-card ${stage.status}`}
-                    title={`Stage ${idx + 1}: ${stage.name}`}
-                  >
-                    <div className="card-top-track">
-                      <div className={`card-track-line ${stage.status} ${stage.colorTheme || 'grey'}`} />
-                      <div className={`card-track-circle ${stage.status} ${stage.colorTheme || 'grey'}`}>
-                        {stage.iconSrc ? (
-                          <img
-                            src={stage.iconSrc}
-                            alt={stage.name}
-                            className="track-circle-img"
-                            width={22}
-                            height={22}
-                          />
-                        ) : (
-                          <span className="track-circle-empty" />
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="card-body">
-                      <b className="card-name" title={stage.name}>
-                        {stage.name}
-                      </b>
-                      {stage.subtitle ? (
-                        <span className="card-sub" title={stage.subtitle}>
-                          {stage.subtitle}
-                        </span>
+            <div className="chronicles-grid" ref={scrollContainerRef}>
+              {chronicles.map((stage, idx) => (
+                <div
+                  key={stage.id}
+                  className={`chronicle-card ${stage.status}`}
+                  title={`Stage ${idx + 1}: ${stage.name}`}
+                >
+                  <div className="card-top-track">
+                    <div className={`card-track-line ${stage.status} ${stage.colorTheme || 'grey'}`} />
+                    <div className={`card-track-circle ${stage.status} ${stage.colorTheme || 'grey'}`}>
+                      {stage.iconSrc ? (
+                        <img
+                          src={stage.iconSrc}
+                          alt={stage.name}
+                          className="track-circle-img"
+                          width={22}
+                          height={22}
+                        />
                       ) : (
-                        <span className="card-sub card-sub-empty">&nbsp;</span>
+                        <span className="track-circle-empty" />
                       )}
                     </div>
                   </div>
-                ))}
-              </div>
+
+                  <div className="card-body">
+                    <b className="card-name" title={stage.name}>
+                      {stage.name}
+                    </b>
+                    {stage.subtitle ? (
+                      <span className="card-sub" title={stage.subtitle}>
+                        {stage.subtitle}
+                      </span>
+                    ) : (
+                      <span className="card-sub card-sub-empty">&nbsp;</span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
 
           {/* Footer Timestamp matching RoKStats */}
           <div className="my-kvk-footer">
@@ -588,139 +540,6 @@ export function CurrentKvkCard({
           </div>
         </div>
       </article>
-
-      {/* War Map Modal */}
-      {showWarMap && (
-        <div className="admin-modal-overlay" onClick={() => setShowWarMap(false)}>
-          <div className="admin-modal-card war-map-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="admin-modal-header">
-              <h3>🗺️ War Map · Mighty Assembly ({code})</h3>
-              <button
-                type="button"
-                className="admin-modal-close"
-                onClick={() => setShowWarMap(false)}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="admin-modal-body">
-              <p className="admin-modal-desc">
-                {lang === 'vi'
-                  ? 'Bản đồ chiến sự phân bổ 4 Phe & 35 Vương quốc trong kịch bản Lost Kingdom Mighty Assembly.'
-                  : 'Camp and kingdom distribution across the Lost Kingdom battlefield.'}
-              </p>
-
-              <div className="war-map-camps-list">
-                <div className="map-camp-item is-yours">
-                  <div className="map-camp-badge wind">🟣 Wind Camp · KD 2676 (Yours)</div>
-                  <div className="map-camp-detail">
-                    {lang === 'vi'
-                      ? '11 Vương quốc · Kiểm soát Đèo 4, Đèo 7 và tiếp cận Tàn tích Cổ đại'
-                      : '11 Kingdoms · Controls Pass 4, Pass 7 and Ancient Ruins access'}
-                  </div>
-                </div>
-
-                <div className="map-camp-item">
-                  <div className="map-camp-badge fire">🔴 Fire Camp</div>
-                  <div className="map-camp-detail">
-                    {lang === 'vi' ? '9 Vương quốc · Căn cứ Khu vực Phía Bắc' : '9 Kingdoms · Northern Region Bases'}
-                  </div>
-                </div>
-
-                <div className="map-camp-item">
-                  <div className="map-camp-badge earth">🟤 Earth Camp</div>
-                  <div className="map-camp-detail">
-                    {lang === 'vi' ? '10 Vương quốc · Căn cứ Khu vực Phía Đông' : '10 Kingdoms · Eastern Region Bases'}
-                  </div>
-                </div>
-
-                <div className="map-camp-item">
-                  <div className="map-camp-badge water">🔵 Water Camp</div>
-                  <div className="map-camp-detail">
-                    {lang === 'vi' ? '5 Vương quốc · Căn cứ Khu vực Phía Nam' : '5 Kingdoms · Southern Region Bases'}
-                  </div>
-                </div>
-              </div>
-
-              <div className="war-map-external-link">
-                <a
-                  href="https://app.rokstats.online/kingdom/2676"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-modal-save"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
-                >
-                  <span>🌐</span>
-                  <span>{lang === 'vi' ? 'Xem Bản Đồ Trực Tiếp Trên RoKStats' : 'Open Live Interactive Map on RoKStats'} ↗</span>
-                </a>
-              </div>
-            </div>
-            <div className="admin-modal-footer">
-              <button
-                type="button"
-                className="btn-modal-cancel"
-                onClick={() => setShowWarMap(false)}
-              >
-                {lang === 'vi' ? 'Đóng' : 'Close'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Scan Manager Modal */}
-      {showScanManager && (
-        <div className="admin-modal-overlay" onClick={() => setShowScanManager(false)}>
-          <div className="admin-modal-card scan-manager-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="admin-modal-header">
-              <h3>📡 Scan Manager · Kingdom #2676</h3>
-              <button
-                type="button"
-                className="admin-modal-close"
-                onClick={() => setShowScanManager(false)}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="admin-modal-body">
-              <div className="scan-status-pill online">
-                <span className="status-dot ready pulse" />
-                <span>{lang === 'vi' ? 'Hệ thống Quét: Đang hoạt động bình thường' : 'Scanner: Online & Healthy'}</span>
-              </div>
-
-              <ul className="scan-info-list">
-                <li>
-                  <strong>{lang === 'vi' ? 'Vương quốc:' : 'Home Kingdom:'}</strong> #2676
-                </li>
-                <li>
-                  <strong>{lang === 'vi' ? 'Kịch bản KvK:' : 'KvK Scenario:'}</strong> Mighty Assembly ({code})
-                </li>
-                <li>
-                  <strong>{lang === 'vi' ? 'Phe tham gia:' : 'Assigned Camp:'}</strong> Wind Camp (11 KD)
-                </li>
-                <li>
-                  <strong>{lang === 'vi' ? 'Thống đốc theo dõi:' : 'Tracked Governors:'}</strong> Top 1,000 Thống đốc
-                </li>
-                <li>
-                  <strong>{lang === 'vi' ? 'Chu kỳ tự động:' : 'Auto Sync Frequency:'}</strong> Mỗi 2 tiếng (GitHub Actions & RoKStats)
-                </li>
-                <li>
-                  <strong>{lang === 'vi' ? 'Lần quét gần nhất:' : 'Last Checked:'}</strong> 10/30/26, 5:04 AM UTC
-                </li>
-              </ul>
-            </div>
-            <div className="admin-modal-footer">
-              <button
-                type="button"
-                className="btn-modal-cancel"
-                onClick={() => setShowScanManager(false)}
-              >
-                {lang === 'vi' ? 'Đóng' : 'Close'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
